@@ -1,5 +1,5 @@
 html, body {
-    background-color: #222529;
+    background-color: #eee;
 }
 
 .games a {
@@ -9,8 +9,9 @@ html, body {
 .card {
     transition: box-shadow .25s;
     height: 100%;
+    color: black;
 }
 
 .card:hover {
-    box-shadow: 3px 3px 10px 0px black;
+    box-shadow: 3px 3px 10px 0px rgba(0,0,0,.3);
 }
