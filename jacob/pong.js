@@ -22,7 +22,7 @@ var update = function() {
 };
 
 var render = function() {
-  context.fillStyle = "#FF00FF";
+  context.fillStyle = "#228B22";
   context.fillRect(0, 0, width, height);
 };
 function Paddle(x, y, width, height){
