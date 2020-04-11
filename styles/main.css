@@ -8,6 +8,7 @@ html, body {
 
 .card {
     transition: box-shadow .25s;
+    height: 100%;
 }
 
 .card:hover {
