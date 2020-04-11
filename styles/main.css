@@ -15,3 +15,10 @@ html, body {
 .card:hover {
     box-shadow: 3px 3px 10px 0px rgba(0,0,0,.3);
 }
+
+.jumbotron {
+    background-image: url('../images/bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 15%;
+}
