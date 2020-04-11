@@ -77,6 +77,15 @@ var render = function() {
   ball.render();
 };
 
+bar update = function() {
+    ball.update();
+};
+
+Ball.prototype.update = function() {
+    this.x += this.x_speed;
+    this.y += this.y_speed;
+};
+
 
 
 
