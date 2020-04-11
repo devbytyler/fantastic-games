@@ -77,7 +77,7 @@ var render = function() {
   ball.render();
 };
 
-bar update = function() {
+var update = function() {
     ball.update();
 };
 
