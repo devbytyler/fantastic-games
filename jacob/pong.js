@@ -69,6 +69,20 @@ var player = new Player();
 var computer = new Computer();
 var ball = new Ball(200, 300);
 
+// from Tyler :)
+function drawCenterLine(){
+  context.beginPath();
+  context.moveTo(0, 300);
+  context.lineTo(400, 300);
+  context.strokeStyle = "#FFF";
+  context.lineWidth = 3;
+  context.stroke();
+}
+
+function drawCircle(){
+  // do stuff
+}
+
 var render = function() {
   context.fillStyle = "#228B22";
   context.fillRect(0, 0, width, height);
