@@ -36,7 +36,7 @@
             var rightPressed = false;
             var leftPressed = false;
             var level = 1;
-            var brickRowCount = 1*level;
+            var brickRowCount = 3;
             var brickColumnCount = 5;
             var brickWidth = 60;
             var brickHeight = 20;
@@ -48,6 +48,7 @@
             var bricks = [];
 
             function makeBricks (){
+                brickRowCount = 1 * level;
                 for(var c=0; c<brickColumnCount; c++){
                     bricks[c] = [];
                     for(var r=0; r<brickRowCount; r++) {
@@ -55,6 +56,7 @@
                     }
                 }
             }
+
             makeBricks();
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
@@ -135,7 +137,6 @@
             function drawBricks() {
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
-                        console.log("here");
                         if(bricks[c][r].status == 1){
                             var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
                             var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
@@ -184,7 +185,7 @@
                     else{
                         lives--;
                         if(!lives) {
-                            alert("GAME OVER");
+                            // alert("GAME OVER");
                             document.location.reload();
                             clearInterval(interval);
                         }
