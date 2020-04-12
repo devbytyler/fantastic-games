@@ -35,7 +35,8 @@
             var paddleX = (canvas.width-paddleWidth) / 2;
             var rightPressed = false;
             var leftPressed = false;
-            var brickRowCount = 10;
+            var level = 1;
+            var brickRowCount = 1*level;
             var brickColumnCount = 5;
             var brickWidth = 60;
             var brickHeight = 20;
@@ -44,15 +45,17 @@
             var brickOffsetLeft = 30;
             var score = 0;
             var lives = 3;
-
             var bricks = [];
-            for(var c=0; c<brickColumnCount; c++){
-                bricks[c] = [];
-                for(var r=0; r<brickRowCount; r++) {
-                    bricks[c][r] = { x: 0, y: 0, status: 1 };
+
+            function makeBricks (){
+                for(var c=0; c<brickColumnCount; c++){
+                    bricks[c] = [];
+                    for(var r=0; r<brickRowCount; r++) {
+                        bricks[c][r] = { x: 0, y: 0, status: 1 };
+                    }
                 }
             }
-
+            makeBricks();
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
             document.addEventListener("mousemove", mouseMoveHandler, false);
@@ -91,12 +94,26 @@
                                 b.status = 0;
                                 score++;
                                 if(score == brickRowCount*brickColumnCount) {
-                                    alert("YOU WIN, CONGRATULATIONS!"); document.location.reload();
-                                    clearInterval(interval);
+                                    if(level == 5){
+                                        ctx.font = "36px Arial";
+                                        ctx.fillStyle = "#000";
+                                        ctx.fillText("You Win!!!", 200, 250);
+                                    }//document.location.reload();
+                                    //clearInterval(interval);
+                                    else {
+                                        advanceLevel();
+                                    }
                             }
                         }
                     }
                 }
+            }
+            function advanceLevel() {
+                level ++;
+                makeBricks();
+                score = 0;
+                x = paddleX;
+                y = canvas.height-60;
             }
 
 
@@ -118,6 +135,7 @@
             function drawBricks() {
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
+                        console.log("here");
                         if(bricks[c][r].status == 1){
                             var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
                             var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
@@ -142,6 +160,11 @@
                 ctx.fillStyle = "#0095DD";
                 ctx.fillText("lives: "+lives, canvas.width-65, 20);
             }
+            function drawLevel() {
+                ctx.font = "20px Arial";
+                ctx.fillStyle = "#000";
+                ctx.fillText("Level " +level, canvas.width/2 - 30, 20);
+            }
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawBricks();
@@ -149,6 +172,7 @@
                 drawPaddle();
                 drawScore();
                 drawLives();
+                drawLevel();
                 collisionDetection();
 
                 if(y + dy < ballRadius){
