@@ -181,9 +181,9 @@ Computer.prototype.update = function(ball) {
   var x_pos = ball.x;
   var diff = -((this.paddle.x + (this.paddle.width / 2)) - x_pos);
   if(diff < 0 && diff < -4) { // max speed left
-    diff = -7;
+    diff = -10;
   } else if(diff > 0 && diff > 4) { // max speed right
-    diff = 7;
+    diff = 10;
   }
   this.paddle.move(diff, 0);
   if(this.paddle.x < 0) {
