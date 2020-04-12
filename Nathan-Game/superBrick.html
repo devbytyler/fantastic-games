@@ -14,13 +14,23 @@
                 margin-bottom: 15px;
                 max-width: 400px;
                 margin: auto;
-
             }
+            div {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+            }
+            button{
+                padding: 10px;
+                margin-top: 10px;
+            }
+
         </style>
     </head>
     <body>
         <h1 id = gameTitle>Super Brick</h1>
         <canvas id="Canvas" width="400" height="500"></canvas>
+        <div> <button><a href "game.html">RESTART</a></button></div>
 
         <script>
             var canvas = document.getElementById("Canvas");
@@ -28,8 +38,8 @@
             var ballRadius = 10;
             var x = canvas.width/2;
             var y = canvas.height-30;
-            var dx = 2;
-            var dy = -2;
+            var dx = 4;
+            var dy = -4;
             var paddleHeight = 10;
             var paddleWidth = 75;
             var paddleX = (canvas.width-paddleWidth) / 2;
@@ -46,9 +56,11 @@
             var score = 0;
             var lives = 3;
             var bricks = [];
+            var gameLose = false;
+            var gameWin = false;
 
             function makeBricks (){
-                brickRowCount = 3*level;
+                brickRowCount = 3 * level;
                 for(var c=0; c<brickColumnCount; c++){
                     bricks[c] = [];
                     for(var r=0; r<brickRowCount; r++) {
@@ -97,11 +109,11 @@
                                 score++;
                                 if(score == brickRowCount*brickColumnCount) {
                                     if(level == 5){
-                                        ctx.font = "36px Arial";
-                                        ctx.fillStyle = "#000";
-                                        ctx.fillText("You Win!!!", 200, 250);
-                                    }//document.location.reload();
-                                    //clearInterval(interval);
+                                        gameWinner();
+                                        //alert("You Win!!! Congratulations!!!")
+                                        //document.location.reload();
+                                        //clearInterval(interval);
+                                    }
                                     else {
                                         advanceLevel();
                                     }
@@ -115,14 +127,14 @@
                 makeBricks();
                 score = 0;
                 x = paddleX;
-                y = canvas.height-60;
+                y = canvas.height-15;
             }
 
 
             function drawBall() {
                 ctx.beginPath();
                 ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-                ctx.fillStyle = "#0095DD";
+                ctx.fillStyle = "#000";
                 ctx.fill();
                 ctx.closePath();
             }
@@ -166,6 +178,26 @@
                 ctx.fillStyle = "#000";
                 ctx.fillText("Level " +level, canvas.width/2 - 30, 20);
             }
+            function gameLost(){
+                ctx.font = "36px Arial";
+                ctx.fillStyle = "#000";
+                ctx.fillText("You Lost!!! Try Again.", 35, 250);
+            }
+            function gameOver() {
+                gameLose = true;
+                dx = 0;
+                dy = 0;
+            }
+            function gameWon(){
+                ctx.font = "32px Arial";
+                ctx.fillStyle = "#000";
+                ctx.fillText("You Won! Congratulations!", 10, 250);
+            }
+            function gameWinner(){
+                gameWin = true;
+                dx = 0;
+                dy = 0;
+            }
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawBricks();
@@ -175,6 +207,13 @@
                 drawLives();
                 drawLevel();
                 collisionDetection();
+                if(gameLose){
+                    gameLost();
+                }
+                if(gameWin){
+                    gameWon();
+                    console.log("Yay!");
+                }
 
                 if(y + dy < ballRadius){
                     dy = -dy;
@@ -185,15 +224,16 @@
                     else{
                         lives--;
                         if(!lives) {
-                            // alert("GAME OVER");
-                            document.location.reload();
-                            clearInterval(interval);
+                            gameOver();
+                            //alert("GAME OVER");
+                            //document.location.reload();
+                            //clearInterval(interval);
                         }
                         else{
                             x = canvas.width/2;
                             y = canvas.height-30;
-                            dx = 2;
-                            dy = -2;
+                            dx = 4;
+                            dy = -4;
                             paddleX = (canvas.width-paddleWidth)/2;
                         }
 
