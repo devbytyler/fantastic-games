@@ -40,7 +40,7 @@
     <body>
         <h1 id = gameTitle>Super Brick</h1>
         <h4 id = instructions>Use the Mouse to move your paddle. Press Space to start levels and pause the game. Finish Level 5 to win.</h4>
-        <canvas id="Canvas" width="400" height="500"></canvas>
+        <canvas id="Canvas" width="400" height="550"></canvas>
         <div> <button onclick = "window.location.href ='superBrick.html'">RESTART</button></div>
 
 
@@ -73,6 +73,7 @@
             var pause = false;
             var oldX;
             var oldY;
+            var previousScore = 0;
 
             //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
@@ -151,7 +152,7 @@
                                 dy = -dy;
                                 b.status = 0;
                                 score++;
-                                if(score == brickRowCount*brickColumnCount) {
+                                if(score == brickRowCount*brickColumnCount + previousScore) {
                                     if(level == 5){
                                         gameWinner();
                                     }
@@ -165,9 +166,9 @@
             }
             //function that controls the advance of levels.
             function advanceLevel() {
+                previousScore = score;
                 level ++;
                 makeBricks();
-                score = 0;
                 x = canvas.width/2;
                 y = canvas.height-30;
                 pause = true;
@@ -278,7 +279,7 @@
                     dy = -dy;
                 } else if(y + dy > canvas.height-ballRadius) {
                     //if it is where the paddle is, it bounces.
-                    if (x + paddleX && x < paddleX + paddleWidth) {
+                    if (x > paddleX && x < paddleX + paddleWidth) {
                         dy = -dy;
                     }
                     //if not, lives -- , if lives == 0, calls gameOver
