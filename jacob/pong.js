@@ -69,6 +69,20 @@ var player = new Player();
 var computer = new Computer();
 var ball = new Ball(200, 300);
 
+// from Tyler :)
+function drawCenterLine(){
+  context.beginPath();
+  context.moveTo(0, 300);
+  context.lineTo(400, 300);
+  context.strokeStyle = "#FFF";
+  context.lineWidth = 3;
+  context.stroke();
+}
+
+function drawCircle(){
+  // do stuff
+}
+
 var render = function() {
   context.fillStyle = "#228B22";
   context.fillRect(0, 0, width, height);
@@ -181,9 +195,9 @@ Computer.prototype.update = function(ball) {
   var x_pos = ball.x;
   var diff = -((this.paddle.x + (this.paddle.width / 2)) - x_pos);
   if(diff < 0 && diff < -4) { // max speed left
-    diff = -7;
+    diff = -10;
   } else if(diff > 0 && diff > 4) { // max speed right
-    diff = 7;
+    diff = 10;
   }
   this.paddle.move(diff, 0);
   if(this.paddle.x < 0) {
