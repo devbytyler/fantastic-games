@@ -74,6 +74,7 @@
             var oldX;
             var oldY;
 
+            //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
                 pause = true;
                 oldX = dx;
@@ -81,6 +82,7 @@
                 dx = 0;
                 dy = 0;
             }
+            //function makes the bricks.
             function makeBricks (){
                 brickRowCount = 3 * level;
                 for(var c=0; c<brickColumnCount; c++){
@@ -90,13 +92,14 @@
                     }
                 }
             }
-
+            //call make brick function.
             makeBricks();
             document.addEventListener("keydown", spaceKeyDown, false);
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
             document.addEventListener("mousemove", mouseMoveHandler, false);
 
+            //makes space key pause and play, ball still goes in the same direction.
             function spaceKeyDown(e) {
                if(e.key == "space" || e.key == " " && pause == false){
                    pause = true;
@@ -111,7 +114,7 @@
                     dy = oldY;
                 }
             }
-
+            //makes mouse control the paddle.
             function mouseMoveHandler(e) {
                 var relativeX = e.clientX - canvas.offsetLeft;
                 if(!pause){
@@ -120,7 +123,7 @@
                     }
                 }
             }
-
+            //makes paddle move left/right based on arrow keys.
             function keyDownHandler(e) {
                 if(e.key == "Right" || e.key == "ArrowRight") {
                     rightPressed = true;
@@ -129,7 +132,7 @@
                     leftPressed = true;
                 }
             }
-
+            //stops paddle from moving after arrow key is not being pressed.
             function keyUpHandler(e) {
                 if(e.key == "Right" || e.key == "ArrowRight") {
                 rightPressed = false;
@@ -138,6 +141,7 @@
                 leftPressed = false;
                 }
             }
+            //detects when a brick is hit, sets it to white, controls game win and advance level.
             function collisionDetection() {
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
@@ -159,6 +163,7 @@
                     }
                 }
             }
+            //function that controls the advance of levels.
             function advanceLevel() {
                 level ++;
                 makeBricks();
@@ -172,8 +177,7 @@
                 dy = 0;
                 paddleX = (canvas.width-paddleWidth)/2;
             }
-
-
+            //draws the ball.
             function drawBall() {
                 ctx.beginPath();
                 ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -181,7 +185,7 @@
                 ctx.fill();
                 ctx.closePath();
             }
-
+            //draws the paddle
             function drawPaddle() {
                 ctx.beginPath();
                 ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
@@ -189,6 +193,7 @@
                 ctx.fill();
                 ctx.closePath();
             }
+            //draws the bricks.
             function drawBricks() {
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
@@ -206,42 +211,51 @@
                     }
                 }
             }
+            //draws the score
             function drawScore() {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#0095DD";
                 ctx.fillText("Score: "+score, 8, 20);
             }
+            //draws the lives
             function drawLives() {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#0095DD";
                 ctx.fillText("lives: "+lives, canvas.width-65, 20);
             }
+            //draws the level
             function drawLevel() {
                 ctx.font = "20px Arial";
                 ctx.fillStyle = "#000";
                 ctx.fillText("Level " +level, canvas.width/2 - 30, 20);
             }
+            //shows if you lose.
             function gameLost(){
                 ctx.font = "36px Arial";
                 ctx.fillStyle = "#000";
                 ctx.fillText("You Lost!!! Try Again.", 35, 250);
             }
+            //sets variable gameLose to true, in draw function causes gameLost to be called.
             function gameOver() {
                 gameLose = true;
                 dx = 0;
                 dy = 0;
             }
+            //shows if you win.
             function gameWon(){
                 ctx.font = "32px Arial";
                 ctx.fillStyle = "#000";
                 ctx.fillText("You Won! Congratulations!", 10, 250);
             }
+            //sets variable gameWin to true, in draw function causes gameWon to be called.
             function gameWinner(){
                 gameWin = true;
                 dx = 0;
                 dy = 0;
             }
+            //draw function, draws all of the code.
             function draw() {
+                //redraws the background every frame.
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawBricks();
                 drawBall();
@@ -250,25 +264,30 @@
                 drawLives();
                 drawLevel();
                 collisionDetection();
+                //calls gameLost if gameLose == true.
                 if(gameLose){
                     gameLost();
                 }
+                //calls gameWon if gameWin == true.
                 if(gameWin){
                     gameWon();
                     console.log("Yay!");
                 }
-
+                //this is the code for bouncing off ceiling and for if it hits the ground.
                 if(y + dy < ballRadius){
                     dy = -dy;
                 } else if(y + dy > canvas.height-ballRadius) {
+                    //if it is where the paddle is, it bounces.
                     if (x + paddleX && x < paddleX + paddleWidth) {
                         dy = -dy;
                     }
+                    //if not, lives -- , if lives == 0, calls gameOver
                     else{
                         lives--;
                         if(!lives) {
                             gameOver();
                         }
+                        //if lives > 0, starts ball and paddle over.
                         else{
                             x = canvas.width/2;
                             y = canvas.height-30;
@@ -282,24 +301,29 @@
 
                     }
                 }
+                //code for bouncing off of the walls.
                 if(x + dx > canvas.width - ballRadius || x +   dx < ballRadius){
                     dx = -dx;
                 }
+                //if rightPressed is true, meaning that right arrow key is pressed, paddle moves right.
                 if(rightPressed) {
                     paddleX += 5;
                     if (paddleX + paddleWidth > canvas.width){
                         paddleX = canvas.width - paddleWidth;
                     }
                 }
+                //if leftPressed is true, meaning that left arrow key is pressed, paddle moves left.
                  else if(leftPressed) {
                     paddleX -= 5;
                     if (paddleX < 0){
                     paddleX = 0;
                     }
                 }
+                //dx is added to x and dy is added to y to move the ball.
                 x += dx;
                 y += dy;
             }
+            //sets interval of the draw function.
             var interval = setInterval(draw, 10);
         </script>
     </body>
