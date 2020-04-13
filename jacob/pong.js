@@ -75,13 +75,15 @@ function drawCenterLine(){
   context.moveTo(0, 300);
   context.lineTo(400, 300);
   context.strokeStyle = "#FFF";
-  context.lineWidth = 3;
+  context.lineWidth = 5;
   context.stroke();
-}
+};
 
 function drawCircle(){
-  // do stuff
-}
+  context.strokeStyle = "#FFF";
+  context.beginPath();
+  context.arc(200, 300, 50, 0, 2 * Math.PI);
+};
 
 var render = function() {
   context.fillStyle = "#228B22";
