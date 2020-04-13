@@ -79,11 +79,26 @@ function drawCenterLine(){
   context.stroke();
 };
 
+
 function drawCircle(){
   context.strokeStyle = "#FFF";
   context.beginPath();
   context.arc(200, 300, 50, 0, 2 * Math.PI);
 };
+//tyler's render function
+/*var render = function() {
+  context.fillStyle = "#228B22";
+  context.fillRect(0, 0, width, height);
+
+  drawCenterLine();
+  drawCircle();
+
+  player.render();
+  computer.render();
+  ball.render();
+};*/
+
+
 
 var render = function() {
   context.fillStyle = "#228B22";
