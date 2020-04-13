@@ -279,7 +279,7 @@
                     dy = -dy;
                 } else if(y + dy > canvas.height-ballRadius) {
                     //if it is where the paddle is, it bounces.
-                    if (x > paddleX && x < paddleX + paddleWidth) {
+                    if (x > paddleX - 15 && x < paddleX + paddleWidth + 15) {
                         dy = -dy;
                     }
                     //if not, lives -- , if lives == 0, calls gameOver
