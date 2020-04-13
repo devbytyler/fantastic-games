@@ -235,6 +235,8 @@
                 ctx.font = "36px Arial";
                 ctx.fillStyle = "#000";
                 ctx.fillText("You Lost!!! Try Again.", 35, 250);
+                ctx.font = "18px Arial";
+                ctx.fillText("Final Score: " + score, 140, 280);
             }
             //sets variable gameLose to true, in draw function causes gameLost to be called.
             function gameOver() {
@@ -247,6 +249,8 @@
                 ctx.font = "32px Arial";
                 ctx.fillStyle = "#000";
                 ctx.fillText("You Won! Congratulations!", 10, 250);
+                ctx.font = "18px Arial";
+                ctx.fillText("Final Score: " + score, 140, 280);
             }
             //sets variable gameWin to true, in draw function causes gameWon to be called.
             function gameWinner(){
