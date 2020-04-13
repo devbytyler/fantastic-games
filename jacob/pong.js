@@ -21,9 +21,9 @@ var step = function() {
 var update = function() {
 };
 
-//var render = function() {
-  //context.fillStyle = "#228B22";
-  //context.fillRect(0, 0, width, height);
+var render = function() {
+  context.fillStyle = "#228B22";
+  context.fillRect(0, 0, width, height);
 };
 function Paddle(x, y, width, height){
     this.x = x;
@@ -86,7 +86,7 @@ function drawCircle(){
   context.arc(200, 300, 50, 0, 2 * Math.PI);
 };
 //tyler's render function
-var render = function() {
+/*var render = function() {
   context.fillStyle = "#228B22";
   context.fillRect(0, 0, width, height);
 
@@ -96,7 +96,7 @@ var render = function() {
   player.render();
   computer.render();
   ball.render();
-};
+};*/
 
 
 
