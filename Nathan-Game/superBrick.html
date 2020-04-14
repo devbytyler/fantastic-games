@@ -23,7 +23,6 @@
                 border-bottom: 4px dashed #000080;
                 max-width: 400px;
                 margin: auto;
-
             }
             div {
                 display: flex;
@@ -36,7 +35,6 @@
                 font-size: 18px;
                 font-family: monospace;
             }
-
             background:
         </style>
     </head>
@@ -45,7 +43,6 @@
         <h4 id = instructions>Use the Mouse to move your paddle. Press Space to start levels and pause the game. Finish Level 5 to win.</h4>
         <canvas id="Canvas" width="400" height="550"></canvas>
         <div> <button onclick = "window.location.href ='superBrick.html'">RESTART</button></div>
-
 
         <script>
             var canvas = document.getElementById("Canvas");
@@ -69,7 +66,7 @@
             var brickOffsetTop = 30;
             var brickOffsetLeft = 30;
             var score = 0;
-            var lives = 3;
+            var lives = 50;
             var bricks = [];
             var gameLose = false;
             var gameWin = false;
@@ -82,6 +79,9 @@
             var ballHitPaddle = false;
             var died = false;
 
+            function restart(){
+                location.reload();
+            }
             //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
                 pause = true;
@@ -259,6 +259,7 @@
                 pause = true;
                 dx = 0;
                 dy = 0;
+                var reset = setInterval(restart, 2000)
             }
             //shows if you win.
             function gameWon(){
