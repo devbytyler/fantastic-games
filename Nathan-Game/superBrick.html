@@ -53,10 +53,10 @@
             var ballRadius = 10;
             var x = canvas.width/2;
             var y = canvas.height-30;
-            var dx = 4;
-            var dy = -4;
+            var dx = 0;
+            var dy = -5;
             var paddleHeight = 10;
-            var paddleWidth = 75;
+            var paddleWidth = 80;
             var paddleX = (canvas.width-paddleWidth) / 2;
             var rightPressed = false;
             var leftPressed = false;
@@ -77,6 +77,10 @@
             var oldX;
             var oldY;
             var previousScore = 0;
+            var paddleCenter = paddleX + paddleWidth/2;
+            var distanceFromCenter = x - paddleCenter;
+            var ballHitPaddle = false;
+            var died = false;
 
             //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
@@ -106,11 +110,18 @@
             //makes space key pause and play, ball still goes in the same direction.
             function spaceKeyDown(e) {
                if(e.key == "space" || e.key == " " && pause == false){
-                   pause = true;
-                   oldX = dx;
-                   oldY = dy;
-                   dx = 0;
-                   dy = 0;
+                   if(died){
+                       dx = 0;
+                       dy = -5;
+                       died = false;
+                   }
+                   else{
+                       pause = true;
+                       oldX = dx;
+                       oldY = dy;
+                       dx = 0;
+                       dy = 0;
+                   }
                }
                 else{
                     pause = false;
@@ -150,7 +161,7 @@
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
                         var b = bricks[c][r];
-                        if(b.status == 1)
+                        if(b.status == 1){
                             if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight){
                                 dy = -dy;
                                 b.status = 0;
@@ -162,6 +173,7 @@
                                     else {
                                         advanceLevel();
                                     }
+                                }
                             }
                         }
                     }
@@ -244,6 +256,7 @@
             //sets variable gameLose to true, in draw function causes gameLost to be called.
             function gameOver() {
                 gameLose = true;
+                pause = true;
                 dx = 0;
                 dy = 0;
             }
@@ -258,6 +271,7 @@
             //sets variable gameWin to true, in draw function causes gameWon to be called.
             function gameWinner(){
                 gameWin = true;
+                pause = true;
                 dx = 0;
                 dy = 0;
             }
@@ -281,17 +295,42 @@
                     gameWon();
                     console.log("Yay!");
                 }
-                //this is the code for bouncing off ceiling and for if it hits the ground.
+
+                //this is the code for bouncing off ceiling.
                 if(y + dy < ballRadius){
                     dy = -dy;
-                } else if(y + dy > canvas.height-ballRadius) {
-                    //if it is where the paddle is, it bounces.
-                    if (x > paddleX - 15 && x < paddleX + paddleWidth + 15) {
+                }
+                //this is the code for bouncing off paddle.
+                else if(x > paddleX - 15 && x < paddleX + paddleWidth + 15 && y + dy > canvas.height-ballRadius){
+                        ballHitPaddle = true;
+                if(y + dy > canvas.height-ballRadius && ballHitPaddle) {
                         dy = -dy;
+                        if(dx < 0){
+                            if (x > paddleCenter){
+                                dx = dx - 2;
+                            }
+                            //dx = dx - distanceFromCenter/20;
+                            else{
+                                dx = dx + 2;
+                            }
+                        }
+                        else{
+                            if (x < paddleCenter){
+                                dx = dx - 2;
+                            }
+                            //dx = dx - distanceFromCenter/20;
+                            else{
+                                dx = dx + 2;
+                            }
+                            //dx = dx + distanceFromCenter/20;
+                        }
+                        ballHitPaddle = false;
                     }
+                }
                     //if not, lives -- , if lives == 0, calls gameOver
-                    else{
+                    else if(ballHitPaddle == false && y + dy > canvas.height-ballRadius){
                         lives--;
+                        died = true;
                         if(!lives) {
                             gameOver();
                         }
@@ -300,15 +339,13 @@
                             x = canvas.width/2;
                             y = canvas.height-30;
                             pause = true;
-                            oldX = dx;
-                            oldY = dy;
+                            //oldX = dx;
+                            //oldY = dy;
                             dx = 0;
                             dy = 0;
                             paddleX = (canvas.width-paddleWidth)/2;
                         }
-
                     }
-                }
                 //code for bouncing off of the walls.
                 if(x + dx > canvas.width - ballRadius || x +   dx < ballRadius){
                     dx = -dx;
