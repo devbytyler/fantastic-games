@@ -78,7 +78,7 @@
             var distanceFromCenter = x - paddleCenter;
             var ballHitPaddle = false;
             var reset = false;
-            var remainingLives = 3;
+            var remainingLives = 5;
             var addLife = false
 
             function restart () {
@@ -189,8 +189,6 @@
                 makeBricks();
                 x = canvas.width/2;
                 y = canvas.height-30;
-                //oldX = dx;
-                //oldY = dy;
                 dx = 0;
                 dy = 0;
                 reset = true;
@@ -210,7 +208,7 @@
                 ctx.font = "36px Arial";
                 ctx.fillStyle = "#000";
                 ctx.fillText("+1 Life!!!", 140, 280);
-                var addLifeInterval = setInterval(lifeAdd, 1000)
+                var addLifeInterval = setInterval(lifeAdd, 1000);
             }
             //draws the ball.
             function drawBall() {
@@ -334,20 +332,17 @@
                         if (x > paddleCenter){
                             dx = dx - changeX;
                         }
-                        //dx = dx - distanceFromCenter/20;
                         else{
                             dx = dx + changeX;
                         }
                     }
                     else{
-                        if (x < paddleCenter){
-                            dx = dx - changeX;
-                        }
-                        //dx = dx - distanceFromCenter/20;
-                        else{
+                        if (x > paddleCenter){
                             dx = dx + changeX;
                         }
-                        //dx = dx + distanceFromCenter/20;
+                        else{
+                            dx = dx - changeX;
+                        }
                     }
                     ballHitPaddle = false;
                 }
@@ -363,8 +358,6 @@
                             x = canvas.width/2;
                             y = canvas.height-30;
                             pause = true;
-                            //oldX = dx;
-                            //oldY = dy;
                             dx = 0;
                             dy = 0;
                             paddleX = (canvas.width-paddleWidth)/2;
