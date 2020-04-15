@@ -66,7 +66,7 @@
             var brickOffsetTop = 30;
             var brickOffsetLeft = 30;
             var score = 0;
-            var lives = 50;
+            var lives = 3;
             var bricks = [];
             var gameLose = false;
             var gameWin = false;
@@ -77,10 +77,22 @@
             var paddleCenter = paddleX + paddleWidth/2;
             var distanceFromCenter = x - paddleCenter;
             var ballHitPaddle = false;
-            var died = false;
+            var reset = false;
+            var remainingLives = 3;
+            var addLife = false
+            var highScore = 0;
 
             function restart(){
-                location.reload();
+                level = 1;
+                gameLose = false;
+                gameWin = false;
+                lives = 3;
+                pause = false;
+                reset = false;
+                x = canvas.width/2;
+                y = canvas.height-30;
+                paddleX = (canvas.width-paddleWidth) / 2;
+                makeBricks();
             }
             //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
@@ -110,23 +122,24 @@
             //makes space key pause and play, ball still goes in the same direction.
             function spaceKeyDown(e) {
                if(e.key == "space" || e.key == " " && pause == false){
-                   if(died){
-                       dx = 0;
-                       dy = -5;
-                       died = false;
-                   }
-                   else{
                        pause = true;
                        oldX = dx;
                        oldY = dy;
                        dx = 0;
                        dy = 0;
-                   }
                }
-                else{
-                    pause = false;
-                    dx = oldX;
-                    dy = oldY;
+                else if(e.key == "space" || e.key == " " && pause == true){
+                    if(reset == true){
+                       dx = 0;
+                       dy = -5;
+                       reset = false;
+                        pause = false;
+                   }
+                    else if(reset == false){
+                        dx = oldX;
+                        dy = oldY;
+                        pause = false;
+                    }
                 }
             }
             //makes mouse control the paddle.
@@ -156,13 +169,13 @@
                 leftPressed = false;
                 }
             }
-            //detects when a brick is hit, sets it to white, controls game win and advance level.
+            //detects when a brick is hit, sets it to gray, controls game win and advance level.
             function collisionDetection() {
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
                         var b = bricks[c][r];
                         if(b.status == 1){
-                            if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight){
+                            if(x + 10 > b.x && x - 10 < b.x+brickWidth && y + 10 > b.y && y - 10 < b.y+brickHeight){
                                 dy = -dy;
                                 b.status = 0;
                                 score++;
@@ -182,16 +195,32 @@
             //function that controls the advance of levels.
             function advanceLevel() {
                 previousScore = score;
-                level ++;
+                level++;
                 makeBricks();
                 x = canvas.width/2;
                 y = canvas.height-30;
-                pause = true;
-                oldX = dx;
-                oldY = dy;
+                //oldX = dx;
+                //oldY = dy;
                 dx = 0;
                 dy = 0;
+                reset = true;
+                pause = true;
                 paddleX = (canvas.width-paddleWidth)/2;
+                if(remainingLives == lives){
+                    lives++;
+                    addLife = true;
+                }
+                remainingLives = lives;
+            }
+            function lifeAdd(){
+                addLife = false;
+            }
+            //If they gain a life, then this function is called.
+            function drawAddLife(){
+                ctx.font = "36px Arial";
+                ctx.fillStyle = "#000";
+                ctx.fillText("+1 Life!!!", 140, 280);
+                var addLifeInterval = setInterval(lifeAdd, 2000)
             }
             //draws the ball.
             function drawBall() {
@@ -237,7 +266,7 @@
             function drawLives() {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#0095DD";
-                ctx.fillText("lives: "+lives, canvas.width-65, 20);
+                ctx.fillText("Lives: "+lives, canvas.width-65, 20);
             }
             //draws the level
             function drawLevel() {
@@ -252,6 +281,10 @@
                 ctx.fillText("You Lost!!! Try Again.", 35, 250);
                 ctx.font = "18px Arial";
                 ctx.fillText("Final Score: " + score, 140, 280);
+                ctx.fillText("High Score: " + highScore, 140, 310);
+                if(gameLose == true){
+                    var reload = setInterval(restart, 2000)
+                }
             }
             //sets variable gameLose to true, in draw function causes gameLost to be called.
             function gameOver() {
@@ -259,7 +292,11 @@
                 pause = true;
                 dx = 0;
                 dy = 0;
-                var reset = setInterval(restart, 2000)
+                if(score > highScore){
+                highScore = score;
+                }
+
+
             }
             //shows if you win.
             function gameWon(){
@@ -268,6 +305,10 @@
                 ctx.fillText("You Won! Congratulations!", 10, 250);
                 ctx.font = "18px Arial";
                 ctx.fillText("Final Score: " + score, 140, 280);
+                if(gameLose == true){
+                    var reload = setInterval(restart, 5000)
+                }
+                ctx.fillText("High Score: " + highScore, 140, 310);
             }
             //sets variable gameWin to true, in draw function causes gameWon to be called.
             function gameWinner(){
@@ -275,6 +316,10 @@
                 pause = true;
                 dx = 0;
                 dy = 0;
+                if(score > highScore){
+                highScore = score;
+                }
+
             }
             //draw function, draws all of the code.
             function draw() {
@@ -287,6 +332,10 @@
                 drawLives();
                 drawLevel();
                 collisionDetection();
+                //tells player that they gained 1 life.
+                if(addLife){
+                    drawAddLife();
+                }
                 //calls gameLost if gameLose == true.
                 if(gameLose){
                     gameLost();
@@ -302,36 +351,37 @@
                     dy = -dy;
                 }
                 //this is the code for bouncing off paddle.
-                else if(x > paddleX - 15 && x < paddleX + paddleWidth + 15 && y + dy > canvas.height-ballRadius){
-                        ballHitPaddle = true;
+                else if(x > paddleX - 10 && x < paddleX + paddleWidth + 10 && y + dy > canvas.height-ballRadius){
+                    ballHitPaddle = true;
+                }
                 if(y + dy > canvas.height-ballRadius && ballHitPaddle) {
-                        dy = -dy;
-                        if(dx < 0){
-                            if (x > paddleCenter){
-                                dx = dx - 2;
-                            }
-                            //dx = dx - distanceFromCenter/20;
-                            else{
-                                dx = dx + 2;
-                            }
+                    var changeX = Math.random() + 1;
+                    dy = -dy;
+                    if(dx < 0){
+                        if (x > paddleCenter){
+                            dx = dx - changeX;
                         }
+                        //dx = dx - distanceFromCenter/20;
                         else{
-                            if (x < paddleCenter){
-                                dx = dx - 2;
-                            }
-                            //dx = dx - distanceFromCenter/20;
-                            else{
-                                dx = dx + 2;
-                            }
-                            //dx = dx + distanceFromCenter/20;
+                            dx = dx + changeX;
                         }
-                        ballHitPaddle = false;
                     }
+                    else{
+                        if (x < paddleCenter){
+                            dx = dx - changeX;
+                        }
+                        //dx = dx - distanceFromCenter/20;
+                        else{
+                            dx = dx + changeX;
+                        }
+                        //dx = dx + distanceFromCenter/20;
+                    }
+                    ballHitPaddle = false;
                 }
                     //if not, lives -- , if lives == 0, calls gameOver
                     else if(ballHitPaddle == false && y + dy > canvas.height-ballRadius){
                         lives--;
-                        died = true;
+                        reset = true;
                         if(!lives) {
                             gameOver();
                         }
