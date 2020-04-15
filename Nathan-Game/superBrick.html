@@ -80,20 +80,7 @@
             var reset = false;
             var remainingLives = 3;
             var addLife = false
-            var highScore = 0;
 
-            function restart(){
-                level = 1;
-                gameLose = false;
-                gameWin = false;
-                lives = 3;
-                pause = false;
-                reset = false;
-                x = canvas.width/2;
-                y = canvas.height-30;
-                paddleX = (canvas.width-paddleWidth) / 2;
-                makeBricks();
-            }
             //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
                 pause = true;
@@ -281,10 +268,6 @@
                 ctx.fillText("You Lost!!! Try Again.", 35, 250);
                 ctx.font = "18px Arial";
                 ctx.fillText("Final Score: " + score, 140, 280);
-                ctx.fillText("High Score: " + highScore, 140, 310);
-                if(gameLose == true){
-                    var reload = setInterval(restart, 2000)
-                }
             }
             //sets variable gameLose to true, in draw function causes gameLost to be called.
             function gameOver() {
@@ -292,11 +275,6 @@
                 pause = true;
                 dx = 0;
                 dy = 0;
-                if(score > highScore){
-                highScore = score;
-                }
-
-
             }
             //shows if you win.
             function gameWon(){
@@ -305,21 +283,12 @@
                 ctx.fillText("You Won! Congratulations!", 10, 250);
                 ctx.font = "18px Arial";
                 ctx.fillText("Final Score: " + score, 140, 280);
-                if(gameLose == true){
-                    var reload = setInterval(restart, 5000)
-                }
-                ctx.fillText("High Score: " + highScore, 140, 310);
-            }
             //sets variable gameWin to true, in draw function causes gameWon to be called.
             function gameWinner(){
                 gameWin = true;
                 pause = true;
                 dx = 0;
                 dy = 0;
-                if(score > highScore){
-                highScore = score;
-                }
-
             }
             //draw function, draws all of the code.
             function draw() {
@@ -343,9 +312,7 @@
                 //calls gameWon if gameWin == true.
                 if(gameWin){
                     gameWon();
-                    console.log("Yay!");
                 }
-
                 //this is the code for bouncing off ceiling.
                 if(y + dy < ballRadius){
                     dy = -dy;
