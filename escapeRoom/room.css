@@ -1,0 +1,60 @@
+html {
+    background: black;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: black;
+    color: #545454;
+    font-family: Times New Roman, serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 2em 2em 4em;
+    text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #222;
+    font-weight: bold;
+    line-height: 1.5;
+    text-align: center
+}
+
+h2 {
+    margin-top: 1.3em;
+}
+
+a:link {
+    color: blue
+}
+a:visited {
+    color: blue
+}
+a:hover{
+    background-color: lightblue;
+}
+a {
+    background-color:gray;
+    padding: 2.5px;
+    border:1px dotted blue;
+}
+h1 {
+    font-family: cursive;
+    color: rgb(139,69,19);
+    border-bottom: 4px dashed brown; 
+    background-color: gray;
+    padding: 25px;
+}
+h2, h3, p {
+    color: black;
+}
+ul {
+    text-align:left;
+    color: black; 
+}
+.room {
+    background-color: gray;
+    border: 4px dashed brown;
+}
