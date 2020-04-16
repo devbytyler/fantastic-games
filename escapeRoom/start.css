@@ -48,3 +48,9 @@ h1 {
     font-family: cursive;
     color: rgb(139,69,19);
 }
+button {
+    padding: 5px;
+    margin-top: 5px;
+    font-size: 15px;
+    font-family: monospace;
+}
