@@ -17,9 +17,10 @@
             <script>
                 var button = document.getElementById("submit, onButtonClick");
                 var answer = document.getElementById("udlrLock");
+                document.addEventListener("onButtonClick", onButtonClick, false);
                 var onButtonClick = function(){
                     if(answer = URDU){
-                        var correct = str.link("clock-clue");
+                        var correct = str.link("clock-clue.html");
                     }
                     else{ document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
                     }
