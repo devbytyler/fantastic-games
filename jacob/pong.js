@@ -74,39 +74,61 @@ function drawCenterLine(){
   context.beginPath();
   context.moveTo(0, 300);
   context.lineTo(400, 300);
-  context.strokeStyle = "#FFF";
+  context.strokeStyle = "#FFFFFF";
   context.lineWidth = 5;
   context.stroke();
 };
 
-
+//middle circle
 function drawCircle(){
-  context.strokeStyle = "#FFF";
+  context.strokeStyle = "#FFFFFF";
+  context.fillStyle = "#FFFFFF";
   context.beginPath();
-  context.arc(200, 300, 50, 0, 2 * Math.PI);
+  context.arc(200, 300, 70, 0, 2 * Math.PI);
+  context.stroke();
+};
+
+//Opponent goal box
+function drawGoalBoxOne(){
+ context.strokeStyle = "#FFFFFF";
+ context.beginPath ();
+ context.rect(75, 0, 250, 100);
+ context.stroke ();
+
+};
+
+//Your goal box
+function drawGoalBoxTwo(){
+   context.strokeStyle = "#FFFFFF";
+   context.beginPath ();
+   context.rect(75, 500, 250, 100);
+   context.stroke ();
 };
 //tyler's render function
-/*var render = function() {
+var render = function() {
   context.fillStyle = "#228B22";
   context.fillRect(0, 0, width, height);
 
+  context.fillStyle = "#FFFFFF"
   drawCenterLine();
   drawCircle();
+  drawGoalBoxOne();
+  drawGoalBoxTwo();
 
+  player.render();
+  computer.render();
+  ball.render();
+};
+
+
+
+/*var render = function() {
+  context.fillStyle = "#228B22";
+  context.fillRect(0, 0, width, height);
   player.render();
   computer.render();
   ball.render();
 };*/
-
-
-
-var render = function() {
-  context.fillStyle = "#228B22";
-  context.fillRect(0, 0, width, height);
-  player.render();
-  computer.render();
-  ball.render();
-};
 
 var update = function() {
     ball.update();
