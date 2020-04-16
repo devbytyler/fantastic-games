@@ -5,6 +5,25 @@ var animate = window.requestAnimationFrame ||
 var canvas = document.createElement('canvas');
 var width = 400;
 var height = 600;
+/*var win = false;
+var lose = false;
+//lose
+function youLose() {
+    lose = true;
+    this.y = 0;
+    this.x = 0;
+}
+function youLost() {
+    context.font = "30px Arial";
+    context.fillStyle = "#000";
+    context.fillText("You Lost!", 75, 135);
+}
+if(lose) {
+    youLost();
+}
+*/
+// that ^ should make it make you win/lose but it doesn't work
+
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
@@ -178,6 +197,7 @@ Ball.prototype.update = function(paddle1, paddle2) {
 
   if(this.y > 600) { // a point was scored on you
     setTimeout(function() { alert ("You Lose!"); }, 0000);
+    //youLose();
     this.x_speed = 0;
     this.y_speed = 4.5;
     this.x = 200;
