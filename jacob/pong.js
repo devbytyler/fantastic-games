@@ -38,10 +38,10 @@ Paddle.prototype.render = function() {
   context.fillRect(this.x, this.y, this.width, this.height);
 };
 function Player() {
-    this.paddle = new Paddle (175, 580, 50, 10);
+    this.paddle = new Paddle (175, 555, 50, 10);
 }
 function Computer() {
-    this.paddle = new Paddle (175, 10, 50, 10);
+    this.paddle = new Paddle (175, 35, 50, 10);
 }
 Player.prototype.render = function() {
   this.paddle.render();
@@ -67,7 +67,7 @@ Ball.prototype.render = function() {
 
 var player = new Player();
 var computer = new Computer();
-var ball = new Ball(200, 300);
+var ball = new Ball(200, 200);
 
 // from Tyler :)
 function drawCenterLine(){
@@ -157,13 +157,41 @@ Ball.prototype.update = function(paddle1, paddle2) {
     this.x = 395;
     this.x_speed = -this.x_speed;
   }
+    //hitting outside opponent goal boxes
+  if (this.y -5 < 0 && this.x -75 <= 0) {//hitting left of opponent goal
+      this.y = 5;
+      this.y_speed = -this.y_speed;
+  }   else if (this.y -5 < 0 && this.x + 75 >= 400) {//hitting right of opponent goal
+      this.y = 5;
+      this.y_speed = -this.y_speed;
+  }
+    //hitting outside your goal box
+  if (this.y +5 > 600 && this.x -75 <= 0) {//hitting left of your goal
+      this.y = 595;
+      this.y_speed = -this.y_speed;
+  }   else if (this.y +5 > 600 && this.x + 75 >= 400) {//hitting right of your goal
+      this.y = 595;
+      this.y_speed = -this.y_speed;
+  }
 
-  if(this.y < 0 || this.y > 600) { // a point was scored
+
+
+  if(this.y > 600) { // a point was scored on you
+    setTimeout(function() { alert ("You Lose!"); }, 0000);
     this.x_speed = 0;
     this.y_speed = 4.5;
     this.x = 200;
-    this.y = 300;
+    this.y = 200;
   }
+
+  if(this.y < 0) { // you scored a point
+    setTimeout(function() { alert ("You Win!"); }, 0000);
+    this.x_speed = 0;
+    this.y_speed = 4.5;
+    this.x = 200;
+    this.y = 200;
+  }
+
 
   if(top_y > 300) {
     if(top_y < (paddle1.y + paddle1.height) && bottom_y > paddle1.y && top_x < (paddle1.x + paddle1.width) && bottom_x > paddle1.x) {
@@ -229,14 +257,19 @@ var update = function() {
   computer.update(ball);
   ball.update(player.paddle, computer.paddle);
 };
+//easy="diff = -7", "diff = 7"
+//medium:10
+//hard:13
+//insane:17 (I beat it at insane so it is possible.)
+//Impossible:25 (Maybe not impossible, but probably.)
 
 Computer.prototype.update = function(ball) {
   var x_pos = ball.x;
   var diff = -((this.paddle.x + (this.paddle.width / 2)) - x_pos);
   if(diff < 0 && diff < -4) { // max speed left
-    diff = -10;
+    diff = -7;
   } else if(diff > 0 && diff > 4) { // max speed right
-    diff = 10;
+    diff = 7;
   }
   this.paddle.move(diff, 0);
   if(this.paddle.x < 0) {
