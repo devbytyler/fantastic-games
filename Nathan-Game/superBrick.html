@@ -90,7 +90,9 @@
             var ballHitPaddle = false;
             var reset = false;
             var remainingLives = 5;
-            var addLife = false
+            var addLife = false;
+            var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            var element = document.getElementById('text');
 
             function restart () {
                 location.reload();
@@ -115,11 +117,13 @@
             }
             //call make brick function.
             makeBricks();
+            if (isMobile){
+                canvas.addEventListener("click", mouseClick, false);
+            }
             document.addEventListener("keydown", spaceKeyDown, false);
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
             document.addEventListener("mousemove", mouseMoveHandler, false);
-            canvas.addEventListener("click", mouseClick, false);
 
             //makes space key pause and play, ball still goes in the same direction.
             function spaceKeyDown(e) {
@@ -145,15 +149,7 @@
                 }
             }
             function mouseClick(e) {
-                   console.log("yay!");
-               if(pause == false){
-                    pause = true;
-                    oldX = dx;
-                    oldY = dy;
-                    dx = 0;
-                    dy = 0;
-               }
-                else if(pause == true){
+               if(pause == true){
                     if(reset == true){
                        dx = 0;
                        dy = -5;
