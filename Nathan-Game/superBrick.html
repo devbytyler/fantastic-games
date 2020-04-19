@@ -119,6 +119,7 @@
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
             document.addEventListener("mousemove", mouseMoveHandler, false);
+            canvas.addEventListener("click", mouseClick, false);
 
             //makes space key pause and play, ball still goes in the same direction.
             function spaceKeyDown(e) {
@@ -130,6 +131,29 @@
                     dy = 0;
                }
                 else if(e.key == "space" || e.key == " " && pause == true){
+                    if(reset == true){
+                       dx = 0;
+                       dy = -5;
+                       reset = false;
+                        pause = false;
+                   }
+                    else if(reset == false){
+                        dx = oldX;
+                        dy = oldY;
+                        pause = false;
+                    }
+                }
+            }
+            function mouseClick(e) {
+                   console.log("yay!");
+               if(pause == false){
+                    pause = true;
+                    oldX = dx;
+                    oldY = dy;
+                    dx = 0;
+                    dy = 0;
+               }
+                else if(pause == true){
                     if(reset == true){
                        dx = 0;
                        dy = -5;
