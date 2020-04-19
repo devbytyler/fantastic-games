@@ -3,6 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <title>Super Brick</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="../styles/main.css">
+        
         <style>
             * {padding: 0; margin: 0;}
             canvas {
@@ -22,6 +26,8 @@
                 color: "#000";
                 max-width: 420px;
                 margin: auto;
+                font-family: serif;
+                font-size: 18px;
             }
             div {
                 display: flex;
@@ -34,10 +40,16 @@
                 font-size: 18px;
                 font-family: monospace;
             }
-            background:
         </style>
+        
     </head>
     <body>
+        <nav class="navbar navbar-dark bg-dark sticky-top">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../images/logo.png" height=30 class="d-inline-block align-top mr-2" alt="">
+                Fantastic Games
+            </a>
+        </nav>
         <h1 id = gameTitle>Super Brick</h1>
         <h4 id = instructions>Use the Mouse or Arrow Keys to move your paddle. Press Space to start levels and pause the game. If you finish a level without losing a life, you gain 1 life. Finish Level 5 to win.</h4>
         <canvas id="Canvas" width="400" height="550"></canvas>

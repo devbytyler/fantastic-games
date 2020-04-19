@@ -9,73 +9,35 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="styles/main.css">
 
+    <!-- Vue JS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <title>Fantastic Games!</title>
   </head>
   <body>
-    <nav class="navbar navbar-dark bg-dark sticky-top">
-        <a class="navbar-brand" href="index.html">
-            <img src="images/logo.png" height=30 class="d-inline-block align-top mr-2" alt="">
-            Fantastic Games
-        </a>
-    </nav>
-    <div class="jumbotron"></div>
-    <div class="container games my-5">
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <a href="Nathan-Game/superBrick.html">
-                    <div class="card">
-                        <img class="card-img-top" src="images/brick.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Super Brick</h5>
-                            <p class="card-text">A classic brick-breaking adventure.</p>
+    <div id="app">
+        <nav class="navbar navbar-dark bg-dark sticky-top">
+            <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" height=30 class="d-inline-block align-top mr-2" alt="">
+                Fantastic Games
+            </a>
+        </nav>
+        <div class="container games my-5">
+            <div class="row">
+                <div v-for="game in games" class="col-12 col-sm-6 col-md-3 mb-3">
+                    <a :href="game.link">
+                        <div class="card">
+                            <img class="card-img-top" :src="game.img" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">{{game.name}}</h5>
+                                <p class="card-text">{{game.desc}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">Created by: {{game.creator}}</small>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Created by Nathan</small>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <a href="jacob/game.html">
-                    <div class="card">
-                        <img class="card-img-top" src="images/pong.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Ponginator 3000</h5>
-                            <p class="card-text">A super addicting pong adventure. Don't worry if you can't beat it. I can't either.</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Created by Jacob</small>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <a href="escapeRoom/main-page.html">
-                    <div class="card">
-                        <img class="card-img-top" src="images/escapeRoom.jpeg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">EscapeRoom</h5>
-                            <p class="card-text">An amazing online escape room.</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Created by Nathan</small>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                <a href="#">
-                    <div class="card">
-                        <!-- <img class="card-img-top" src="images/pong.jpg" alt="Card image cap"> -->
-                        <div class="card-body">
-                            <h5 class="card-title">Coming Soon...</h5>
-                            <p class="card-text">Wait for it...</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Created by ???</small>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -85,5 +47,8 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="main.js"></script>
+
   </body>
 </html>
