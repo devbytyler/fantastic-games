@@ -13,12 +13,19 @@
                 <p>What is the combination?<br>
                 Answer Format: 1, 2, 3<br>
                 <input id = "answer"><br>
-                <button id = "submit">SUBMIT</button><br>
+                <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
                 <button onclick = "window.location.href ='room1.html'">Back to Room</button></p>
+                <div id = "wrong"></div>
             </div>
-            <div id = "wrong"></div>
             <script>
-
+                var onButtonClick = function(){
+                    if(document.getElementById("answer").value == "6, 13, 34"){
+                        location.href = ("microwave-clue.html");
+                    }
+                    else{
+                        document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                    }
+                }
             </script>
         </body>
 </HTML>

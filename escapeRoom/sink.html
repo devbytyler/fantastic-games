@@ -10,13 +10,19 @@
                 <p> <img src = "images/sink.png" alt = "Picture of sink" width = "100"><br>
                 You walk over to the sink, and you find a key in it. Where does the key go to? <br>
                 <input type = "text" id = "answer"><br>
-                <button id = "submit">SUBMIT</button><br>
-                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
-                </p>
+                <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button></p>
+                <div id = "wrong"></div>
             </div>
-            <div id = "wrong"></div>
             <script>
-
+                var onButtonClick = function(){
+                   console.log("yay"); if(document.getElementById("answer").value.toLowerCase() == "couch"){
+                        location.href = ("couch-clue.html")
+                    }
+                    else {
+                        document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                    }
+                }
             </script>
         </body>
 </HTML>

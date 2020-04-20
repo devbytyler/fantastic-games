@@ -13,13 +13,20 @@
                 <p>What is the combination?<br>
                 Answer Format: 123<br>
                 <input type = "text" id = "answer"><br>
-                <button id = "submit">SUBMIT</button><br>
+                <button id = "submit" onclick = "onButtonClick()">SUBMIT</button><br>
                 <button onclick = "window.location.href ='room1.html'">Back to Room</button>
                 </p>
             </div>
             <div id = "wrong"></div>
             <script>
-
+                var onButtonClick = function(){
+                    if(document.getElementById("answer").value == "419"){
+                        location.href = ("toilet-clue.html");
+                    }
+                    else {
+                        document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                    }
+                }
             </script>
         </body>
 </HTML>
