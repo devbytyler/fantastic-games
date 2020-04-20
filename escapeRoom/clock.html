@@ -13,16 +13,16 @@
                 Answer format: UDLR</p>
             <input id="udlrLock" type="text"><br>
             <button id="submit" onclick="onButtonClick()">SUBMIT</button><br>
+            <div id="response"></div>
             <button onclick="window.location.href='room1.html'">Back to Room</button>
-            <div id="wrong"></div>
         </div>
         <script>
             var onButtonClick = function(){
                 if(document.getElementById("udlrLock").value.toLowerCase() == "urdu"){
-                    location.href = ("clock-clue.html")
+                    document.getElementById("response").innerHTML = "<p>You open the case, and inside is a piece of paper with a number on it.</p><img src='images/clock-clue.png' width='200'>"
                 }
                 else { 
-                    document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                    document.getElementById("response").textContent = "Wrong Answer! Try Again.";
                 }
             };
         </script>
