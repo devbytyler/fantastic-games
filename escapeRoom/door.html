@@ -11,9 +11,18 @@
             <p>You walk over to the door. On the handle is a lock needing 5 numbers. Use all previous clues to open the door.<br>
             Answer Format: 1, 2, 3, 4, 5<br>
             <input type = "text" id = "doorLock"><br>
-            <button id = "submit">SUBMIT</button><br>
+            <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
             <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </p>
+            <div id = "wrong"></div>
         </div>
+        <script>
+            var onButtonClick = function() {    if(document.getElementById("doorLock").value == "22, 6, 37, 43, 41"){
+                    location.href = ("you-escaped.html");
+                }
+                else {      document.getElementById("wrong").textContent  = "Wrong Answer! Try Again.";
+                }
+            }
+        </script>
     </body>
 </html>
