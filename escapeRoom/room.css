@@ -63,3 +63,11 @@ button {
 #response {
     color: black;
 }
+#worked {
+    border-bottom: none;
+    margin-bottom: none;
+    font-family: cursive;
+}
+#riddle {
+    font-family: cursive;
+}

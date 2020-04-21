@@ -11,16 +11,17 @@
                 You walk over to the sink, and you find a key in it. Where does the key go to? <br>
                 <input type = "text" id = "answer"><br>
                 <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
-                <button onclick = "window.location.href ='room1.html'">Back to Room</button></p>
-                <div id = "wrong"></div>
+                </p>
+                <div id = "response"></div>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
                 var onButtonClick = function(){
                    console.log("yay"); if(document.getElementById("answer").value.toLowerCase() == "couch"){
-                        location.href = ("couch-clue.html")
+                        document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the wall safe behind the couch, and inside is a piece of paper with a number on it.</p><p><img src='images/couch-clue.png' alt='Paper with the number 43' width='200'></p>"
                     }
                     else {
-                        document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                        document.getElementById("response").textContent = "Wrong Answer! Try Again.";
                     }
                 }
             </script>

@@ -14,16 +14,23 @@
                 Answer Format: 1, 2, 3<br>
                 <input type = "text" id = "deskLock"><br>
                 <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
-                <button onclick = "window.location.href ='room1.html'">Back to Room</button></p>
-                <div id = "wrong"></div>
+                </p>
+                <div id = "response"></div>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
+                document.addEventListener("keydown", returnKey, false);
+                function returnKey(e){
+                    if(e.key == "Enter"){
+                        onButtonClick();
+                    }
+                }
                 var onButtonClick = function() {
                     if(document.getElementById("deskLock").value == "3, 5, 16"){
-                        location.href = ("desk-clue.html")
+                        document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the desk drawer, and inside is a piece of paper with a number on it</p><p><img src='images/desk-clue.png' alt='Paper with the number 37' width='200'></p>"
                     }
                     else{
-                        document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                        document.getElementById("response").textContent = "Wrong Answer! Try Again.";
                     }
                 }
             </script>
