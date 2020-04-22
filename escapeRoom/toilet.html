@@ -14,17 +14,23 @@
                 Answer Format: 123<br>
                 <input type = "text" id = "answer"><br>
                 <button id = "submit" onclick = "onButtonClick()">SUBMIT</button><br>
-                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
                 </p>
+                <div id = "response"></div>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
-            <div id = "wrong"></div>
             <script>
+                document.addEventListener("keydown", returnKey, false);
+                function returnKey(e){
+                    if(e.key == "Enter"){
+                        onButtonClick();
+                    }
+                }
                 var onButtonClick = function(){
                     if(document.getElementById("answer").value == "419"){
-                        location.href = ("toilet-clue.html");
+                        document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the desk drawer, and inside is a piece of paper with a number on it.</p><p><img src = 'images/toilet-clue.png' alt = 'Paper with the number 22' width = '200'> </p>"
                     }
                     else {
-                        document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                        document.getElementById("response").textContent = "Wrong Answer! Try Again.";
                     }
                 }
             </script>

@@ -14,16 +14,23 @@
                 Answer Format: 1, 2, 3<br>
                 <input id = "answer"><br>
                 <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
-                <button onclick = "window.location.href ='room1.html'">Back to Room</button></p>
-                <div id = "wrong"></div>
+                </p>
+                <div id = "microResponse"></div>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
+                document.addEventListener("keydown", returnKey, false);
+                function returnKey(e){
+                    if(e.key == "Enter"){
+                        onButtonClick();
+                    }
+                }
                 var onButtonClick = function(){
                     if(document.getElementById("answer").value == "6, 13, 34"){
-                        location.href = ("microwave-clue.html");
+                        document.getElementById("microResponse").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the back of the microwave, and inside is a piece of paper with a number on it.</p><p><img src = 'images/microwave-clue.png' alt = 'Paper with 6 on it' width = '300'>"
                     }
                     else{
-                        document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
+                        document.getElementById("microResponse").textContent = "Wrong Answer! Try Again.";
                     }
                 }
             </script>

@@ -8,17 +8,47 @@
             <h1>Inside the Sink</h1>
             <div class="room">
                 <p> <img src = "images/sink.png" alt = "Picture of sink" width = "100"><br>
-                You walk over to the sink, and you find a key in it. Where does the key go to? <br>
-                <input type = "text" id = "answer"><br>
+                You walk over to the sink, and there is a cover over it. It is locked. You also find a riddle at the base of the sink.</p>
+                <h3>The Riddle:</h3>
+                <p id = riddle>
+                <strong>"Submarines and Dirty Dishes have this in common"</strong></p>
+                <p><input type = "text" id = "answer"><br>
                 <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
                 </p>
                 <div id = "response"></div>
+                <div id = "responseTwo"></div>
                 <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
+                var partTwo = false;
+                var wrong = false;
+                document.addEventListener("keydown", returnKey, false);
+                function returnKey (e){
+                    if(e.key == "Enter"){
+                        if(!partTwo){
+                            onButtonClick();
+                            wrong = false;
+                        }
+                        if(partTwo){
+                           ButtonClickTwo();
+                            wrong = true;
+                        }
+                    }
+                }
+                var ButtonClickTwo = function(){
+                    if(document.getElementById("answerTwo").value.toLowerCase() == "couch"){
+                        document.getElementById("responseTwo").innerHTML = "<p>You open the wall safe behind the couch, and inside is a piece of paper with a number on it.</p><p><img src='images/couch-clue.png' alt='Paper with the number 43' width='200'></p>"
+                    }
+                    else{
+                        if(wrong){
+                           document.getElementById("responseTwo").textContent = "Wrong Answer! Try Again.";
+                        }
+                    }
+                }
                 var onButtonClick = function(){
-                   console.log("yay"); if(document.getElementById("answer").value.toLowerCase() == "couch"){
-                        document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the wall safe behind the couch, and inside is a piece of paper with a number on it.</p><p><img src='images/couch-clue.png' alt='Paper with the number 43' width='200'></p>"
+                    if(document.getElementById("answer").value.toLowerCase() == "sink"){
+                        document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You lift the cover on the sink, and inside is a key. Where does the key go to?</p><input type = 'text' id = answerTwo><br><button id = submitTwo onclick = 'ButtonClickTwo()'>SUBMIT</button>"
+                        partTwo = true;
                     }
                     else {
                         document.getElementById("response").textContent = "Wrong Answer! Try Again.";
