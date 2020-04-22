@@ -44,7 +44,7 @@
         <h4 id = instructions>Use the Mouse or Arrow Keys to move your paddle. Press Space to start levels and pause the game. If you finish a level without losing a life, you gain 1 life. Finish Level 5 to win. Use the buttons to change between easy and hard modes.</h4>
         <canvas id="Canvas" width="400" height="550"></canvas>
         <div> <button id = "easy">EASY</button> <button id = "hard">HARD</button></div>
-        <div> <button onclick = "window.location.href ='superBrick.html'">RESTART</button></div>
+        <div> <button onclick = "restartButton()">RESTART</button></div>
 
         <script>
             var canvas = document.getElementById("Canvas");
@@ -86,9 +86,50 @@
             var element = document.getElementById('text');
             var hard = false;
             var easy = true;
+            var restart = false;
 
-            function restart () {
-                location.reload();
+            var restartButton = function(){
+                restart = true;
+                if(restart){
+                    canvas.width = 400;
+                    paddleWidth = canvas.width * 0.2;
+                    score = 0;
+                    previousScore = 0;
+                    level = 1;
+                    dx = 0;
+                    dy = 0;
+                    reset = true;
+                    pause = true;
+                    makeBricks();
+                    x = canvas.width/2;
+                    y = canvas.height-30;
+                    paddleX = (canvas.width-paddleWidth)/2;
+                    if(hard){
+                        lives = 10;
+                        remainingLives = 10;
+                    }
+                    else{
+                        lives = 5;
+                        remainingLives = 5;
+                    }
+                    restart = false;
+                }
+            }
+            function restart(){
+                score = 0;
+                lives = 5;
+                previousScore = 0;
+                level = 1;
+                dx = 0;
+                dy = 0;
+                reset = true;
+                pause = true;
+                makeBricks();
+                x = canvas.width/2;
+                y = canvas.height-30;
+                paddleX = (canvas.width-paddleWidth)/2;
+                canvas.width = 400;
+                remainingLives = 5;
             }
             //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
