@@ -3,10 +3,8 @@
     <head>
         <meta charset="utf-8" />
         <title>Super Brick</title>
-
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="../styles/main.css">
-        
         <style>
             * {padding: 0; margin: 0;}
             canvas {
@@ -20,6 +18,7 @@
                 text-decoration: underline;
                 color: #0095DD;
                 margin: auto;
+                font-family: serif;
             }
             #instructions {
                 text-align: center;
@@ -41,7 +40,6 @@
                 font-family: monospace;
             }
         </style>
-        
     </head>
     <body>
         <nav class="navbar navbar-dark bg-dark sticky-top">
@@ -202,7 +200,25 @@
                         var b = bricks[c][r];
                         if(b.status == 1){
                             if(x + 10 >= b.x && x - 10 <= b.x+brickWidth && y + 10 >= b.y && y - 10 <= b.y+brickHeight){
-                                dy = -dy;
+                                if(y + 10 == b.y || y - 10 == b.y + brickHeight){
+                                    console.log("yay!! Y");
+                                    if(dx === 0){
+                                        if(level == 2 || level == 4){
+                                            console.log("worked");
+                                            dy = 5;
+                                        }
+                                        else{
+                                            dy = -dy;
+                                        }
+                                    }
+                                    else{
+                                        dy = -dy;
+                                    }
+                                }
+                                else if(x + 9 >= b.x || x - 9 <= b.x + brickWidth){
+                                    console.log("yay!! X");
+                                    dx = -dx;
+                                }
                                 b.status = 0;
                                 score++;
                                 if(score == brickRowCount*brickColumnCount + previousScore) {
