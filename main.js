@@ -24,6 +24,14 @@ var app = new Vue({
                 creator: 'Nathan & Jacob',
             },
             {
+                name: 'Coin Collector',
+                desc: 'An amazing coin collecting adventure!',
+                img: 'images/coinCollector.png',
+                link: 'Nathan-Game/platformGame/platformGame.html',
+                creator: 'Nathan',
+
+            },
+            {
                 name: 'Coming Soon...', 
                 desc: 'Wait for it!', 
                 img: 'https://picsum.photos/200/100', 
