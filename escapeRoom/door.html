@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Escape Room</title>
+        <link rel="stylesheet" href="room.css">
+    </head>
+    <body>
+        <div id = "page">
+            <h1>The Final Puzzle</h1>
+            <div class = room>
+                <img src = "images/doorLock.webp" alt = "Picture of Lock" width = "75">
+                <p>You walk over to the door. On the handle is a lock needing 5 numbers. Use all previous clues to open the door.<br>
+                Answer Format: 1, 2, 3, 4, 5<br>
+                <input type = "text" id = "doorLock"><br>
+                <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
+                </p>
+                <div id = "wrong"></div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("keydown", returnKey, false);
+            function returnKey(e){
+                if(e.key == "Enter"){
+                    onButtonClick();
+                }
+            }
+            var onButtonClick = function() {    if(document.getElementById("doorLock").value == "22, 6, 37, 43, 41"){
+                    document.getElementById("page").innerHTML = "<h1>Congratulations!</h1><div class = room><h2>You Escaped!!!!!!!</h2><p>Thanks for Playing!!!<br><button onclick = 'window.location.href = 'main-page.html''>Play Again?</button><br><button onclick = 'window.location.href = '../index.html''>Play a New Game?</button></p></div>"
+                }
+                else {
+                    document.getElementById("wrong").textContent  = "Wrong Answer! Try Again.";
+                }
+            }
+        </script>
+    </body>
+</html>

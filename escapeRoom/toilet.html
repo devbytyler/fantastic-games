@@ -9,13 +9,30 @@
             <div class="room">
                 <p> <img src="images/toilet.jpg" alt="toilet picture" width="150"></p>
                 <p>You walk over to the Toilet. behind it is a combination lock and a piece of paper with a math problem. Solve it to open the lock.</p>
-                <p> <img src="images/toilet-math.png" alt="2[5*9/2+17(8+9/3)]" width="500"></p>
+                <p> <img src="images/toilet-math.png" alt="2[5*9/2+17(8+9/3)]" width="400"></p>
                 <p>What is the combination?<br>
-                <a href="nope.html">327</a><br>
-                <a href="toilet-clue.html">419</a><br>
-                <a href="nope.html">516</a><br>
-                <a href="nope.html">425</a><br>
-                <a href="nope.html">350</a></p>
+                Answer Format: 123<br>
+                <input type = "text" id = "answer"><br>
+                <button id = "submit" onclick = "onButtonClick()">SUBMIT</button><br>
+                </p>
+                <div id = "response"></div>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
+            <script>
+                document.addEventListener("keydown", returnKey, false);
+                function returnKey(e){
+                    if(e.key == "Enter"){
+                        onButtonClick();
+                    }
+                }
+                var onButtonClick = function(){
+                    if(document.getElementById("answer").value == "419"){
+                        document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the desk drawer, and inside is a piece of paper with a number on it.</p><p><img src = 'images/toilet-clue.png' alt = 'Paper with the number 22' width = '200'> </p>"
+                    }
+                    else {
+                        document.getElementById("response").textContent = "Wrong Answer! Try Again.";
+                    }
+                }
+            </script>
         </body>
 </HTML>

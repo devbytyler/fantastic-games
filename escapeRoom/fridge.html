@@ -8,16 +8,29 @@
             <h1>Inside the Fridge</h1>
             <div class=room>
                 <p><img src="images/fridge-pic.jpg" alt="Picture of fridge" width="125"></p>
-                <p> You walk over to the fridge and open it. Inside the fridge is a piece of paper in the back. It has pictures of different objects around the room. </p>
-                <p><img src="images/fridge.png" alt="Papaer in Fridge, order: Toilet, Microwave, Desk, Couch, Clock" width="500"></p>
-                <p> Where do you want to go next?<br>
-                <a href="desk.html">The Desk</a><br>
-                <a href="clock.html">The Clock</a><br>
-                <a href="microwave.html">The Microwave</a><br>
-                <a href="couch.html">The Couch</a><br>
-                <a href="toilet.html">The Toilet</a><br>
-                <a href="sink.html">The Sink</a><br>
-                <a href="escape.html">The Door</a></p>
+                <p> You walk over to the fridge and try to open it, but it is locked. You find a riddle taped to the back of the lock. Answer it to open the fridge.</p>
+                <h3>The Riddle:</h3>
+                <p id = riddle><strong>"The more there is, the less you see. What am I?"</strong></p>
+                <p><input id="riddleLock" type="text"><br>
+                <button id="submitFridge" onclick="onButtonClick()">SUBMIT</button></p>
+                <div id = response></div>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
+            <script>
+                document.addEventListener("keydown", returnKey, false);
+                function returnKey(e){
+                    if(e.key == "Enter"){
+                        onButtonClick();
+                    }
+                }
+                var onButtonClick = function(){
+                    if(document.getElementById("riddleLock").value.toLowerCase() == "dark"){
+                        document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the fridge, and inside is a piece of paper. It has pictures of objects around the room.<img src='images/fridge.png' alt='Paper in Fridge, order: Toilet, Microwave, Desk, Couch, Clock' width='400'>"
+                    }
+                    else {
+                        document.getElementById("response").textContent = "Wrong Answer! Try Again."
+                    }
+                }
+            </script>
         </body>
 </HTML>

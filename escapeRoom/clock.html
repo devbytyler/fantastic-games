@@ -1,29 +1,36 @@
 <!DOCTYPE html>
-<HTML lang=en>
-    <HEAD>
+<html lang=en>
+    <head>
         <title>Escape Room</title>
         <link rel="stylesheet" href="room.css">
-    </HEAD>
-        <body>
-            <h1>Behind the Clock</h1>
-            <div class=room>
-                <p> You look behind one clock, but there is nothing there. You look behind the other clock, and there is a case with a UDLR lock. You notice that the clocks aren't moving. One is at 12:15, and the other is at 6:00.</p>
-                <p>What is the combination?<br>
+    </head>
+    <body>
+        <h1>Behind the Clock</h1>
+        <div class=room>
+            <p> You look behind one clock, but there is nothing there. You look behind the other clock, and there is a case with a UDLR lock. You notice that the clocks aren't moving. One is at 12:15,
+                and the other is at 6:00.</p>
+            <p>What is the combination?<br>
                 Answer format: UDLR</p>
-                <input type="text" id="udlrLock"><br>
-                <button id = "submit">SUBMIT</button>
-            </div>
-            <div id = "wrong"></div>
-            <script>
-                var button = document.getElementById("submit, onButtonClick");
-                var answer = document.getElementById("udlrLock");
-                var onButtonClick = function(){
-                    if(answer = URDU){
-                        var correct = str.link("clock-clue");
-                    }
-                    else{ document.getElementById("wrong").textContent = "Wrong Answer! Try Again.";
-                    }
+            <input id="udlrLock" type="text"><br>
+            <button id="submit" onclick="onButtonClick()">SUBMIT</button><br>
+            <div id="response"></div>
+            <button onclick="window.location.href='room1.html'">Back to Room</button>
+        </div>
+        <script>
+            document.addEventListener("keydown", returnKey, false);
+            function returnKey(e){
+                if(e.key == "Enter"){
+                    onButtonClick();
                 }
-            </script>
-        </body>
-</HTML>
+            }
+            var onButtonClick = function(){
+                if(document.getElementById("udlrLock").value.toLowerCase() == "urdu"){
+                    document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the case, and inside is a piece of paper with a number on it.</p><img src='images/clock-clue.png' width='200'>"
+                }
+                else { 
+                    document.getElementById("response").textContent = "Wrong Answer! Try Again.";
+                }
+            };
+        </script>
+    </body>
+</html>

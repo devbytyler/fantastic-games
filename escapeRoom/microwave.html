@@ -10,12 +10,29 @@
                 <p> <img src="images/microwave-pic.png" alt="picture of microwave" width="200"></p>
                 <p>You walk over to the microwave and open it. Inside is a lock There is also a paper with 3 math problems. Solve them to open the lock.</p>
                 <p> <img src="images/microwave-math.png" alt="solve for x: 1. 0=7x-42, 2. 0=3x-39, 3. 0=15x-510" width="300"></p>
-                <p>What is the combination?</p>
-                <a href="microwave-clue.html">6, 13, 34</a><br>
-                <a href="nope.html">7, 36, 20</a><br>
-                <a href="nope.html">16, 7, 9</a><br>
-                <a href="nope.html">3, 7, 15</a><br>
-                <a href="nope.html">13, 36, 3</a>
+                <p>What is the combination?<br>
+                Answer Format: 1, 2, 3<br>
+                <input id = "answer"><br>
+                <button id = "submit" onclick="onButtonClick()">SUBMIT</button><br>
+                </p>
+                <div id = "microResponse"></div>
+                <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
+            <script>
+                document.addEventListener("keydown", returnKey, false);
+                function returnKey(e){
+                    if(e.key == "Enter"){
+                        onButtonClick();
+                    }
+                }
+                var onButtonClick = function(){
+                    if(document.getElementById("answer").value == "6, 13, 34"){
+                        document.getElementById("microResponse").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the back of the microwave, and inside is a piece of paper with a number on it.</p><p><img src = 'images/microwaveClue.png' alt = 'Paper with 6 on it' width = '300'>"
+                    }
+                    else{
+                        document.getElementById("microResponse").textContent = "Wrong Answer! Try Again.";
+                    }
+                }
+            </script>
         </body>
 </HTML>

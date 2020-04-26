@@ -16,12 +16,15 @@
                 text-decoration: underline;
                 color: #0095DD;
                 margin: auto;
+                font-family: serif;
             }
             #instructions {
                 text-align: center;
                 color: "#000";
                 max-width: 420px;
                 margin: auto;
+                font-family: serif;
+                font-size: 18px;
             }
             div {
                 display: flex;
@@ -34,14 +37,14 @@
                 font-size: 18px;
                 font-family: monospace;
             }
-            background:
         </style>
     </head>
     <body>
         <h1 id = gameTitle>Super Brick</h1>
-        <h4 id = instructions>Use the Mouse or Arrow Keys to move your paddle. Press Space to start levels and pause the game. If you finish a level without losing a life, you gain 1 life. Finish Level 5 to win.</h4>
+        <h4 id = instructions>Use the Mouse or Arrow Keys to move your paddle. Press Space to start levels and pause the game. If you finish a level without losing a life, you gain 1 life. Finish Level 5 to win. Use the buttons to change between easy and hard modes.</h4>
         <canvas id="Canvas" width="400" height="550"></canvas>
-        <div> <button onclick = "window.location.href ='superBrick.html'">RESTART</button></div>
+        <div> <button id = "easy">EASY</button> <button id = "hard">HARD</button></div>
+        <div> <button onclick = "window.location.href = 'superBrick.html'">RESTART</button></div>
 
         <script>
             var canvas = document.getElementById("Canvas");
@@ -52,7 +55,7 @@
             var dx = 0;
             var dy = -5;
             var paddleHeight = 10;
-            var paddleWidth = 80;
+            var paddleWidth = canvas.width * 0.2;
             var paddleX = (canvas.width-paddleWidth) / 2;
             var rightPressed = false;
             var leftPressed = false;
@@ -65,7 +68,7 @@
             var brickOffsetTop = 30;
             var brickOffsetLeft = 30;
             var score = 0;
-            var lives = 5;
+            var lives = 10;
             var bricks = [];
             var gameLose = false;
             var gameWin = false;
@@ -74,13 +77,16 @@
             var oldY;
             var previousScore = 0;
             var paddleCenter = paddleX + paddleWidth/2;
-            var distanceFromCenter = x - paddleCenter;
             var ballHitPaddle = false;
             var reset = false;
-            var remainingLives = 5;
-            var addLife = false
+            var remainingLives = 10;
+            var addLife = false;
+            var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            var element = document.getElementById('text');
+            var hard = true;
+            var easy = false;
 
-            function restart () {
+            function restart(){
                 location.reload();
             }
             //This makes it so the ball is stopped when page is loaded.
@@ -94,6 +100,12 @@
             //function makes the bricks.
             function makeBricks (){
                 brickRowCount = 3 * level;
+                if(hard){
+                    brickColumnCount = 4 + level;
+                }
+                else{
+                    brickColumnCount = 5;
+                }
                 for(var c=0; c<brickColumnCount; c++){
                     bricks[c] = [];
                     for(var r=0; r<brickRowCount; r++) {
@@ -103,10 +115,53 @@
             }
             //call make brick function.
             makeBricks();
+            if (isMobile){
+                canvas.addEventListener("click", mouseClick, false);
+            }
             document.addEventListener("keydown", spaceKeyDown, false);
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
             document.addEventListener("mousemove", mouseMoveHandler, false);
+            document.getElementById("easy").addEventListener("click", function(){
+                if(hard){
+                    easy = true;
+                    hard = false;
+                    score = 0;
+                    lives = 5;
+                    previousScore = 0;
+                    level = 1;
+                    dx = 0;
+                    dy = 0;
+                    reset = true;
+                    pause = true;
+                    makeBricks();
+                    x = canvas.width/2;
+                    y = canvas.height-30;
+                    paddleX = (canvas.width-paddleWidth)/2;
+                    canvas.width = 400;
+                    remainingLives = 5;
+                }
+            });
+            document.getElementById("hard").addEventListener("click", function(){
+                if(easy){
+                    hard = true;
+                    easy = false;
+                    score = 0;
+                    lives = 10;
+                    previousScore = 0;
+                    level = 1;
+                    dx = 0;
+                    dy = 0;
+                    reset = true;
+                    pause = true;
+                    makeBricks();
+                    x = canvas.width/2;
+                    y = canvas.height-30;
+                    paddleX = (canvas.width-paddleWidth)/2;
+                    canvas.width = 400;
+                    remainingLives = 10;
+                }
+            });
 
             //makes space key pause and play, ball still goes in the same direction.
             function spaceKeyDown(e) {
@@ -118,6 +173,21 @@
                     dy = 0;
                }
                 else if(e.key == "space" || e.key == " " && pause == true){
+                    if(reset == true){
+                       dx = 0;
+                       dy = -5;
+                       reset = false;
+                        pause = false;
+                   }
+                    else if(reset == false){
+                        dx = oldX;
+                        dy = oldY;
+                        pause = false;
+                    }
+                }
+            }
+            function mouseClick(e) {
+               if(pause == true){
                     if(reset == true){
                        dx = 0;
                        dy = -5;
@@ -169,7 +239,25 @@
                         var b = bricks[c][r];
                         if(b.status == 1){
                             if(x + 10 >= b.x && x - 10 <= b.x+brickWidth && y + 10 >= b.y && y - 10 <= b.y+brickHeight){
-                                dy = -dy;
+                                if(y + 10 == b.y || y - 10 == b.y + brickHeight){
+                                    console.log("yay!! Y");
+                                    if(dx === 0){
+                                        if(level == 2 || level == 4){
+                                            console.log("worked");
+                                            dy = 5;
+                                        }
+                                        else{
+                                            dy = -dy;
+                                        }
+                                    }
+                                    else{
+                                        dy = -dy;
+                                    }
+                                }
+                                else if(x + 9 >= b.x || x - 9 <= b.x + brickWidth){
+                                    console.log("yay!! X");
+                                    dx = -dx;
+                                }
                                 b.status = 0;
                                 score++;
                                 if(score == brickRowCount*brickColumnCount + previousScore) {
@@ -189,6 +277,11 @@
             function advanceLevel() {
                 previousScore = score;
                 level++;
+                if(hard){
+                   canvas.width += 70;
+                    paddleWidth = canvas.width * 0.2;
+                    console.log(paddleWidth);
+                }
                 makeBricks();
                 x = canvas.width/2;
                 y = canvas.height-30;
@@ -210,7 +303,12 @@
             function drawAddLife(){
                 ctx.font = "36px Arial";
                 ctx.fillStyle = "#000";
-                ctx.fillText("+1 Life!!!", 140, 280);
+                if(hard){
+                    ctx.fillText("+1 Life!!!", 35 * level + 105, 280);
+                }
+                if(easy){
+                    ctx.fillText("+1 Life!!!", 140, 280);
+                }
                 var addLifeInterval = setInterval(lifeAdd, 1000);
             }
             //draws the ball.
@@ -269,9 +367,17 @@
             function gameLost(){
                 ctx.font = "36px Arial";
                 ctx.fillStyle = "#000";
-                ctx.fillText("You Lost!!! Try Again.", 35, 250);
-                ctx.font = "18px Arial";
-                ctx.fillText("Final Score: " + score, 140, 280);
+                if(hard){
+                    ctx.fillText("You Lost!!! Try Again.", 35 * level, 250);
+                    ctx.font = "18px Arial";
+                    ctx.fillText("Final Score: " + score, 35 * level + 105, 280);
+                }
+                else if(easy){
+                    ctx.fillText("You Lost!!! Try Again.", 35, 250);
+                    ctx.font = "18px Arial";
+                    ctx.fillText("Final Score: " + score, 140, 280);
+                }
+
             }
             //sets variable gameLose to true, in draw function causes gameLost to be called.
             function gameOver() {
@@ -285,9 +391,16 @@
             function gameWon(){
                 ctx.font = "32px Arial";
                 ctx.fillStyle = "#000";
-                ctx.fillText("You Won! Congratulations!", 10, 250);
-                ctx.font = "18px Arial";
-                ctx.fillText("Final Score: " + score, 140, 280);
+                if(easy){
+                    ctx.fillText("You Won! Congratulations!", 10, 250);
+                    ctx.font = "18px Arial";
+                    ctx.fillText("Final Score: " + score, 140, 280);
+                }
+                else if(hard){
+                    ctx.fillText("You Won! Congratulations!", 150, 250);
+                    ctx.font = "18px Arial";
+                    ctx.fillText("Final Score: " + score, 280, 280);
+                }
             }
             //sets variable gameWin to true, in draw function causes gameWon to be called.
             function gameWinner(){
