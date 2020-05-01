@@ -455,14 +455,14 @@ const YOUWIN = `
 var GAME_LEVELS = [
     TOWER,
     CAVE,
-    MOONLIGHT,
-    THE_GUANTLET,
     DRACULAS_CASTLE,
     GONE_MAD,
     VISTA,
+    MOONLIGHT,
+    NATIVE,
+    THE_GUANTLET,
     THE_HEIST,
     CASTLE,
-    NATIVE,
     YOUWIN,
 ]
 
