@@ -6,7 +6,9 @@
             body {
                 display: flex;
                 align-content: center;
+                justify-content: center;
                 flex-direction: column;
+                background-color: lightgreen;
             }
             h1 {
                 text-align: center;
@@ -17,8 +19,19 @@
             }
             canvas {
                 background: "white";
-                border: 4px inset black;
+                border: 4px inset darkgray;
                 margin: 0 auto;
+            }
+            #restart {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+            }
+            button{
+                padding: 10px;
+                margin-top: 0px;
+                font-size: 18px;
+                font-family: monospace;
             }
         </style>
     </head>
@@ -26,6 +39,8 @@
         <h1>SNAKE</h1>
         <h3>Collect fruit to grow bigger. Use arrow keys to move.</h3>
         <canvas id="canvas" width="600" height="600"></canvas>
+        <div id = "score"></div>
+        <div id = "restart"><button onclick = "window.location.href = 'snakeGame.html'">RESTART</button></div>
         <script src = "snakeGame.js">
         </script>
     </body>
