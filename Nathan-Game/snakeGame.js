@@ -26,6 +26,7 @@ var bh = 600;
 var p = 0;
 var score = 0;
 var lose = false;
+var segments = snakeX.length-1;
 
 
 document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
@@ -83,12 +84,10 @@ function keyDownHandler(e) {
 //draws snake segments.
 function drawSnake() {
     for(var i = 0; i < snakeSegments; i++)
-        console.log(snakeX[0], snakeX[1], snakeX[2], snakeX[3], snakeY[0], snakeY[1], snakeY[2], snakeY[3],);
         ctx.beginPath();
-        ctx.rect(snakeX[0], snakeY[0], snakeWidth, snakeHeight);
-        ctx.rect(snakeX[1], snakeY[1], snakeWidth, snakeHeight);
-        ctx.rect(snakeX[2], snakeY[2], snakeWidth, snakeHeight);
-        ctx.rect(snakeX[3], snakeY[3], snakeWidth, snakeHeight);
+        for(var i = 0; i < snakeX.length; i++) {
+            ctx.rect(snakeX[i], snakeY[i], snakeWidth, snakeHeight);
+        }
         ctx.fillStyle = "darkgreen";
         ctx.fill();
         ctx.closePath();
@@ -117,20 +116,21 @@ function drawLose() {
 //draw function, draws 4 long snake, apple, and background each time it is called.
 function draw() {
     drawBackground();
-    drawBoard();
     drawSnake();
     drawApple();
+    drawBoard();
     if(lose) {
         drawLose();
     }
 
     if(snakeX[0] == appleX && snakeY[0] == appleY){
         score++;
-        snakeSegments++;
         document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
         appleX = randomNumber(1, 40) * 15;
         appleY = randomNumber(1, 40) * 15;
-        snakeSegments++;
+        snakeX.push(snakeX[snakeX.length - 1] - 15);
+        snakeY.push(snakeY[snakeY.length - 1])
+
     }
     if(snakeX[0] > 600 || snakeX[0] < 0 || snakeY[0] < 0 || snakeY[0] > 600) {
         lose = true;
