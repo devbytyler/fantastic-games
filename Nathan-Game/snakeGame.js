@@ -14,8 +14,8 @@ var appleHeight = 15;
 var appleX = randomNumber(1, 40) * 15;
 var appleY = randomNumber(1, 40) * 15;
 var score = 0;
-var dx = 0;
-var dy = 0;
+var dx = [15, 15, 15, 15];
+var dy = [0, 0, 0, 0];
 var right = true;
 var left = false;
 var up = false;
@@ -48,16 +48,16 @@ function drawBoard(){
 document.addEventListener("keydown", keyDownHandler, false);
 
 function keyDownHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight") {
-        if(dx == 0 && !right){
+    if(e.key == "ArrowRight") {
+        if(!left && !right){
             right = true;
             left = false;
             up = false;
             down = false;
         }
     }
-    else if(e.key == "Left" || e.key == "ArrowLeft") {
-        if(dx == 0 && !left) {
+    else if(e.key == "ArrowLeft") {
+        if(!right && !left) {
             left = true;
             right = false;
             up = false;
@@ -65,7 +65,7 @@ function keyDownHandler(e) {
         }
     }
     else if(e.key == "ArrowUp") {
-        if(dy == 0 && !up) {
+        if(!down && !up) {
             up = true;
             down = false;
             right = false;
@@ -73,7 +73,7 @@ function keyDownHandler(e) {
         }
     }
     else if(e.key == "ArrowDown") {
-        if(dy == 0 && !down) {
+        if(!up && !down) {
             down = true;
             left = false;
             right = false;
@@ -83,7 +83,7 @@ function keyDownHandler(e) {
 }
 //draws snake segments.
 function drawSnake() {
-    for(var i = 0; i < snakeSegments; i++)
+    for(var i = 0; i < snakeSegments; i++){
         ctx.beginPath();
         for(var i = 0; i < snakeX.length; i++) {
             ctx.rect(snakeX[i], snakeY[i], snakeWidth, snakeHeight);
@@ -91,6 +91,7 @@ function drawSnake() {
         ctx.fillStyle = "darkgreen";
         ctx.fill();
         ctx.closePath();
+    }
 }
 //draws apple at random x and y.
 function drawApple() {
@@ -113,6 +114,14 @@ function drawLose() {
     ctx.fillStyle = "#000";
     ctx.fillText("You Lose!!!", canvas.width / 2 - 119, canvas.height / 2);
 }
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
 //draw function, draws 4 long snake, apple, and background each time it is called.
 function draw() {
     drawBackground();
@@ -129,8 +138,18 @@ function draw() {
         appleX = randomNumber(1, 40) * 15;
         appleY = randomNumber(1, 40) * 15;
         snakeX.push(snakeX[snakeX.length - 1] - 15);
-        snakeY.push(snakeY[snakeY.length - 1])
-
+        snakeY.push(snakeY[snakeY.length - 1]);
+        dx.push(dx[dx.length - 1]);
+        dy.push(dy[dy.length - 1]);
+        console.log(dx[dx.length - 1]);
+        console.log(dy[dy.length - 1]);
+    }
+    for(var i = 0; i < snakeX.length; i++) {
+        console.log("applemove")
+        if(appleX == snakeX[i] && appleY == snakeY[i]){
+            appleX = randomNumber(1, 40) * 15;
+            appleY = randomNumber(1, 40) * 15;
+        }
     }
     if(snakeX[0] > 600 || snakeX[0] < 0 || snakeY[0] < 0 || snakeY[0] > 600) {
         lose = true;
@@ -138,37 +157,50 @@ function draw() {
         left = false;
         up = false;
         down = false;
-        dx = 0;
-        dy = 0;
+        for(var i = 0; i < snakeX.length; i++){
+            dx[i] = 0;
+            dy[i] = 0;
+        }
+    }
+    function advance() {
+        for(var i = 0; i < snakeX.length; i++) {
+            snakeY[i] += dy[i];
+            snakeX[i] += dx[i];
+        }
     }
     //snake moves based on the arrow keys pushed.
     if(right == true){
-        dx = 15;
-        dy = 0;
+        for(var i = 0; i < dx.length; i++) {
+            dx[i] = 15;
+            dy[i] = 0;
+            sleep(1);
+            advance();
+        }
     }
     else if(left == true){
-        dx = -15;
-        dy = 0;
+        for(var i = 0; i < dx.length; i++) {
+            dx[i] = -15;
+            dy[i] = 0;
+            sleep(1);
+            advance();
+        }
     }
     else if(up == true){
-        dx = 0;
-        dy = -15;
+        for(var i = 0; i < dx.length; i++) {
+            dx[i] = 0;
+            dy[i] = -15;
+            sleep(1);
+            advance();
+        }
     }
     else if(down == true){
-        dx = 0;
-        dy = 15;
-    }
-    if(right || left){
-        for(var i = 0; i < snakeX.length; i++) {
-            snakeX[i] += dx;
+        for(var i = 0; i < dx.length; i++) {
+            dx[i] = 0;
+            dy[i] = 15;
+            sleep(1);
+            advance();
         }
     }
-    if(up || down) {
-        for(var i = 0; i < snakeY.length; i++) {
-           snakeY[i] += dy;
-        }
-    }
-
 }
 //sets interval for how often draw function is called.
 var interval = setInterval(draw, 150);
