@@ -5,17 +5,17 @@ function randomNumber(min, max) {
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-var snakeWidth = 15;
-var snakeHeight = 15;
-var snakeX = [300, 285, 270, 255];
-var snakeY = [300, 300, 300, 300];
-var appleWidth = 15;
-var appleHeight = 15;
+var snakeSize = 15;
+var snakePos = [
+    [300, 300],
+    [285, 300],
+    [270, 300],
+    [255, 300],
+];
+var appleSize = 15;
 var appleX = randomNumber(1, 40) * 15;
 var appleY = randomNumber(1, 40) * 15;
 var score = 0;
-var dx = [15, 15, 15, 15];
-var dy = [0, 0, 0, 0];
 var right = true;
 var left = false;
 var up = false;
@@ -23,7 +23,6 @@ var down = false;
 var bw = 600;
 var bh = 600;
 var p = 0;
-var score = 0;
 var lose = false;
 var turn = false;
 
@@ -85,10 +84,10 @@ function keyDownHandler(e) {
 }
 //draws snake segments.
 function drawSnake() {
-    for(var i = 0; i < snakeX.length; i++){
+    for(var i = 0; i < snakePos.length; i++){
         ctx.beginPath();
-        for(var i = 0; i < snakeX.length; i++) {
-            ctx.rect(snakeX[i], snakeY[i], snakeWidth, snakeHeight);
+        for(var i = 0; i < snakePos.length; i++) {
+            ctx.rect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
         }
         ctx.fillStyle = "darkgreen";
         ctx.fill();
@@ -98,7 +97,7 @@ function drawSnake() {
 //draws apple at random x and y.
 function drawApple() {
     ctx.beginPath();
-    ctx.rect(appleX, appleY, appleWidth, appleHeight);
+    ctx.rect(appleX, appleY, appleSize, appleSize);
     ctx.fillStyle = "darkred";
     ctx.fill();
     ctx.closePath();
@@ -116,14 +115,6 @@ function drawLose() {
     ctx.fillStyle = "#000";
     ctx.fillText("You Lose!!!", canvas.width / 2 - 119, canvas.height / 2);
 }
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}
 //draw function, draws 4 long snake, apple, and background each time it is called.
 function draw() {
     drawBackground();
@@ -134,66 +125,43 @@ function draw() {
         drawLose();
     }
 
-    if(snakeX[0] == appleX && snakeY[0] == appleY){
+    if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
         score++;
         document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
         appleX = randomNumber(1, 40) * 15;
         appleY = randomNumber(1, 40) * 15;
-        if(up && !turn) {
-            snakeX.push(snakeX[snakeX.length - 1]);
-            snakeY.push(snakeY[snakeY.length - 1] + 15);
-        }
-        if(down && !turn) {
-            snakeX.push(snakeX[snakeX.length - 1]);
-            snakeY.push(snakeY[snakeY.length - 1] - 15);
-
-        }
-        if(left && !turn) {
-            snakeX.push(snakeX[snakeX.length - 1] - 15);
-            snakeY.push(snakeY[snakeY.length - 1]);
-        }
-        if(right && !turn) {
-            snakeX.push(snakeX[snakeX.length - 1] + 15);
-            snakeY.push(snakeY[snakeY.length - 1]);
-        }
-        dx.push(dx[dx.length - 1]);
-        dy.push(dy[dy.length - 1]);
+        snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
     }
-    for(var i = 0; i < snakeX.length; i++) {
-        if(appleX == snakeX[i] && appleY == snakeY[i]){
+    else if(!lose) {
+        snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
+        snakePos.pop();
+    }
+    for(var i = 0; i < snakePos.length; i++) {
+        if(appleX == snakePos[i][0] && appleY == snakePos[i][1]){
             appleX = randomNumber(1, 40) * 15;
             appleY = randomNumber(1, 40) * 15;
         }
     }
-    if(snakeX[0] > 599 || snakeX[0] < 1 || snakeY[0] < 1 || snakeY[0] > 599) {
+    if(snakePos[0][0] > 599 || snakePos[0][0] < 1 || snakePos[0][1] < 1 || snakePos[0][1] > 599) {
         lose = true;
         right = false;
         left = false;
         up = false;
         down = false;
-        for(var i = 0; i < snakeX.length; i++){
-            dx[i] = 0;
-            dy[i] = 0;
-        }
     }
-    function advance() {
-        for(var i = 0; i < snakeX.length; i++) {
-            snakeY[i] += dy[i];
-            snakeX[i] += dx[i];
-        }
-    }
+
     //snake moves based on the arrow keys pushed.
     if(right == true){
         if(turn == true){
             for(var i = 0; i < dx.length; i++) {
                 dx[i] = 15;
                 dy[i] = 0;
-                advance();
+                //advance();
             }
             turn = false;
         }
         else {
-            advance();
+           // advance();
         }
     }
     else if(left == true){
@@ -201,12 +169,12 @@ function draw() {
             for(var i = 0; i < dx.length; i++) {
                 dx[i] = -15;
                 dy[i] = 0;
-                advance();
+                //advance();
             }
             turn = false;
         }
         else {
-            advance();
+            //advance();
         }
     }
     else if(up == true){
@@ -214,12 +182,12 @@ function draw() {
             for(var i = 0; i < dx.length; i++) {
                 dx[i] = 0;
                 dy[i] = -15;
-                advance();
+                //advance();
             }
             turn = false;
         }
         else {
-            advance();
+            //advance();
         }
     }
     else if(down == true){
@@ -227,12 +195,12 @@ function draw() {
             for(var i = 0; i < dx.length; i++) {
                 dx[i] = 0;
                 dy[i] = 15;
-                advance();
+                //advance();
             }
             turn = false;
         }
         else {
-            advance();
+            //advance();
         }
     }
 }
