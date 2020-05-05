@@ -4,7 +4,7 @@ var app = new Vue({
         games: [
             {
                 name: 'Super Brick', 
-                desc: 'A classic brick-breaking adventure.', 
+                desc: 'A fantastic brick-breaking adventure.',
                 img: 'images/brick.jpg', 
                 link: 'Nathan-Game/superBrick.html', 
                 creator:'Nathan',
@@ -18,18 +18,25 @@ var app = new Vue({
             },
             {
                 name: 'Escape Room', 
-                desc: 'An amazing online escape room.', 
+                desc: 'A fantastic online escape room.',
                 img: 'images/escapeRoom.jpeg', 
                 link: 'escapeRoom/main-page.html', 
                 creator: 'Nathan & Jacob',
             },
             {
                 name: 'Coin Collector',
-                desc: 'An amazing coin collecting adventure!',
+                desc: 'A fantastic coin collecting adventure!',
                 img: 'images/coinCollector.png',
                 link: 'Nathan-Game/platformGame/platformGame.html',
                 creator: 'Nathan, Jacob, and Tyler',
 
+            },
+            {
+                name: 'Snake Game',
+                desc: 'An fantastic eating snake game!',
+                img: 'images/snake.png',
+                link: 'Nathan-Game/snakeGame.html',
+                creator: 'Nathan',
             },
             {
                 name: 'Coming Soon...', 
