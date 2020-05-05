@@ -93,6 +93,13 @@ function drawSnake() {
         ctx.fillStyle = "darkgreen";
         ctx.fill();
         ctx.closePath();
+        ctx.beginPath();
+        for(var i = 0; i < snakePos.length; i++) {
+            ctx.strokeRect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
+        }
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.closePath();
     }
 }
 //draws apple at random x and y.
@@ -107,7 +114,7 @@ function drawApple() {
 function drawBackground() {
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "lightgreen";
     ctx.fill();
     ctx.closePath();
 }
@@ -237,4 +244,4 @@ function draw() {
     }
 }
 //sets interval for how often draw function is called.
-var interval = setInterval(draw, 150);
+var interval = setInterval(draw, 100);
