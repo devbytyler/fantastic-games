@@ -20,14 +20,12 @@ var right = true;
 var left = false;
 var up = false;
 var down = false;
-var snakeSegments = 3;
 var bw = 600;
 var bh = 600;
 var p = 0;
 var score = 0;
 var lose = false;
-var segments = snakeX.length-1;
-
+var turn = false;
 
 document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
 function drawBoard(){
@@ -54,6 +52,7 @@ function keyDownHandler(e) {
             left = false;
             up = false;
             down = false;
+            turn = true;
         }
     }
     else if(e.key == "ArrowLeft") {
@@ -62,6 +61,7 @@ function keyDownHandler(e) {
             right = false;
             up = false;
             down = false;
+            turn = true;
         }
     }
     else if(e.key == "ArrowUp") {
@@ -70,6 +70,7 @@ function keyDownHandler(e) {
             down = false;
             right = false;
             left = false;
+            turn = true;
         }
     }
     else if(e.key == "ArrowDown") {
@@ -78,12 +79,13 @@ function keyDownHandler(e) {
             left = false;
             right = false;
             up = false;
+            turn = true;
         }
     }
 }
 //draws snake segments.
 function drawSnake() {
-    for(var i = 0; i < snakeSegments; i++){
+    for(var i = 0; i < snakeX.length; i++){
         ctx.beginPath();
         for(var i = 0; i < snakeX.length; i++) {
             ctx.rect(snakeX[i], snakeY[i], snakeWidth, snakeHeight);
@@ -137,21 +139,33 @@ function draw() {
         document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
         appleX = randomNumber(1, 40) * 15;
         appleY = randomNumber(1, 40) * 15;
-        snakeX.push(snakeX[snakeX.length - 1] - 15);
-        snakeY.push(snakeY[snakeY.length - 1]);
+        if(up && !turn) {
+            snakeX.push(snakeX[snakeX.length - 1]);
+            snakeY.push(snakeY[snakeY.length - 1] + 15);
+        }
+        if(down && !turn) {
+            snakeX.push(snakeX[snakeX.length - 1]);
+            snakeY.push(snakeY[snakeY.length - 1] - 15);
+
+        }
+        if(left && !turn) {
+            snakeX.push(snakeX[snakeX.length - 1] - 15);
+            snakeY.push(snakeY[snakeY.length - 1]);
+        }
+        if(right && !turn) {
+            snakeX.push(snakeX[snakeX.length - 1] + 15);
+            snakeY.push(snakeY[snakeY.length - 1]);
+        }
         dx.push(dx[dx.length - 1]);
         dy.push(dy[dy.length - 1]);
-        console.log(dx[dx.length - 1]);
-        console.log(dy[dy.length - 1]);
     }
     for(var i = 0; i < snakeX.length; i++) {
-        console.log("applemove")
         if(appleX == snakeX[i] && appleY == snakeY[i]){
             appleX = randomNumber(1, 40) * 15;
             appleY = randomNumber(1, 40) * 15;
         }
     }
-    if(snakeX[0] > 600 || snakeX[0] < 0 || snakeY[0] < 0 || snakeY[0] > 600) {
+    if(snakeX[0] > 599 || snakeX[0] < 1 || snakeY[0] < 1 || snakeY[0] > 599) {
         lose = true;
         right = false;
         left = false;
@@ -170,34 +184,54 @@ function draw() {
     }
     //snake moves based on the arrow keys pushed.
     if(right == true){
-        for(var i = 0; i < dx.length; i++) {
-            dx[i] = 15;
-            dy[i] = 0;
-            sleep(1);
+        if(turn == true){
+            for(var i = 0; i < dx.length; i++) {
+                dx[i] = 15;
+                dy[i] = 0;
+                advance();
+            }
+            turn = false;
+        }
+        else {
             advance();
         }
     }
     else if(left == true){
-        for(var i = 0; i < dx.length; i++) {
-            dx[i] = -15;
-            dy[i] = 0;
-            sleep(1);
+        if(turn == true) {
+            for(var i = 0; i < dx.length; i++) {
+                dx[i] = -15;
+                dy[i] = 0;
+                advance();
+            }
+            turn = false;
+        }
+        else {
             advance();
         }
     }
     else if(up == true){
-        for(var i = 0; i < dx.length; i++) {
-            dx[i] = 0;
-            dy[i] = -15;
-            sleep(1);
+        if(turn == true) {
+            for(var i = 0; i < dx.length; i++) {
+                dx[i] = 0;
+                dy[i] = -15;
+                advance();
+            }
+            turn = false;
+        }
+        else {
             advance();
         }
     }
     else if(down == true){
-        for(var i = 0; i < dx.length; i++) {
-            dx[i] = 0;
-            dy[i] = 15;
-            sleep(1);
+        if(turn == true) {
+            for(var i = 0; i < dx.length; i++) {
+                dx[i] = 0;
+                dy[i] = 15;
+                advance();
+            }
+            turn = false;
+        }
+        else {
             advance();
         }
     }
