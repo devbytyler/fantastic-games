@@ -25,6 +25,7 @@ var bh = 600;
 var p = 0;
 var lose = false;
 var win = false;
+var turn = false;
 
 document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
 function drawBoard(){
@@ -46,35 +47,39 @@ document.addEventListener("keydown", keyDownHandler, false);
 
 function keyDownHandler(e) {
     if(e.key == "ArrowRight") {
-        if(!left && !right){
+        if(!left && !right && !turn){
             right = true;
             left = false;
             up = false;
             down = false;
+            turn = true;
         }
     }
     else if(e.key == "ArrowLeft") {
-        if(!right && !left) {
+        if(!right && !left && !turn) {
             left = true;
             right = false;
             up = false;
             down = false;
+            turn = true;
         }
     }
     else if(e.key == "ArrowUp") {
-        if(!down && !up) {
+        if(!down && !up && !turn) {
             up = true;
             down = false;
             right = false;
             left = false;
+            turn = true;
         }
     }
     else if(e.key == "ArrowDown") {
-        if(!up && !down) {
+        if(!up && !down && !turn) {
             down = true;
             left = false;
             right = false;
             up = false;
+            turn = true;
         }
     }
 }
@@ -121,7 +126,7 @@ function draw() {
     drawBackground();
     drawSnake();
     drawApple();
-    drawBoard();
+    //drawBoard();
     if(lose) {
         drawLose();
     }
@@ -159,8 +164,15 @@ function draw() {
             snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
         }
         else if(!lose && !win) {
-            snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
-            snakePos.pop();
+            if(turn){
+                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
+                snakePos.pop();
+                turn = false;
+            }
+            else {
+                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
+                snakePos.pop();
+            }
         }
     }
     else if(left == true){
@@ -172,8 +184,15 @@ function draw() {
             snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
         }
         else if(!lose && !win) {
-            snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
-            snakePos.pop();
+            if(turn){
+                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
+                snakePos.pop();
+                turn = false;
+            }
+            else {
+                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
+                snakePos.pop();
+            }
         }
     }
     else if(up == true){
@@ -185,8 +204,15 @@ function draw() {
             snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
         }
         else if(!lose && !win) {
-            snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
-            snakePos.pop();
+            if(turn){
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
+                snakePos.pop();
+                turn = false;
+            }
+            else {
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
+                snakePos.pop();
+            }
         }
     }
     else if(down == true){
@@ -198,8 +224,15 @@ function draw() {
             snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
         }
         else if(!lose && !win) {
-            snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
-            snakePos.pop();
+            if(turn) {
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
+                snakePos.pop();
+                turn = false;
+            }
+            else {
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
+                snakePos.pop();
+            }
         }
     }
 }
