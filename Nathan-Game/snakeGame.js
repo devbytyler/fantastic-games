@@ -46,7 +46,7 @@ function drawBoard(){
 document.addEventListener("keydown", keyDownHandler, false);
 
 function keyDownHandler(e) {
-    if(e.key == "ArrowRight") {
+    if(e.key == "ArrowRight" || e.key == "d") {
         if(!left && !right && !turn){
             right = true;
             left = false;
@@ -55,7 +55,7 @@ function keyDownHandler(e) {
             turn = true;
         }
     }
-    else if(e.key == "ArrowLeft") {
+    else if(e.key == "ArrowLeft" || e.key == "a") {
         if(!right && !left && !turn) {
             left = true;
             right = false;
@@ -64,7 +64,7 @@ function keyDownHandler(e) {
             turn = true;
         }
     }
-    else if(e.key == "ArrowUp") {
+    else if(e.key == "ArrowUp" || e.key == "w") {
         if(!down && !up && !turn) {
             up = true;
             down = false;
@@ -73,7 +73,7 @@ function keyDownHandler(e) {
             turn = true;
         }
     }
-    else if(e.key == "ArrowDown") {
+    else if(e.key == "ArrowDown" || e.key == "s") {
         if(!up && !down && !turn) {
             down = true;
             left = false;
