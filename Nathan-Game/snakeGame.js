@@ -128,7 +128,7 @@ function draw() {
     if(win) {
         drawWin();
     }
-    if(snakePos.length == 5){
+    if(snakePos.length == 1600){
         win = true;
     }
     for(var i = 1; i < snakePos.length; i++) {
@@ -149,13 +149,9 @@ function draw() {
         up = false;
         down = false;
     }
-    if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
-        console.log(appleX, appleY);
-    }
     //snake moves based on the arrow keys pushed.
     if(right == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
-            console.log("eat");
             score++;
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             appleX = randomNumber(1, 40) * 15;
@@ -169,7 +165,6 @@ function draw() {
     }
     else if(left == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
-            console.log("eat");
             score++;
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             appleX = randomNumber(1, 40) * 15;
@@ -183,7 +178,6 @@ function draw() {
     }
     else if(up == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
-            console.log("eat");
             score++;
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             appleX = randomNumber(1, 40) * 15;
@@ -197,7 +191,6 @@ function draw() {
     }
     else if(down == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
-            console.log("eat");
             score++;
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             appleX = randomNumber(1, 40) * 15;
