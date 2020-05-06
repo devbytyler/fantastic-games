@@ -35,7 +35,7 @@ var app = new Vue({
                 name: 'Snake Game',
                 desc: 'An fantastic snake game!',
                 img: 'images/snake.png',
-                link: 'Nathan-Game/snakeGame.html',
+                link: 'Nathan-Game/snakeGame/snakeGame.html',
                 creator: 'Nathan',
             },
             {
