@@ -16,17 +16,24 @@ var appleSize = 15;
 var appleX = randomNumber(1, 40) * 15;
 var appleY = randomNumber(1, 40) * 15;
 var score = 0;
-var right = true;
+var right = false;
+var turnRight = true;
 var left = false;
+var turnLeft = false;
 var up = false;
+var turnUp = false;
 var down = false;
+var turnDown = false;
 var lose = false;
 var win = false;
 var turn = false;
 var speed = 100;
 var changeSpeed = 0;
+//gets images for apple
 var appleSrc = 'pictures/snakeApple.png';
 var appleObj = new Image();
+appleObj.src = appleSrc;
+//gets image for head
 var upSrc = 'pictures/headUp.png';
 var upObj = new Image();
 var downSrc = 'pictures/headDown.png';
@@ -35,13 +42,25 @@ var rightSrc = 'pictures/headRight.png';
 var rightObj = new Image();
 var leftSrc = 'pictures/headLeft.png';
 var leftObj = new Image();
-
 upObj.src = upSrc;
 downObj.src = downSrc;
 rightObj.src = rightSrc;
 leftObj.src = leftSrc;
-appleObj.src = appleSrc;
+//gets image for tail
+var tailUpSrc = 'pictures/tail-up.png';
+var tailUpObj = new Image();
+var tailDownSrc = 'pictures/tail-down.png';
+var tailDownObj = new Image();
+var tailRightSrc = 'pictures/tail-right.png';
+var tailRightObj = new Image();
+var tailLeftSrc = 'pictures/tail-left.png';
+var tailLeftObj = new Image();
+tailUpObj.src = tailUpSrc;
+tailDownObj.src = tailDownSrc;
+tailRightObj.src = tailRightSrc;
+tailLeftObj.src = tailLeftSrc;
 
+//displays score underneath game.
 document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
 
 //makes arrow keys or WASD work.
@@ -87,28 +106,42 @@ function keyDownHandler(e) {
 }
 //draws snake segments.
 function drawSnake() {
-    if(right){
+    //draws head based on direction.
+    if(turnRight){
         ctx.drawImage(rightObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
     }
-    if(left){
+    if(turnLeft){
         ctx.drawImage(leftObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
     }
-    if(up){
+    if(turnUp){
         ctx.drawImage(upObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
     }
-    if(down){
+    if(turnDown){
         ctx.drawImage(downObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
+    }
+    //draws tail based on 2nd to last and last items in snakePos array.
+    if(snakePos[snakePos.length - 2][0] + 15 == snakePos[snakePos.length - 1][0]) {
+        ctx.drawImage(tailLeftObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 1.5, snakeSize + 3, snakeSize + 3);
+    }
+    if(snakePos[snakePos.length - 2][0] - 15 == snakePos[snakePos.length - 1][0]) {
+        ctx.drawImage(tailRightObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 1.5, snakeSize + 3, snakeSize + 3);
+    }
+    if(snakePos[snakePos.length - 2][1] + 15 == snakePos[snakePos.length - 1][1]) {
+        ctx.drawImage(tailUpObj, snakePos[snakePos.length - 1][0] - 1.5, snakePos[snakePos.length - 1][1], snakeSize + 3, snakeSize + 3);
+    }
+    if(snakePos[snakePos.length - 2][1] - 15 == snakePos[snakePos.length - 1][1]) {
+        ctx.drawImage(tailDownObj, snakePos[snakePos.length - 1][0] - 1.5, snakePos[snakePos.length - 1][1], snakeSize + 3, snakeSize + 3);
     }
     for(var i = 0; i < snakePos.length; i++){
         ctx.beginPath();
-        for(var i = 1; i < snakePos.length; i++) {
+        for(var i = 1; i < snakePos.length - 1; i++) {
             ctx.rect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
         }
         ctx.fillStyle = "darkgreen";
         ctx.fill();
         ctx.closePath();
         ctx.beginPath();
-        for(var i = 1; i < snakePos.length; i++) {
+        for(var i = 1; i < snakePos.length - 1; i++) {
             ctx.strokeRect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
         }
         ctx.fillStyle = "black";
@@ -185,6 +218,10 @@ function draw() {
                 snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
                 snakePos.pop();
                 turn = false;
+                turnRight = true;
+                turnLeft = false;
+                turnDown = false;
+                turnUp = false;
             }
             else {
                 snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
@@ -206,6 +243,10 @@ function draw() {
                 snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
                 snakePos.pop();
                 turn = false;
+                turnLeft = true;
+                turnDown = false;
+                turnRight = false;
+                turnUp = false;
             }
             else {
                 snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
@@ -226,6 +267,10 @@ function draw() {
                 snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
                 snakePos.pop();
                 turn = false;
+                turnUp = true;
+                turnLeft = false;
+                turnDown = false;
+                turnRight = false;
             }
             else {
                 snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
@@ -246,6 +291,10 @@ function draw() {
                 snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
                 snakePos.pop();
                 turn = false;
+                turnDown = true;
+                turnLeft = false;
+                turnRight = false;
+                turnUp = false;
             }
             else {
                 snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
