@@ -25,6 +25,22 @@ var win = false;
 var turn = false;
 var speed = 100;
 var changeSpeed = 0;
+var appleSrc = 'pictures/snakeApple.png';
+var appleObj = new Image();
+var upSrc = 'pictures/headUp.png';
+var upObj = new Image();
+var downSrc = 'pictures/headDown.png';
+var downObj = new Image();
+var rightSrc = 'pictures/headRight.png';
+var rightObj = new Image();
+var leftSrc = 'pictures/headLeft.png';
+var leftObj = new Image();
+
+upObj.src = upSrc;
+downObj.src = downSrc;
+rightObj.src = rightSrc;
+leftObj.src = leftSrc;
+appleObj.src = appleSrc;
 
 document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
 
@@ -71,16 +87,28 @@ function keyDownHandler(e) {
 }
 //draws snake segments.
 function drawSnake() {
+    if(right){
+        ctx.drawImage(rightObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
+    }
+    if(left){
+        ctx.drawImage(leftObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
+    }
+    if(up){
+        ctx.drawImage(upObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
+    }
+    if(down){
+        ctx.drawImage(downObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
+    }
     for(var i = 0; i < snakePos.length; i++){
         ctx.beginPath();
-        for(var i = 0; i < snakePos.length; i++) {
+        for(var i = 1; i < snakePos.length; i++) {
             ctx.rect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
         }
-        ctx.fillStyle = "darkgreen";
+        ctx.fillStyle = "mediumseagreen";
         ctx.fill();
         ctx.closePath();
         ctx.beginPath();
-        for(var i = 0; i < snakePos.length; i++) {
+        for(var i = 1; i < snakePos.length; i++) {
             ctx.strokeRect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
         }
         ctx.fillStyle = "black";
@@ -88,13 +116,10 @@ function drawSnake() {
         ctx.closePath();
     }
 }
+
 //draws apple at random x and y.
 function drawApple() {
-    ctx.beginPath();
-    ctx.rect(appleX, appleY, appleSize, appleSize);
-    ctx.fillStyle = "darkred";
-    ctx.fill();
-    ctx.closePath();
+        ctx.drawImage(appleObj, appleX, appleY, appleSize, appleSize);
 }
 //draws background.
 function drawBackground() {
@@ -117,8 +142,8 @@ function drawWin() {
 //draw function, draws 4 long snake, apple, and background each time it is called.
 function draw() {
     drawBackground();
-    drawSnake();
     drawApple();
+    drawSnake();
     if(lose) {
         drawLose();
     }
