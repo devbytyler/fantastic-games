@@ -104,7 +104,7 @@ function drawSnake() {
         for(var i = 1; i < snakePos.length; i++) {
             ctx.rect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
         }
-        ctx.fillStyle = "mediumseagreen";
+        ctx.fillStyle = "darkgreen";
         ctx.fill();
         ctx.closePath();
         ctx.beginPath();
