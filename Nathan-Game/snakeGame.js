@@ -20,29 +20,15 @@ var right = true;
 var left = false;
 var up = false;
 var down = false;
-var bw = 600;
-var bh = 600;
-var p = 0;
 var lose = false;
 var win = false;
 var turn = false;
+var speed = 100;
+var changeSpeed = 0;
 
 document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
-function drawBoard(){
-    for (var x = 0; x <= bw; x += 15) {
-        ctx.moveTo(0.5 + x + p, p);
-        ctx.lineTo(0.5 + x + p, bh + p);
-    }
 
-    for (var x = 0; x <= bh; x += 15) {
-        ctx.moveTo(p, 0.5 + x + p);
-        ctx.lineTo(bw + p, 0.5 + x + p);
-    }
-    ctx.strokeStyle = "gray";
-    ctx.stroke();
-}
-
-//makes arrow keys work.
+//makes arrow keys or WASD work.
 document.addEventListener("keydown", keyDownHandler, false);
 
 function keyDownHandler(e) {
@@ -133,7 +119,6 @@ function draw() {
     drawBackground();
     drawSnake();
     drawApple();
-    //drawBoard();
     if(lose) {
         drawLose();
     }
@@ -184,6 +169,7 @@ function draw() {
     }
     else if(left == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
+            changeSpeed++;
             score++;
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             appleX = randomNumber(1, 40) * 15;
@@ -242,6 +228,9 @@ function draw() {
             }
         }
     }
+    if(changeSpeed == 50){
+        speed--;
+    }
 }
 //sets interval for how often draw function is called.
-var interval = setInterval(draw, 100);
+var interval = setInterval(draw, speed);
