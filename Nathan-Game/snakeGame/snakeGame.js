@@ -81,14 +81,6 @@ document.addEventListener("keydown", keyDownHandler, false);
 
 //makes restart button restart game.
 document.getElementById("restarting").addEventListener("click", function(){
-    if(blockMode){
-        blockMode = true;
-        normalMode = false;
-    }
-    else {
-        blockMode = false;
-        normalMode = true;
-    }
     score = 0;
     lose = false;
     win = false;
@@ -113,6 +105,7 @@ document.getElementById("restarting").addEventListener("click", function(){
     left = false;
     up = false;
     down = false;
+    turn = false;
 });
 
 //changes mode when button is clicked.
@@ -145,6 +138,7 @@ document.getElementById("mode").addEventListener("click", function(){
         left = false;
         up = false;
         down = false;
+        turn = false;
     }
     else {
         blockMode = true;
@@ -174,8 +168,8 @@ document.getElementById("mode").addEventListener("click", function(){
         left = false;
         up = false;
         down = false;
+        turn = false;
     }
-
 });
 
 //function for changing direction
