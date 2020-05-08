@@ -3,6 +3,7 @@ function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+//variables
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var snakeSize = 15;
@@ -35,12 +36,15 @@ var win = false;
 var turn = false;
 var speed = 100;
 var changeSpeed = 0;
-var normalMode = false;
-var blockMode = true;
+var normalMode = true;
+var blockMode = false;
+var restart = false;
+
 //gets images for apple
 var appleSrc = 'pictures/snakeApple.png';
 var appleObj = new Image();
 appleObj.src = appleSrc;
+
 //gets image for head
 var upSrc = 'pictures/headUp.png';
 var upObj = new Image();
@@ -54,6 +58,7 @@ upObj.src = upSrc;
 downObj.src = downSrc;
 rightObj.src = rightSrc;
 leftObj.src = leftSrc;
+
 //gets image for tail
 var tailUpSrc = 'pictures/tail-up.png';
 var tailUpObj = new Image();
@@ -68,28 +73,101 @@ tailDownObj.src = tailDownSrc;
 tailRightObj.src = tailRightSrc;
 tailLeftObj.src = tailLeftSrc;
 
-console.log(blockPos);
-
 //displays score underneath game.
 document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
 
 //makes arrow keys or WASD work.
 document.addEventListener("keydown", keyDownHandler, false);
 
+//makes restart button restart game.
+document.getElementById("restarting").addEventListener("click", function(){
+    score = 0;
+    lose = false;
+    win = false;
+    appleX = randomNumber(1, 40) * 15;
+    appleY = randomNumber(1, 40) * 15;
+    blockPos = [
+    [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
+    [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
+    ];
+    snakePos = [
+    [300, 300],
+    [285, 300],
+    [270, 300],
+    [255, 300],
+    ];
+    turnRight = true;
+    turnLeft = false;
+    turnUp = false;
+    turnDown = false;
+    right = false;
+    left = false;
+    up = false;
+    down = false;
+});
+
+//changes mode when button is clicked.
 document.getElementById("mode").addEventListener("click", function(){
     if(blockMode){
         blockMode = false;
         normalMode = true;
         document.getElementById("mode").innerHTML = "BLOCK MODE";
+        score = 0;
+        lose = false;
+        win = false;
+        appleX = randomNumber(1, 40) * 15;
+        appleY = randomNumber(1, 40) * 15;
+        blockPos = [
+        [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
+        [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
+        ];
+        snakePos = [
+        [300, 300],
+        [285, 300],
+        [270, 300],
+        [255, 300],
+        ];
+        turnRight = true;
+        turnLeft = false;
+        turnUp = false;
+        turnDown = false;
+        right = false;
+        left = false;
+        up = false;
+        down = false;
     }
     else {
         blockMode = true;
         normalMode = false;
         document.getElementById("mode").innerHTML = "NORMAL MODE";
+        score = 0;
+        lose = false;
+        win = false;
+        appleX = randomNumber(1, 40) * 15;
+        appleY = randomNumber(1, 40) * 15;
+        blockPos = [
+        [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
+        [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
+        ];
+        snakePos = [
+        [300, 300],
+        [285, 300],
+        [270, 300],
+        [255, 300],
+        ];
+        turnRight = true;
+        turnLeft = false;
+        turnUp = false;
+        turnDown = false;
+        right = false;
+        left = false;
+        up = false;
+        down = false;
     }
 
 });
 
+//function for changing direction
 function keyDownHandler(e) {
     if(e.key == "ArrowRight" || e.key == "d") {
         if(!left && !right && !turn){
@@ -128,6 +206,7 @@ function keyDownHandler(e) {
         }
     }
 }
+
 //draws snake segments.
 function drawSnake() {
     //draws head based on direction.
@@ -178,6 +257,7 @@ function drawSnake() {
 function drawApple() {
     ctx.drawImage(appleObj, appleX, appleY, appleSize, appleSize);
 }
+//draws block mode.
 function drawBlock() {
     ctx.beginPath();
     for(var i = 0; i <= blockPos.length - 1; i++){
@@ -195,11 +275,13 @@ function drawBackground() {
     ctx.fill();
     ctx.closePath();
 }
+//types "You lose" on canvas.
 function drawLose() {
     ctx.font = "50px Arial";
     ctx.fillStyle = "#000";
     ctx.fillText("You Lose!!!", canvas.width / 2 - 119, canvas.height / 2);
 }
+//types "You win" on canvas
 function drawWin() {
     ctx.font = "50px Arial";
     ctx.fillStyle = "#000";
@@ -210,6 +292,7 @@ function draw() {
     drawBackground();
     drawApple();
     drawSnake();
+    //if it's block mode, it draws the blocks.
     if(blockMode) {
         drawBlock();
     }
@@ -222,33 +305,46 @@ function draw() {
     if(snakePos.length == 1600){
         win = true;
     }
+    //if snake hits itself, it dies.
     for(var i = 1; i < snakePos.length; i++) {
         if(snakePos[0][0] == snakePos[i][0] && snakePos[0][1] == snakePos[i][1]){
             lose = true;
         }
     }
-    for(var i = 0; i <= blockPos.length - 1; i++) {
-        if(snakePos[0][0] == blockPos[i][0] && snakePos[0][1] == blockPos[i][1]) {
-            lose = true;
-        }
-    }
-    for(var i = 1; i < snakePos.length; i++) {
-        for(var j = 1; j < blockPos.length; j++){
-            if(blockPos[j][0] == snakePos[i][0] && blockPos[j][1] == snakePos[i][1]) {
-                blockPos.splice(j, 1, [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],);
+
+    if(blockMode){
+        //if a block is drawn on the snake, it changes coordinates.
+        for(var i = 0; i <= blockPos.length - 1; i++) {
+            if(snakePos[0][0] == blockPos[i][0] && snakePos[0][1] == blockPos[i][1]) {
+                lose = true;
             }
         }
+        //if snake hits block, it dies.
+        for(var i = 1; i < snakePos.length; i++) {
+            for(var j = 1; j < blockPos.length; j++){
+                if(blockPos[j][0] == snakePos[i][0] && blockPos[j][1] == snakePos[i][1]) {
+                    blockPos.splice(j, 1, [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],);
+                }
+            }
+        }
+        //if apple is on block, then it moves.
+        for(var i = 0; i < blockPos.length; i++){
+            if(appleX == blockPos[i][0] && appleY == blockPos[i][1]){
+                appleX = randomNumber(1, 40) * 15;
+                appleY = randomNumber(1, 40) * 15;
+            }
+        }
+    }
+
+    //if apple is on snake, it moves.
+    for(var i = 1; i < snakePos.length - 1; i++){
         if(appleX == snakePos[i][0] && appleY == snakePos[i][1]){
             appleX = randomNumber(1, 40) * 15;
             appleY = randomNumber(1, 40) * 15;
         }
     }
-    for(var i = 0; i < blockPos.length; i++){
-        if(appleX == blockPos[i][0] && appleY == blockPos[i][1]){
-            appleX = randomNumber(1, 40) * 15;
-            appleY = randomNumber(1, 40) * 15;
-        }
-    }
+
+    //if snake hits walls, it dies.
     if(snakePos[0][0] > 599 || snakePos[0][0] < 0 || snakePos[0][1] < 0 || snakePos[0][1] > 599) {
         lose = true;
         right = false;
@@ -256,10 +352,13 @@ function draw() {
         up = false;
         down = false;
     }
+
+    //code for adding another block
     if(blockTimer == 5){
         blockPos.push([randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],);
         blockTimer = 0;
     }
+
     //snake moves based on the arrow keys pushed.
     if(right == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
@@ -365,8 +464,9 @@ function draw() {
             }
         }
     }
+    //after you are 50 long, you get faster.
     if(changeSpeed == 50){
-        speed--;
+        speed -= 2;
     }
 }
 //sets interval for how often draw function is called.
