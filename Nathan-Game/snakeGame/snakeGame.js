@@ -84,6 +84,7 @@ document.getElementById("restarting").addEventListener("click", function(){
     score = 0;
     lose = false;
     win = false;
+    speed = 100;
     appleX = randomNumber(1, 40) * 15;
     appleY = randomNumber(1, 40) * 15;
     blockPos = [
@@ -110,7 +111,7 @@ document.getElementById("restarting").addEventListener("click", function(){
 
 //changes mode when button is clicked.
 document.getElementById("modeSwitch").addEventListener("click", function(){
-    speed = [100, 90];
+    speed = 100;
     score = 0;
     lose = false;
     win = false;
@@ -140,7 +141,6 @@ document.getElementById("modeSwitch").addEventListener("click", function(){
         blockMode = true;
         normalMode = false;
         document.getElementById("mode").innerHTML = "<h4>Block Mode</h4>";
-        console.log("hi");
     }
     else if(blockMode){
         blockMode = false;
@@ -152,6 +152,7 @@ document.getElementById("modeSwitch").addEventListener("click", function(){
 //function for changing direction
 function keyDownHandler(e) {
     if(e.key == "ArrowRight" || e.key == "d") {
+        e.preventDefault();
         if(!left && !right && !turn){
             right = true;
             left = false;
@@ -161,6 +162,7 @@ function keyDownHandler(e) {
         }
     }
     else if(e.key == "ArrowLeft" || e.key == "a") {
+        e.preventDefault();
         if(!right && !left && !turn) {
             left = true;
             right = false;
@@ -170,6 +172,7 @@ function keyDownHandler(e) {
         }
     }
     else if(e.key == "ArrowUp" || e.key == "w") {
+        e.preventDefault();
         if(!down && !up && !turn) {
             up = true;
             down = false;
@@ -179,6 +182,7 @@ function keyDownHandler(e) {
         }
     }
     else if(e.key == "ArrowDown" || e.key == "s") {
+        e.preventDefault();
         if(!up && !down && !turn) {
             down = true;
             left = false;
