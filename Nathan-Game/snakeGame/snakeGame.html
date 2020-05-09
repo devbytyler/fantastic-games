@@ -17,6 +17,9 @@
             h3 {
                 text-align: center;
             }
+            h4 {
+                margin-top: 0;
+            }
             canvas {
                 background: "white";
                 border: 4px inset darkgray;
@@ -45,10 +48,10 @@
         <h1>SNAKE</h1>
         <h3>Collect fruit to grow bigger. Use arrow keys or WASD to move.</h3>
         <div id = "restart"><button id = "restarting">RESTART</button></div>
+        <div class = "modeDiv"><button id = "modeSwitch">MODE SWITCH</button></div>
         <div id = "mode" class = "modeDiv"><h4>Normal Mode</h4></div>
         <canvas id="canvas" width="600" height="600"></canvas>
         <div id = "score"></div>
-        <div class = "modeDiv"><button id = "modeSwitch">MODE SWITCH</button></div>
         <script src = "snakeGame.js">
         </script>
     </body>

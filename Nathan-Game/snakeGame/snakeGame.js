@@ -109,66 +109,43 @@ document.getElementById("restarting").addEventListener("click", function(){
 });
 
 //changes mode when button is clicked.
-document.getElementById("mode").addEventListener("click", function(){
-    if(blockMode){
-        blockMode = false;
-        normalMode = true;
-        document.getElementById("mode").innerHTML = "BLOCK MODE";
-        score = 0;
-        lose = false;
-        win = false;
-        appleX = randomNumber(1, 40) * 15;
-        appleY = randomNumber(1, 40) * 15;
-        blockPos = [
+document.getElementById("modeSwitch").addEventListener("click", function(){
+    speed = [100, 90];
+    score = 0;
+    lose = false;
+    win = false;
+    appleX = randomNumber(1, 40) * 15;
+    appleY = randomNumber(1, 40) * 15;
+    blockPos = [
         [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
         [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
-        ];
-        snakePos = [
+    ];
+    snakePos = [
         [300, 300],
         [285, 300],
         [270, 300],
         [255, 300],
-        ];
-        blockTimer = 0;
-        turnRight = true;
-        turnLeft = false;
-        turnUp = false;
-        turnDown = false;
-        right = false;
-        left = false;
-        up = false;
-        down = false;
-        turn = false;
-    }
-    else {
+    ];
+    blockTimer = 0;
+    turnRight = true;
+    turnLeft = false;
+    turnUp = false;
+    turnDown = false;
+    right = false;
+    left = false;
+    up = false;
+    down = false;
+    turn = false;
+    if(normalMode){
         blockMode = true;
         normalMode = false;
-        document.getElementById("mode").innerHTML = "NORMAL MODE";
-        score = 0;
-        lose = false;
-        win = false;
-        appleX = randomNumber(1, 40) * 15;
-        appleY = randomNumber(1, 40) * 15;
-        blockPos = [
-        [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
-        [randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],
-        ];
-        snakePos = [
-        [300, 300],
-        [285, 300],
-        [270, 300],
-        [255, 300],
-        ];
-        blockTimer = 0;
-        turnRight = true;
-        turnLeft = false;
-        turnUp = false;
-        turnDown = false;
-        right = false;
-        left = false;
-        up = false;
-        down = false;
-        turn = false;
+        document.getElementById("mode").innerHTML = "<h4>Block Mode</h4>";
+        console.log("hi");
+    }
+    else if(blockMode){
+        blockMode = false;
+        normalMode = true;
+        document.getElementById("mode").innerHTML = "<h4>Normal Mode</h4>";
     }
 });
 
