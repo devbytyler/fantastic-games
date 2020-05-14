@@ -13,7 +13,7 @@ var app = new Vue({
                 name: 'Goalie Wars', 
                 desc: "A super addicting pong adventure. Don't worry if you can't beat it. I can't either.", 
                 img: 'images/pong.jpg', 
-                link: 'jacob/game.html', 
+                link: 'Jacob-Game/Jacob-Soccer/game.html',
                 creator:'Jacob',
             },
             {
@@ -37,6 +37,13 @@ var app = new Vue({
                 img: 'images/snake.png',
                 link: 'Nathan-Game/snakeGame/snakeGame.html',
                 creator: 'Nathan',
+            },
+            {
+                name: 'Bounce',
+                desc: 'A fantastic bouncing adventure',
+                img: 'images/Bounce.png',
+                link: 'Jacob-Game/Jacob-Bounce/bounceGame/bounce.html',
+                creator: 'Jacob',
             },
             {
                 name: 'Coming Soon...', 
