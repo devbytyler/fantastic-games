@@ -60,7 +60,7 @@ class playGame extends Phaser.Scene{
     }
     updateScore(inc){
         this.score += inc;
-        this.scoreText.text = 'Store: ' + this.score + '\nBest: ' + this.topScore;
+        this.scoreText.text = 'Score: ' + this.score + '\nBest: ' + this.topScore;
     }
     boost(){
         if(this.firstBounce != 0){
