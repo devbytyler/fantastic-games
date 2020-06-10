@@ -46,6 +46,13 @@ var app = new Vue({
                 creator: 'Jacob',
             },
             {
+                name: 'Star Catcher',
+                desc: 'A fantastic star collecting game!',
+                img: 'images/starCatcher.png',
+                link: 'Nathan-Game/starCatcher/starCatcher.html',
+                creator: 'Nathan',
+            },
+            {
                 name: 'Coming Soon...', 
                 desc: 'Wait for it!', 
                 img: 'https://picsum.photos/200/100', 
