@@ -53,6 +53,14 @@ var app = new Vue({
                 creator: 'Nathan',
             },
             {
+                name: 'Space Shooter',
+                desc: 'A fantastic space adventure!',
+                img: 'images/spaceShooter.png',
+                link: 'Nathan-Game/spaceShooter/spaceShooter.html',
+                creator: 'Nathan',
+
+            },
+            {
                 name: 'Coming Soon...', 
                 desc: 'Wait for it!', 
                 img: 'https://picsum.photos/200/100', 
