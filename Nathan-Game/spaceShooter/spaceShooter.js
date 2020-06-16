@@ -18,7 +18,7 @@ var shields;
 var score = 0;
 var scoreText;
 var greenEnemyLaunchTimer;
-var greenEnemySpacing = 1000;
+var greenEnemySpacing = 500;
 var blueEnemyLaunchTimer;
 var blueEnemyLaunched = false;
 var blueEnemySpacing = 2500;
@@ -28,13 +28,14 @@ var bossSpacing = 20000;
 var bossBulletTimer = 0;
 var bossYdirection = -1;
 var gameOver;
+var bossNum = 1;
 
 var ACCLERATION = 600;
 var DRAG = 400;
 var MAXSPEED = 400;
 
 function preload() {
-    game.load.image('starfield', 'assets/starfield.png');
+    game.load.image('starfield', 'assets/starfield.jpg');
     game.load.image('ship', 'assets/player.png');
     game.load.image('bullet', 'assets/bullet.png');
     game.load.image('enemy-green', 'assets/enemy-green.png');
@@ -63,6 +64,7 @@ function create() {
     //  The hero!
     player = game.add.sprite(400, 500, 'ship');
     player.health = 100;
+    player.damageAmount = 20;
     player.anchor.setTo(0.5, 0.5);
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.maxVelocity.setTo(MAXSPEED, MAXSPEED);
@@ -130,7 +132,7 @@ function create() {
     boss.exists = false;
     boss.alive = false;
     boss.anchor.setTo(0.5, 0.5);
-    boss.damageAmount = 50;
+    boss.damageAmount = 1;
     boss.angle = 180;
     boss.scale.x = 0.6;
     boss.scale.y = 0.6;
@@ -160,6 +162,7 @@ function create() {
                     explosion.alpha = beforeAlpha;
                 });
                 boss.kill();
+                bossNum += 1;
                 booster.kill();
                 boss.dying = false;
                 bossDeath.on = false;
@@ -169,7 +172,7 @@ function create() {
 
             //  reset pacing for other enemies
             blueEnemySpacing = 2500;
-            greenEnemySpacing = 1000;
+            greenEnemySpacing = 500;
 
             //  give some bonus health
             player.health = Math.min(100, player.health + 40);
@@ -205,7 +208,7 @@ function create() {
     boss.fire = function() {
         if (game.time.now > bossBulletTimer) {
             var raySpacing = 3000;
-            var chargeTime = 1500;
+            var chargeTime = 1000;
             var rayTime = 1500;
 
             function chargeAndShoot(side) {
@@ -255,7 +258,7 @@ function create() {
       boss.angle = 180 - bank * 20;
 
       booster.x = boss.x + -5 * bank;
-      booster.y = boss.y + 10 * Math.abs(bank) - boss.height / 2;
+      booster.y = boss.y - 20 * Math.abs(bank) - boss.height / 2 + 30;
 
       //  fire if player is in target
       var angleToPlayer = game.math.radToDeg(game.physics.arcade.angleBetween(boss, player)) - 90;
@@ -266,7 +269,7 @@ function create() {
     }
 
     //  boss's boosters
-    booster = game.add.emitter(boss.body.x, boss.body.y - boss.height / 2);
+    booster = game.add.emitter(boss.body.x, boss.body.y - (boss.height - 50) / 2);
     booster.width = 0;
     booster.makeParticles('blueEnemyBullet');
     booster.forEach(function(p){
@@ -403,8 +406,8 @@ function update() {
     game.physics.arcade.overlap(blueEnemies, bullets, hitEnemy, null, this);
 
     game.physics.arcade.overlap(boss, bullets, hitEnemy, bossHitTest, this);
-    game.physics.arcade.overlap(player, boss.rayLeft, enemyHitsPlayer, null, this);
-    game.physics.arcade.overlap(player, boss.rayRight, enemyHitsPlayer, null, this);
+    game.physics.arcade.overlap(player, boss.rayLeft, bossHitsPlayer, null, this);
+    game.physics.arcade.overlap(player, boss.rayRight, bossHitsPlayer, null, this);
 
     game.physics.arcade.overlap(blueEnemyBullets, player, enemyHitsPlayer, null, this);
 
@@ -527,8 +530,8 @@ function launchBlueEnemy() {
     var verticalSpeed = 180;
     var spread = 60;
     var frequency = 70;
-    var verticalSpacing = 70;
-    var numEnemiesInWave = 5;
+    var verticalSpacing = 100;
+    var numEnemiesInWave = 3;
 
     //  Launch wave
     for (var i =0; i < numEnemiesInWave; i++) {
@@ -540,8 +543,8 @@ function launchBlueEnemy() {
 
             //  Set up firing
             var bulletSpeed = 400;
-            var firingDelay = 2000;
-            enemy.bullets = 1;
+            var firingDelay = 1000;
+            enemy.bullets = 2;
             enemy.lastShot = 0;
 
             //  Update function for each enemy
@@ -585,7 +588,8 @@ function launchBlueEnemy() {
 function launchBoss() {
     boss.reset(game.width / 2, -boss.height);
     booster.start(false, 1000, 10);
-    boss.health = 501;
+    boss.health = 401 + (100 * bossNum);
+    console.log(boss.health);
     bossBulletTimer = game.time.now + 5000;
 }
 
@@ -629,7 +633,7 @@ function hitEnemy(enemy, bullet) {
     if (enemy.finishOff && enemy.health < 5) {
       enemy.finishOff();
     } else {
-        enemy.damage(enemy.damageAmount);
+        enemy.damage(player.damageAmount);
     }
     bullet.kill();
 
@@ -643,7 +647,7 @@ function hitEnemy(enemy, bullet) {
     greenEnemySpacing *= 0.9;
 
     //  Blue enemies come in after a score of 1000
-    if (!blueEnemyLaunched && score > 1000) {
+    if (!blueEnemyLaunched && score > 0) {
       blueEnemyLaunched = true;
       launchBlueEnemy();
       //  Slow green enemies down now that there are other enemies
@@ -662,7 +666,7 @@ function hitEnemy(enemy, bullet) {
     }
 
     //  Weapon upgrade
-    if (score > 5000 && player.weaponLevel < 2) {
+    if (score > 50000 && player.weaponLevel < 2) {
       player.weaponLevel = 2;
     }
 }
@@ -697,6 +701,19 @@ function enemyHitsPlayer (player, bullet) {
     }
 }
 
+function bossHitsPlayer (player, bullet) {
+    player.damage(bullet.damageAmount);
+    shields.render()
+
+    if (player.alive) {
+
+    } else {
+        playerDeath.x = player.x;
+        playerDeath.y = player.y;
+        playerDeath.start(false, 1000, 10, 10);
+    }
+}
+
 
 function restart () {
     //  Reset the enemies
@@ -719,12 +736,13 @@ function restart () {
     shields.render();
     score = 0;
     scoreText.render();
+    bossNum = 0;
 
     //  Hide the text
     gameOver.visible = false;
 
     //  Reset pacing
-    greenEnemySpacing = 1000;
+    greenEnemySpacing = 500;
     blueEnemyLaunched = false;
     bossLaunched = false;
 }
