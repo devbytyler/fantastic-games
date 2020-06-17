@@ -132,7 +132,7 @@ function create() {
     boss.exists = false;
     boss.alive = false;
     boss.anchor.setTo(0.5, 0.5);
-    boss.damageAmount = 1;
+    boss.damageAmount = 50;
     boss.angle = 180;
     boss.scale.x = 0.6;
     boss.scale.y = 0.6;
@@ -190,7 +190,7 @@ function create() {
         ray.anchor.x = 0.5;
         ray.anchor.y = 0.5;
         ray.scale.x = 2.5;
-        ray.damageAmount = boss.damageAmount;
+        ray.damageAmount = 1;
         game.physics.enable(ray, Phaser.Physics.ARCADE);
         ray.body.setSize(ray.width / 5, ray.height / 4);
         ray.update = function() {
@@ -215,7 +215,7 @@ function create() {
                 ray = boss['ray' + side];
                 ray.name = side
                 ray.revive();
-                ray.y = 80;
+                ray.y = -20;
                 ray.alpha = 0;
                 ray.scale.y = 13;
                 game.add.tween(ray).to({alpha: 1}, chargeTime, Phaser.Easing.Linear.In, true).onComplete.add(function(ray){
