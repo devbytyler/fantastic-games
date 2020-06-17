@@ -528,7 +528,7 @@ function launchGreenEnemy() {
 function launchBlueEnemy() {
     var startingX = game.rnd.integerInRange(100, game.width - 100);
     var verticalSpeed = 180;
-    var spread = 60;
+    var spread = 100;
     var frequency = 70;
     var verticalSpacing = 100;
     var numEnemiesInWave = 3;
@@ -566,7 +566,7 @@ function launchBlueEnemy() {
                   game.time.now > firingDelay + this.lastShot) {
                     this.lastShot = game.time.now;
                     this.bullets--;
-                    enemyBullet.reset(this.x, this.y + this.height / 2);
+                    enemyBullet.reset(this.x, this.y - 15 + this.height / 2);
                     enemyBullet.damageAmount = this.damageAmount;
                     var angle = game.physics.arcade.moveToObject(enemyBullet, player, bulletSpeed);
                     enemyBullet.angle = game.math.radToDeg(angle);
