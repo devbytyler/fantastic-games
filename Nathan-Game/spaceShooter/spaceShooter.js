@@ -4,6 +4,8 @@ var game = new Phaser.Game(800,600, Phaser.CANVAS, 'space-shooter', {preload: pr
 var player;
 var greenEnemies;
 var blueEnemies;
+var redEnemies;
+var life;
 var enemyBullets;
 var starfield;
 var cursors;
@@ -17,11 +19,16 @@ var bulletTimer = 0;
 var shields;
 var score = 0;
 var scoreText;
+var lifeLaunched = false;
+var lifeTimer = 0;
 var greenEnemyLaunchTimer;
 var greenEnemySpacing = 500;
 var blueEnemyLaunchTimer;
 var blueEnemyLaunched = false;
 var blueEnemySpacing = 2500;
+var redEnemyLaunchTimer;
+var redEnemyLaunched = false;
+var redEnemySpacing = 2500;
 var bossLaunchTimer;
 var bossLaunched = false;
 var bossSpacing = 20000;
@@ -43,8 +50,10 @@ function preload() {
     game.load.image('blueEnemyBullet', 'assets/enemy-blue-bullet.png');
     game.load.spritesheet('explosion', 'assets/explode.png', 128, 128);
     game.load.bitmapFont('spacefont', 'assets/spacefont.png', 'assets/spacefont.xml');
+    game.load.image('enemy-red', 'assets/enemy-red.png');
     game.load.image('boss', 'assets/boss.png');
     game.load.image('deathRay', 'assets/death-ray.png');
+    game.load.image('life', 'assets/life.png');
 }
 
 function create() {
@@ -77,6 +86,19 @@ function create() {
         shipTrail.start(false, 5000, 10);
     });
 
+    life = game.add.group();
+    life.enableBody = true;
+    life.physicsBodyType = Phaser.Physics.ARCADE;
+    life.createMultiple(30, 'life');
+    life.setAll('anchor.x', 0.5);
+    life.setAll('anchor.y', 0.5);
+    life.setAll('scale.x', 0.5);
+    life.setAll('scale.y', 0.5);
+    life.setAll('angle', 180);
+    life.forEach(function(enemy){
+        enemy.damageAmount = -10;
+    });
+
     //  The baddies!
     greenEnemies = game.add.group();
     greenEnemies.enableBody = true;
@@ -90,7 +112,7 @@ function create() {
     greenEnemies.forEach(function(enemy){
         addEnemyEmitterTrail(enemy);
         enemy.body.setSize(enemy.width * 3 / 4, enemy.height * 3 / 4);
-        enemy.damageAmount = 20;
+        enemy.damageAmount = 10;
         enemy.events.onKilled.add(function(){
             enemy.trail.kill();
         });
@@ -124,7 +146,20 @@ function create() {
     blueEnemies.setAll('scale.y', 0.5);
     blueEnemies.setAll('angle', 180);
     blueEnemies.forEach(function(enemy){
-        enemy.damageAmount = 40;
+        enemy.damageAmount = 10;
+    });
+
+    redEnemies = game.add.group();
+    redEnemies.enableBody = true;
+    redEnemies.physicsBodyType = Phaser.Physics.ARCADE;
+    redEnemies.createMultiple(30, 'enemy-red');
+    redEnemies.setAll('anchor.x', 0.5);
+    redEnemies.setAll('anchor.y', 0.5);
+    redEnemies.setAll('scale.x', 0.5);
+    redEnemies.setAll('scale.y', 0.5);
+    redEnemies.setAll('angle', 180);
+    redEnemies.forEach(function(enemy){
+        enemy.damageAmount = 10;
     });
 
     //  The boss
@@ -401,15 +436,15 @@ function update() {
     //  Check collisions
     game.physics.arcade.overlap(player, greenEnemies, shipCollide, null, this);
     game.physics.arcade.overlap(greenEnemies, bullets, hitEnemy, null, this);
-
     game.physics.arcade.overlap(player, blueEnemies, shipCollide, null, this);
     game.physics.arcade.overlap(blueEnemies, bullets, hitEnemy, null, this);
-
+    game.physics.arcade.overlap(player, redEnemies, shipCollide, null, this);
+    game.physics.arcade.overlap(redEnemies, bullets, hitEnemy, null, this);
     game.physics.arcade.overlap(boss, bullets, hitEnemy, bossHitTest, this);
     game.physics.arcade.overlap(player, boss.rayLeft, bossHitsPlayer, null, this);
     game.physics.arcade.overlap(player, boss.rayRight, bossHitsPlayer, null, this);
-
     game.physics.arcade.overlap(blueEnemyBullets, player, enemyHitsPlayer, null, this);
+    game.physics.arcade.overlap(player, life, gainLife, null, this);
 
     //  Game over?
     if (! player.alive && gameOver.visible === false) {
@@ -471,7 +506,6 @@ function fireBullet() {
             var BULLET_SPEED = 400;
             var BULLET_SPACING = 550;
 
-
             for (var i = 0; i < 3; i++) {
                 var bullet = bullets.getFirstExists(false);
                 if (bullet) {
@@ -493,6 +527,20 @@ function fireBullet() {
     }
 }
 
+function launchLife() {
+    var startingX = game.rnd.integerInRange(150, game.width - 150);
+    var verticalSpeed = 300;
+    var enemy = life.getFirstExists(false);
+    if (enemy) {
+        enemy.reset(game.rnd.integerInRange(150, game.width - 150), -20);
+        enemy.startingX = startingX;
+        enemy.body.velocity.y = verticalSpeed;
+    }
+    if (this.y > game.height + 200) {
+        this.kill();
+        this.y = -20;
+    }
+}
 
 function launchGreenEnemy() {
     var ENEMY_SPEED = 300;
@@ -525,13 +573,74 @@ function launchGreenEnemy() {
     greenEnemyLaunchTimer = game.time.events.add(game.rnd.integerInRange(greenEnemySpacing, greenEnemySpacing + 1000), launchGreenEnemy);
 }
 
+function launchRedEnemy() {
+    redEnemies.health = 41
+    var startingX = game.rnd.integerInRange(150, game.width - 150);
+    var verticalSpeed = 180;
+    var spread = 50;
+    var frequency = 70;
+    var verticalSpacing = 100;
+    var numEnemiesInWave = 1;
+
+    //  Launch wave
+    for (var i =0; i < numEnemiesInWave; i++) {
+        var enemy = redEnemies.getFirstExists(false);
+        if (enemy) {
+            enemy.startingX = startingX;
+            enemy.reset(game.width / 2, -verticalSpacing * i);
+            enemy.body.velocity.y = verticalSpeed;
+
+            //  Set up firing
+            var bulletSpeed = 400;
+            var firingDelay = 500;
+            enemy.bullets = 3;
+            enemy.lastShot = 0;
+
+            //  Update function for each enemy
+            enemy.update = function(){
+              //  Wave movement
+              this.body.x = this.startingX + Math.sin((this.y) / frequency) * spread;
+
+              //  Squish and rotate ship for illusion of "banking"
+              bank = Math.cos((this.y + 60) / frequency)
+              this.scale.x = 0.5 - Math.abs(bank) / 8;
+              this.angle = 180 - bank * 2;
+
+              //  Fire
+              enemyBullet = blueEnemyBullets.getFirstExists(false);
+              if (enemyBullet &&
+                  this.alive &&
+                  this.bullets &&
+                  this.y > game.width / 8 &&
+                  game.time.now > firingDelay + this.lastShot) {
+                    this.lastShot = game.time.now;
+                    this.bullets--;
+                    enemyBullet.reset(this.x, this.y - 15 + this.height / 2);
+                    enemyBullet.damageAmount = this.damageAmount;
+                    var angle = game.physics.arcade.moveToObject(enemyBullet, player, bulletSpeed);
+                    enemyBullet.angle = game.math.radToDeg(angle);
+                }
+
+              //  Kill enemies once they go off screen
+              if (this.y > game.height + 200) {
+                this.kill();
+                this.y = -20;
+              }
+            };
+        }
+    }
+
+    //  Send another wave soon
+    redEnemyLaunchTimer = game.time.events.add(game.rnd.integerInRange(redEnemySpacing, redEnemySpacing + 4000), launchRedEnemy);
+}
+
 function launchBlueEnemy() {
     var startingX = game.rnd.integerInRange(100, game.width - 100);
     var verticalSpeed = 180;
     var spread = 100;
     var frequency = 70;
     var verticalSpacing = 100;
-    var numEnemiesInWave = 3;
+    var numEnemiesInWave = game.rnd.integerInRange(1, 3);
 
     //  Launch wave
     for (var i =0; i < numEnemiesInWave; i++) {
@@ -589,7 +698,6 @@ function launchBoss() {
     boss.reset(game.width / 2, -boss.height);
     booster.start(false, 1000, 10);
     boss.health = 401 + (100 * bossNum);
-    console.log(boss.health);
     bossBulletTimer = game.time.now + 5000;
 }
 
@@ -604,6 +712,11 @@ function addEnemyEmitterTrail(enemy) {
     enemy.trail = enemyTrail;
 }
 
+function gainLife(player, life) {
+    life.kill();
+    player.health += 10;
+    shields.render();
+}
 
 function shipCollide(player, enemy) {
     enemy.kill();
@@ -623,7 +736,6 @@ function shipCollide(player, enemy) {
     }
 }
 
-
 function hitEnemy(enemy, bullet) {
     var explosion = explosions.getFirstExists(false);
     explosion.reset(bullet.body.x + bullet.body.halfWidth, bullet.body.y + bullet.body.halfHeight);
@@ -641,11 +753,6 @@ function hitEnemy(enemy, bullet) {
     score += enemy.damageAmount * 10;
     scoreText.render();
 
-    //  Pacing
-
-    //  Enemies come quicker as score increases
-    greenEnemySpacing *= 0.9;
-
     //  Blue enemies come in after a score of 1000
     if (!blueEnemyLaunched && score > 0) {
       blueEnemyLaunched = true;
@@ -654,10 +761,17 @@ function hitEnemy(enemy, bullet) {
       greenEnemySpacing *= 2;
     }
 
+    if(!redEnemyLaunched && score > 3500) {
+        redEnemyLaunched = true;
+        launchRedEnemy();
+        greenEnemySpacing *= 2;
+    }
+
     //  Launch boss
-    if (!bossLaunched && score > 15000) {
+    if (!bossLaunched && score > 7500) {
         greenEnemySpacing = 5000;
         blueEnemySpacing = 12000;
+        redEnemySpacing = 12000;
         //  dramatic pause before boss
         game.time.events.add(2000, function(){
           bossLaunched = true;
@@ -666,8 +780,17 @@ function hitEnemy(enemy, bullet) {
     }
 
     //  Weapon upgrade
-    if (score > 50000 && player.weaponLevel < 2) {
+    if (score > 20000 && player.weaponLevel < 2) {
       player.weaponLevel = 2;
+    }
+
+    if(score > 0 && player.health <100) {
+        if(lifeTimer > 29){
+            launchLife();
+            lifeTimer = 0;
+        }else {
+            lifeTimer++;
+        }
     }
 }
 
@@ -722,6 +845,7 @@ function restart () {
     game.time.events.add(1000, launchGreenEnemy);
     blueEnemies.callAll('kill');
     blueEnemyBullets.callAll('kill');
+    redEnemies.callAll('kill');
     game.time.events.remove(blueEnemyLaunchTimer);
     boss.kill();
     booster.kill();
@@ -744,5 +868,6 @@ function restart () {
     //  Reset pacing
     greenEnemySpacing = 500;
     blueEnemyLaunched = false;
+    redEnemyLaunched = false;
     bossLaunched = false;
 }
