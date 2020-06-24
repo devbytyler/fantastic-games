@@ -714,7 +714,7 @@ function addEnemyEmitterTrail(enemy) {
 
 function gainLife(player, life) {
     life.kill();
-    player.health += 10;
+    player.health = Math.min(100, player.health + 10);
     shields.render();
 }
 
@@ -768,7 +768,7 @@ function hitEnemy(enemy, bullet) {
     }
 
     //  Launch boss
-    if (!bossLaunched && score > 7500) {
+    if (!bossLaunched && score > 500) {
         greenEnemySpacing = 5000;
         blueEnemySpacing = 12000;
         redEnemySpacing = 12000;
