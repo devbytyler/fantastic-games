@@ -768,7 +768,7 @@ function hitEnemy(enemy, bullet) {
     }
 
     //  Launch boss
-    if (!bossLaunched && score > 1500) {
+    if (!bossLaunched && score > 15000) {
         greenEnemySpacing = 5000;
         blueEnemySpacing = 12000;
         redEnemySpacing = 12000;
