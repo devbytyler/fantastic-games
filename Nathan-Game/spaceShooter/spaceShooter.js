@@ -844,6 +844,7 @@ function restart () {
     blueEnemyBullets.callAll('kill');
     redEnemies.callAll('kill');
     game.time.events.remove(blueEnemyLaunchTimer);
+    game.time.events.remove(redEnemyLaunchTimer);
     boss.kill();
     booster.kill();
     game.time.events.remove(bossLaunchTimer);
@@ -858,6 +859,7 @@ function restart () {
     score = 0;
     scoreText.render();
     bossNum = 0;
+    lifeTimer = 0;
 
     //  Hide the text
     gameOver.visible = false;
