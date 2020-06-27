@@ -754,6 +754,8 @@ function hitEnemy(enemy, bullet) {
     scoreText.render();
 
     greenEnemySpacing *= 0.9;
+    redEnemySpacing *= 0.999;
+    blueEnemySpacing *= 0.999;
 
     //  Blue enemies come in after a score of 1000
     if (!blueEnemyLaunched && score > 0) {
@@ -767,6 +769,7 @@ function hitEnemy(enemy, bullet) {
         redEnemyLaunched = true;
         launchRedEnemy();
         greenEnemySpacing *= 2;
+        blueEnemySpacing *= 2;
     }
 
     //  Launch boss
@@ -782,7 +785,7 @@ function hitEnemy(enemy, bullet) {
     }
 
     //  Weapon upgrade
-    if (score > 20000 && player.weaponLevel < 2) {
+    if (score > 25000 && player.weaponLevel < 2) {
       player.weaponLevel = 2;
     }
 
@@ -796,16 +799,8 @@ function hitEnemy(enemy, bullet) {
     }
 }
 
-//  Don't count a hit in the lower right and left quarants to aproximate better collisions
 function bossHitTest(boss, bullet) {
-    if ((bullet.x > boss.x + boss.width / 5 &&
-        bullet.y > boss.y) ||
-        (bullet.x < boss.x - boss.width / 5 &&
-        bullet.y > boss.y)) {
-      return false;
-    } else {
       return true;
-    }
 }
 
 function enemyHitsPlayer (player, bullet) {
