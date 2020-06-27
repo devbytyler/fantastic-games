@@ -753,6 +753,8 @@ function hitEnemy(enemy, bullet) {
     score += enemy.damageAmount * 10;
     scoreText.render();
 
+    greenEnemySpacing *= 0.9;
+
     //  Blue enemies come in after a score of 1000
     if (!blueEnemyLaunched && score > 0) {
       blueEnemyLaunched = true;
