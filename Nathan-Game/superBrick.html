@@ -89,6 +89,7 @@
             function restart(){
                 location.reload();
             }
+
             //This makes it so the ball is stopped when page is loaded.
             if(level == 1 && score == 0){
                 pause = true;
@@ -240,10 +241,8 @@
                         if(b.status == 1){
                             if(x + 10 >= b.x && x - 10 <= b.x+brickWidth && y + 10 >= b.y && y - 10 <= b.y+brickHeight){
                                 if(y + 10 == b.y || y - 10 == b.y + brickHeight){
-                                    console.log("yay!! Y");
                                     if(dx === 0){
                                         if(level == 2 || level == 4){
-                                            console.log("worked");
                                             dy = 5;
                                         }
                                         else{
@@ -255,7 +254,6 @@
                                     }
                                 }
                                 else if(x + 9 >= b.x || x - 9 <= b.x + brickWidth){
-                                    console.log("yay!! X");
                                     dx = -dx;
                                 }
                                 b.status = 0;
@@ -280,7 +278,6 @@
                 if(hard){
                    canvas.width += 70;
                     paddleWidth = canvas.width * 0.2;
-                    console.log(paddleWidth);
                 }
                 makeBricks();
                 x = canvas.width/2;
@@ -351,6 +348,11 @@
                 ctx.fillStyle = "#0095DD";
                 ctx.fillText("Score: "+score, 8, 20);
             }
+            function drawHighScore() {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#0095DD";
+                ctx.fillText("Best:"+ localStorage.getItem("highScore"), 93, 20);
+            }
             //draws the lives
             function drawLives() {
                 ctx.font = "16px Arial";
@@ -386,6 +388,9 @@
                 dx = 0;
                 dy = 0;
                 var reload = setInterval(restart, 2000);
+                if (score > localStorage.getItem("highScore")){
+                    localStorage.setItem("highScore", score);
+                }
             }
             //shows if you win.
             function gameWon(){
@@ -409,6 +414,9 @@
                 dx = 0;
                 dy = 0;
                 var reload = setInterval(restart, 2000);
+                if (score > localStorage.getItem("highScore")){
+                    localStorage.setItem("highScore", score);
+                }
             }
             //draw function, draws all of the code.
             function draw() {
@@ -418,6 +426,7 @@
                 drawBall();
                 drawPaddle();
                 drawScore();
+                drawHighScore();
                 drawLives();
                 drawLevel();
                 collisionDetection();

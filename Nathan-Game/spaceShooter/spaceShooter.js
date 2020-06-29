@@ -695,6 +695,9 @@ function launchBlueEnemy() {
 }
 
 function launchBoss() {
+    redEnemySpacing *= 1.5;
+    blueEnemySpacing *= 1.5;
+    greenEnemySpacing *= 1.5;
     boss.reset(game.width / 2, -boss.height);
     booster.start(false, 1000, 10);
     boss.health = 401 + (100 * bossNum);
@@ -754,8 +757,8 @@ function hitEnemy(enemy, bullet) {
     scoreText.render();
 
     greenEnemySpacing *= 0.9;
-    redEnemySpacing *= 0.999;
-    blueEnemySpacing *= 0.999;
+    redEnemySpacing *= 0.99;
+    blueEnemySpacing *= 0.99;
 
     if (!blueEnemyLaunched && score > 0) {
       blueEnemyLaunched = true;

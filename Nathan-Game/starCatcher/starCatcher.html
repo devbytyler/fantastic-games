@@ -103,7 +103,13 @@ function create ()
 
     bombs = this.physics.add.group();
 
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+    if(localStorage.getItem("best") == null){
+        bestText = this.add.text(16, 56, 'Best: 0', { fontSize: '32px', fill: '#000' });
+    }
+    else{
+        bestText = this.add.text(16, 56, 'Best: ' + localStorage.getItem("best"), { fontSize: '32px', fill: '#000' });
+    }
 
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(stars, platforms);
@@ -139,6 +145,10 @@ function collectStar (player, star) {
 
     score += 1;
     scoreText.setText('Score: ' + score);
+    if(score > localStorage.getItem("best")){
+        localStorage.setItem("best", score);
+    }
+    bestText.setText('Best: ' + localStorage.getItem("best"));
 
     if (stars.countActive(true) === 0) {
         stars.children.iterate(function (child) {
