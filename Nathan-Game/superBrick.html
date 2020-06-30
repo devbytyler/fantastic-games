@@ -258,6 +258,12 @@
                                 }
                                 b.status = 0;
                                 score++;
+                                if (score > localStorage.getItem("hardBest") && hard){
+                                        localStorage.setItem("hardBest", score);
+                                }
+                                else if (score > localStorage.getItem("easyBest") && easy){
+                                    localStorage.setItem("easyBest", score);
+                                }
                                 if(score == brickRowCount*brickColumnCount + previousScore) {
                                     if(level == 5){
                                         gameWinner();
@@ -351,7 +357,20 @@
             function drawHighScore() {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#0095DD";
-                ctx.fillText("Best:"+ localStorage.getItem("highScore"), 93, 20);
+                if(hard){
+                    if(localStorage.getItem("hardBest") == null){
+                        ctx.fillText("Best: 0", 93, 20);                }
+                    else{
+                        ctx.fillText("Best: "+ localStorage.getItem("hardBest"), 93, 20);
+                    }
+                } else if(easy){
+                    if(localStorage.getItem("easyBest") == null){
+                        ctx.fillText("Best: 0", 93, 20);                }
+                    else{
+                        ctx.fillText("Best: "+ localStorage.getItem("easyBest"), 93, 20);
+                    }
+                }
+
             }
             //draws the lives
             function drawLives() {
@@ -388,9 +407,6 @@
                 dx = 0;
                 dy = 0;
                 var reload = setInterval(restart, 2000);
-                if (score > localStorage.getItem("highScore")){
-                    localStorage.setItem("highScore", score);
-                }
             }
             //shows if you win.
             function gameWon(){
@@ -414,9 +430,6 @@
                 dx = 0;
                 dy = 0;
                 var reload = setInterval(restart, 2000);
-                if (score > localStorage.getItem("highScore")){
-                    localStorage.setItem("highScore", score);
-                }
             }
             //draw function, draws all of the code.
             function draw() {

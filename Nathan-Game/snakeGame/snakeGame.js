@@ -164,11 +164,13 @@ function keyDownHandler(e) {
     else if(e.key == "ArrowLeft" || e.key == "a") {
         e.preventDefault();
         if(!right && !left && !turn) {
-            left = true;
-            right = false;
-            up = false;
-            down = false;
-            turn = true;
+            if(up || down){
+                left = true;
+                right = false;
+                up = false;
+                down = false;
+                turn = true;
+            }
         }
     }
     else if(e.key == "ArrowUp" || e.key == "w") {
