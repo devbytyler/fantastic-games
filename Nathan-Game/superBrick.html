@@ -44,7 +44,7 @@
         <h4 id = instructions>Use the Mouse or Arrow Keys to move your paddle. Press Space to start levels and pause the game. If you finish a level without losing a life, you gain 1 life. Finish Level 5 to win. Use the buttons to change between easy and hard modes.</h4>
         <canvas id="Canvas" width="400" height="550"></canvas>
         <div> <button id = "easy">EASY</button> <button id = "hard">HARD</button></div>
-        <div> <button onclick = "window.location.href = 'superBrick.html'">RESTART</button></div>
+        <div> <button id = restartButton>RESTART</button></div>
 
         <script>
             var canvas = document.getElementById("Canvas");
@@ -85,8 +85,28 @@
             var element = document.getElementById('text');
             var hard = true;
             var easy = false;
+            if(localStorage.getItem("mode") == null){
+                hard = true;
+                easy = false;
+            }
+            else if(localStorage.getItem("mode") == "easy"){
+                easy = true;
+                hard =false;
+                lives = 5;
+                remainingLives = 5;
+            }
+            else if(localStorage.getItem("mode") == "easy"){
+                hard = true;
+                easy = false;
+            }
 
             function restart(){
+                if(easy){
+                    localStorage.setItem("mode", "easy");
+                }
+                if (hard){
+                    localStorage.setItem("mode", "hard");
+                }
                 location.reload();
             }
 
@@ -119,6 +139,15 @@
             if (isMobile){
                 canvas.addEventListener("click", mouseClick, false);
             }
+            document.getElementById("restartButton").addEventListener("click", function(){
+                if(easy == true){
+                    localStorage.setItem("mode", "easy");
+                }
+                else if(hard == true){
+                    localStorage.setItem("mode", "hard");
+                }
+                location.reload();
+            });
             document.addEventListener("keydown", spaceKeyDown, false);
             document.addEventListener("keydown", keyDownHandler, false);
             document.addEventListener("keyup", keyUpHandler, false);
