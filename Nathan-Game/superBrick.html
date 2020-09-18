@@ -244,10 +244,20 @@
             function keyDownHandler(e) {
                 if(!pause){
                     if(e.key == "Right" || e.key == "ArrowRight") {
+                        e.preventDefault();
                         rightPressed = true;
                     }
                     else if(e.key == "Left" || e.key == "ArrowLeft") {
+                        e.preventDefault();
                         leftPressed = true;
+                    }
+                }
+                else{
+                    if(e.key == "Right" || e.key == "ArrowRight") {
+                        e.preventDefault();
+                    }
+                    else if(e.key == "Left" || e.key == "ArrowLeft") {
+                        e.preventDefault();
                     }
                 }
             }
@@ -255,9 +265,11 @@
             function keyUpHandler(e) {
                 if(!pause){
                     if(e.key == "Right" || e.key == "ArrowRight") {
+                    e.preventDefault();
                     rightPressed = false;
                     }
                     else if(e.key == "Left" || e.key == "ArrowLeft") {
+                    e.preventDefault();
                     leftPressed = false;
                     }
                 }
