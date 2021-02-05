@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Snake Game</title>
+        <style>
+            body {
+                display: flex;
+                align-content: center;
+                justify-content: center;
+                flex-direction: column;
+                background-color: lightgray;
+            }
+            h1 {
+                text-align: center;
+                margin-bottom: 0;
+            }
+            h3 {
+                text-align: center;
+            }
+            h4 {
+                margin-top: 0;
+            }
+            canvas {
+                background: "white";
+                border: 4px inset darkgray;
+                margin: 0 auto;
+            }
+            #restart {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+            }
+            .modeDiv {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+            }
+            button{
+                padding: 10px;
+                margin-top: 0px;
+                margin-bottom: 10px;
+                font-size: 18px;
+                font-family: monospace;
+                max-height: 50px;
+            }
+            #div{
+                display: flex;
+                justify-content: inherit;
+                width: 600px;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>SNAKE</h1>
+        <h3>Player 1: Arrowkeys, brown snake. Player 2: WASD, green snake. Kill the other player to win!</h3>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <div id = "div">
+            <div id = "restart"><button id = "restarting">RESTART</button></div>
+        </div>
+        <script src = "2PlayerSnake.js">
+        </script>
+    </body>
+</html>
