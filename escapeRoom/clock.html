@@ -17,6 +17,12 @@
             <button onclick="window.location.href='room1.html'">Back to Room</button>
         </div>
         <script>
+            if(localStorage.getItem("clock") == null){
+                localStorage.setItem("clock", "no");
+            }
+            else if(localStorage.getItem("clock") == "yes"){
+                document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the case, and inside is a piece of paper with a number on it.</p><img src='images/clock-clue.png' width='200'>"
+            }
             document.addEventListener("keydown", returnKey, false);
             function returnKey(e){
                 if(e.key == "Enter"){
@@ -24,8 +30,9 @@
                 }
             }
             var onButtonClick = function(){
-                if(document.getElementById("udlrLock").value.toLowerCase() == "urdu"){
+                if(document.getElementById("udlrLock").value.toLowerCase() == "urdu" || localStorage.getItem("clock") == "yes"){
                     document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the case, and inside is a piece of paper with a number on it.</p><img src='images/clock-clue.png' width='200'>"
+                    localStorage.setItem("clock", "yes");
                 }
                 else { 
                     document.getElementById("response").textContent = "Wrong Answer! Try Again.";

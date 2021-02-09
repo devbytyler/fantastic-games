@@ -19,6 +19,12 @@
                 <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
+                if(localStorage.getItem("microwave") == null){
+                    localStorage.setItem("microwave", "no");
+                }
+                else if(localStorage.getItem("microwave") == "yes"){
+                    document.getElementById("microResponse").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the back of the microwave, and inside is a piece of paper with a number on it.</p><p><img src = 'images/microwaveClue.png' alt = 'Paper with 6 on it' width = '300'>"
+                }
                 document.addEventListener("keydown", returnKey, false);
                 function returnKey(e){
                     if(e.key == "Enter"){
@@ -26,8 +32,9 @@
                     }
                 }
                 var onButtonClick = function(){
-                    if(document.getElementById("answer").value == "6, 13, 34"){
+                    if(document.getElementById("answer").value == "6, 13, 34" || localStorage.getItem("microwave") == "yes"){
                         document.getElementById("microResponse").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the back of the microwave, and inside is a piece of paper with a number on it.</p><p><img src = 'images/microwaveClue.png' alt = 'Paper with 6 on it' width = '300'>"
+                        localStorage.setItem("microwave", "yes");
                     }
                     else{
                         document.getElementById("microResponse").textContent = "Wrong Answer! Try Again.";

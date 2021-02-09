@@ -20,6 +20,19 @@
                 <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
+                if(localStorage.getItem("sink") == null){
+                    localStorage.setItem("sink", "no");
+                }
+                else if(localStorage.getItem("sink") == "yes"){
+                    document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You lift the cover on the sink, and inside is a key. Where does the key go to?</p><input type = 'text' id = answerTwo><br><button id = submitTwo onclick = 'ButtonClickTwo()'>SUBMIT</button>"
+                    partTwo = true;
+                }
+                if(localStorage.getItem("key") == null){
+                    localStorage.setItem("key", "no");
+                }
+                else if(localStorage.getItem("key") == "yes"){
+                    document.getElementById("responseTwo").innerHTML = "<p>You open the wall safe behind the couch, and inside is a piece of paper with a number on it.</p><p><img src='images/couch-clue.png' alt='Paper with the number 43' width='200'></p>"
+                }
                 var partTwo = false;
                 var wrong = false;
                 document.addEventListener("keydown", returnKey, false);
@@ -36,8 +49,9 @@
                     }
                 }
                 var ButtonClickTwo = function(){
-                    if(document.getElementById("answerTwo").value.toLowerCase() == "couch"){
+                    if(document.getElementById("answerTwo").value.toLowerCase() == "couch" || localStorage.getItem("key") == "yes"){
                         document.getElementById("responseTwo").innerHTML = "<p>You open the wall safe behind the couch, and inside is a piece of paper with a number on it.</p><p><img src='images/couch-clue.png' alt='Paper with the number 43' width='200'></p>"
+                        localStorage.setItem("key", "yes");
                     }
                     else{
                         if(wrong){
@@ -46,9 +60,10 @@
                     }
                 }
                 var onButtonClick = function(){
-                    if(document.getElementById("answer").value.toLowerCase() == "sink"){
+                    if(document.getElementById("answer").value.toLowerCase() == "sink" || localStorage.getItem("sink") == "yes"){
                         document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You lift the cover on the sink, and inside is a key. Where does the key go to?</p><input type = 'text' id = answerTwo><br><button id = submitTwo onclick = 'ButtonClickTwo()'>SUBMIT</button>"
                         partTwo = true;
+                        localStorage.setItem("sink", "yes");
                     }
                     else {
                         document.getElementById("response").textContent = "Wrong Answer! Try Again.";

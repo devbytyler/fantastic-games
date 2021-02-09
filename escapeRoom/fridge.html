@@ -17,6 +17,12 @@
                 <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
+                if(localStorage.getItem("fridge") == null){
+                    localStorage.setItem("fridge", "yes");
+                }
+                else if(localStorage.getItem("fridge") == "yes"){
+                    document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the fridge, and inside is a piece of paper. It has pictures of objects around the room.<img src='images/fridge.png' alt='Paper in Fridge, order: Toilet, Microwave, Desk, Couch, Clock' width='400'>"
+                }
                 document.addEventListener("keydown", returnKey, false);
                 function returnKey(e){
                     if(e.key == "Enter"){
@@ -24,8 +30,9 @@
                     }
                 }
                 var onButtonClick = function(){
-                    if(document.getElementById("riddleLock").value.toLowerCase() == "dark"){
+                   if(document.getElementById("riddleLock").value.toLowerCase() == "dark" || localStorage.getItem("desk") == "yes"){
                         document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the fridge, and inside is a piece of paper. It has pictures of objects around the room.<img src='images/fridge.png' alt='Paper in Fridge, order: Toilet, Microwave, Desk, Couch, Clock' width='400'>"
+                       localStorage.setItem("fridge", "yes");
                     }
                     else {
                         document.getElementById("response").textContent = "Wrong Answer! Try Again."

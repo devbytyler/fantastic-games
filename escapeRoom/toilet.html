@@ -19,6 +19,12 @@
                 <button onclick = "window.location.href ='room1.html'">Back to Room</button>
             </div>
             <script>
+                if(localStorage.getItem("toilet") == null){
+                    localStorage.setItem("toilet", "no");
+                }
+                else if(localStorage.getItem("toilet") == "yes"){
+                    document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the desk drawer, and inside is a piece of paper with a number on it.</p><p><img src = 'images/toilet-clue.png' alt = 'Paper with the number 22' width = '200'> </p>"
+                }
                 document.addEventListener("keydown", returnKey, false);
                 function returnKey(e){
                     if(e.key == "Enter"){
@@ -26,8 +32,9 @@
                     }
                 }
                 var onButtonClick = function(){
-                    if(document.getElementById("answer").value == "419"){
+                    if(document.getElementById("answer").value == "419" || localStorage.getItem("toilet") == "yes"){
                         document.getElementById("response").innerHTML = "<h2 id = 'worked'>The Combination Worked!</h2><p>You open the desk drawer, and inside is a piece of paper with a number on it.</p><p><img src = 'images/toilet-clue.png' alt = 'Paper with the number 22' width = '200'> </p>"
+                        localStorage.setItem("toilet", "yes");
                     }
                     else {
                         document.getElementById("response").textContent = "Wrong Answer! Try Again.";
