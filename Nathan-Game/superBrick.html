@@ -21,7 +21,7 @@
             #instructions {
                 text-align: center;
                 color: "#000";
-                max-width: 420px;
+                max-width: 520px;
                 margin: auto;
                 font-family: serif;
                 font-size: 18px;
@@ -34,6 +34,8 @@
             button{
                 padding: 10px;
                 margin-top: 10px;
+                margin-left: 5px;
+                margin-right: 5px;
                 font-size: 18px;
                 font-family: monospace;
             }
@@ -41,12 +43,13 @@
     </head>
     <body>
         <h1 id = gameTitle>Super Brick</h1>
-        <h4 id = instructions>Use the Mouse or Arrow Keys to move your paddle. Press Space to start levels and pause the game. If you finish a level without losing a life, you gain 1 life. Finish Level 5 to win. Use the buttons to change between easy and hard modes.</h4>
+        <h4 id = instructions>Use the Mouse or Arrow Keys to move your paddle. Press Space to start levels and pause the game. If you finish a level without losing a life, you gain 1 life. Finish Level 5 to win. Yellow bricks have to be hit twice, red bricks have to be hit 3 times.</h4>
         <canvas id="Canvas" width="400" height="550"></canvas>
         <div> <button id = "easy">EASY</button> <button id = "hard">HARD</button></div>
         <div> <button id = restartButton>RESTART</button></div>
 
         <script>
+            //variables
             var canvas = document.getElementById("Canvas");
             var ctx = canvas.getContext("2d");
             var ballRadius = 10;
@@ -85,6 +88,8 @@
             var element = document.getElementById('text');
             var hard = true;
             var easy = false;
+
+            //sets the mode the game starts in.
             if(localStorage.getItem("mode") == null){
                 hard = true;
                 easy = false;
@@ -95,11 +100,12 @@
                 lives = 5;
                 remainingLives = 5;
             }
-            else if(localStorage.getItem("mode") == "easy"){
+            else if(localStorage.getItem("mode") == "hard"){
                 hard = true;
                 easy = false;
             }
 
+            //function for the restart button
             function restart(){
                 if(easy){
                     localStorage.setItem("mode", "easy");
@@ -131,6 +137,70 @@
                     bricks[c] = [];
                     for(var r=0; r<brickRowCount; r++) {
                         bricks[c][r] = { x: 0, y: 0, status: 1 };
+                    }
+                    //sets the brick status for each level on easy mode.
+                    if(easy){
+                        if(level == 2){
+                            for(var r=0; r<1; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                        }
+                        if(level == 3){
+                            for(var r=0; r<3; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                            for(var r=0; r<1; r++){
+                                bricks[c][r] = {x: 0, y: 0, status: 3};
+                            }
+                        }
+                        if(level == 4){
+                            for(var r=0; r<4; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                            for(var r=0; r<2; r++){
+                                bricks[c][r] = {x: 0, y: 0, status: 3};
+                            }
+                        }
+                        if(level == 5){
+                            for(var r=0; r<6; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                            for(var r=0; r<3; r++){
+                                bricks[c][r] = {x: 0, y: 0, status: 3};
+                            }
+                        }
+                    }
+                    //sets the brick status for each level on hard mode.
+                    if(hard){
+                        if(level == 2){
+                            for(var r=0; r<2; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                        }
+                        if(level == 3){
+                            for(var r=0; r<4; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                            for(var r=0; r<2; r++){
+                                bricks[c][r] = {x: 0, y: 0, status: 3};
+                            }
+                        }
+                        if(level == 4){
+                            for(var r=0; r<6; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                            for(var r=0; r<3; r++){
+                                bricks[c][r] = {x: 0, y: 0, status: 3};
+                            }
+                        }
+                        if(level == 5){
+                            for(var r=0; r<8; r++){
+                                bricks[c][r] = { x: 0, y: 0, status: 2};
+                            }
+                            for(var r=0; r<4; r++){
+                                bricks[c][r] = {x: 0, y: 0, status: 3};
+                            }
+                        }
                     }
                 }
             }
@@ -172,6 +242,9 @@
                     paddleX = (canvas.width-paddleWidth)/2;
                     canvas.width = 400;
                     remainingLives = 5;
+                    gameLose = false;
+                    gameWin = false;
+                    paddleWidth = canvas.width * 0.2;
                 }
             });
             document.getElementById("hard").addEventListener("click", function(){
@@ -192,29 +265,34 @@
                     paddleX = (canvas.width-paddleWidth)/2;
                     canvas.width = 400;
                     remainingLives = 10;
+                    gameLose = false;
+                    gameWin = false;
+                    paddleWidth = canvas.width * 0.2;
                 }
             });
 
             //makes space key pause and play, ball still goes in the same direction.
             function spaceKeyDown(e) {
-               if(e.key == "space" || e.key == " " && pause == false){
-                    pause = true;
-                    oldX = dx;
-                    oldY = dy;
-                    dx = 0;
-                    dy = 0;
-               }
-                else if(e.key == "space" || e.key == " " && pause == true){
-                    if(reset == true){
-                       dx = 0;
-                       dy = -5;
-                       reset = false;
-                        pause = false;
-                   }
-                    else if(reset == false){
-                        dx = oldX;
-                        dy = oldY;
-                        pause = false;
+                if(!gameLose && !gameWin){
+                    if(e.key == "space" || e.key == " " && pause == false){
+                        pause = true;
+                        oldX = dx;
+                        oldY = dy;
+                        dx = 0;
+                        dy = 0;
+                    }
+                    else if(e.key == "space" || e.key == " " && pause == true){
+                        if(reset == true){
+                           dx = 0;
+                           dy = -5;
+                           reset = false;
+                            pause = false;
+                       }
+                        else if(reset == false){
+                            dx = oldX;
+                            dy = oldY;
+                            pause = false;
+                        }
                     }
                 }
             }
@@ -276,47 +354,92 @@
                     }
                 }
             }
-            //detects when a brick is hit, sets it to gray, controls game win and advance level.
+            var brickHit = false;
+            var hitY = false;
+            var hitX = false;
+            //detects when a brick is hit, changes brick status, and controls game win and advance level.
             function collisionDetection() {
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
                         var b = bricks[c][r];
-                        if(b.status == 1){
+                        if(b.status == 1|| b.status == 2|| b.status == 3){
                             if(x + 10 >= b.x && x - 10 <= b.x+brickWidth && y + 10 >= b.y && y - 10 <= b.y+brickHeight){
+                                brickHit = true;
+                                if(b.status == 3){
+                                    b.status = 2;
+                                    score++;
+                                }else if(b.status == 2){
+                                    b.status = 1;
+                                    score++;
+                                }else if(b.status == 1){
+                                    b.status = 0;
+                                    score++;
+                                }
                                 if(y + 10 == b.y || y - 10 == b.y + brickHeight){
-                                    if(dx === 0){
-                                        if(level == 2 || level == 4){
-                                            dy = 5;
-                                        }
-                                        else{
-                                            dy = -dy;
-                                        }
-                                    }
-                                    else{
-                                        dy = -dy;
-                                    }
+                                    hitY = true;
                                 }
-                                else if(x + 9 >= b.x || x - 9 <= b.x + brickWidth){
-                                    dx = -dx;
+                                else if(x + 10 >= b.x || x - 10 <= b.x + brickWidth){
+                                    hitX = true;
                                 }
-                                b.status = 0;
-                                score++;
                                 if (score > localStorage.getItem("hardBest") && hard){
                                         localStorage.setItem("hardBest", score);
                                 }
                                 else if (score > localStorage.getItem("easyBest") && easy){
                                     localStorage.setItem("easyBest", score);
                                 }
-                                if(score == brickRowCount*brickColumnCount + previousScore) {
-                                    if(level == 5){
-                                        gameWinner();
-                                    }
-                                    else {
-                                        advanceLevel();
-                                    }
-                                }
+                                checkAdvance();
                             }
                         }
+                    }
+                }
+                if(brickHit){
+                    if(hitY){
+                        dy = -dy;
+                        hitY = false;
+                    }
+                    else if(hitY){
+                        dx = -dx;
+                        hitX = false;
+                    }
+                    brickHit = false;
+                }
+            }
+            //checks to see if you advance to the next level.
+            function checkAdvance(){
+                //checks for easy mode
+                if(easy){
+                    if(level == 1 && score == 15){
+                        advanceLevel();
+                    }
+                    else if(level == 2 && score == 35 + previousScore){
+                        advanceLevel();
+                    }
+                    else if(level == 3 && score == 65 + previousScore){
+                        advanceLevel();
+                    }
+                    else if(level == 4 && score == 90 + previousScore){
+                        advanceLevel();
+                    }
+                    else if(level == 5 && score == 120 + previousScore){
+                        gameWinner();
+                    }
+                }
+                //checks for hard mode
+                else if(hard){
+                    if(level == 1 && score == 15){
+                        advanceLevel();
+                    }
+                    else if(level == 2 && score == 48 + previousScore){
+                        advanceLevel();
+                    }
+                    else if(level == 3 && score == 105 + previousScore){
+                        advanceLevel();
+                    }
+                    else if(level == 4 && score == 168 + previousScore){
+                        advanceLevel();
+                    }
+                    else if(level == 5 && score == 243 + previousScore){
+                        gameWinner();
                     }
                 }
             }
@@ -355,7 +478,6 @@
                 if(easy){
                     ctx.fillText("+1 Life!!!", 140, 280);
                 }
-                var addLifeInterval = setInterval(lifeAdd, 1000);
             }
             //draws the ball.
             function drawBall() {
@@ -373,18 +495,24 @@
                 ctx.fill();
                 ctx.closePath();
             }
-            //draws the bricks.
+            //draws the bricks. Different color for each status.
             function drawBricks() {
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
-                        if(bricks[c][r].status == 1){
+                        if(bricks[c][r].status >= 1){
                             var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
                             var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
                             bricks[c][r].x = brickX;
                             bricks[c][r].y = brickY;
                             ctx.beginPath();
                             ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                            ctx.fillStyle = "#0095DD";
+                            if(bricks[c][r].status == 1){
+                                ctx.fillStyle = "#0095DD";
+                            }else if(bricks[c][r].status == 2){
+                                ctx.fillStyle = "#ffff66";
+                            }else if(bricks[c][r].status == 3) {
+                                ctx.fillStyle = "#ff4d4d";
+                            }
                             ctx.fill();
                             ctx.closePath();
                         }
@@ -397,29 +525,43 @@
                 ctx.fillStyle = "#0095DD";
                 ctx.fillText("Score: "+score, 8, 20);
             }
+            //draws the high score, and sets the high score in local storage.
             function drawHighScore() {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#0095DD";
                 if(hard){
                     if(localStorage.getItem("hardBest") == null){
-                        ctx.fillText("Best: 0", 93, 20);                }
+                        ctx.fillText("Best: 0", 90, 20);                }
                     else{
-                        ctx.fillText("Best: "+ localStorage.getItem("hardBest"), 93, 20);
+                        ctx.fillText("Best: "+ localStorage.getItem("hardBest"), 90, 20);
                     }
                 } else if(easy){
                     if(localStorage.getItem("easyBest") == null){
-                        ctx.fillText("Best: 0", 93, 20);                }
+                        ctx.fillText("Best: 0", 90, 20);                }
                     else{
-                        ctx.fillText("Best: "+ localStorage.getItem("easyBest"), 93, 20);
+                        ctx.fillText("Best: "+ localStorage.getItem("easyBest"), 90, 20);
                     }
                 }
-
             }
             //draws the lives
             function drawLives() {
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "#0095DD";
-                ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+                if(hard){
+                    ctx.fillText("Lives: "+lives, canvas.width-73, 20);
+                }else{
+                    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+                }
+
+            }
+            function drawMode() {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#0095DD";
+                if(hard){
+                    ctx.fillText("Hard", canvas.width - 120, 20);
+                }else if(easy){
+                    ctx.fillText("Easy", canvas.width - 120, 20);
+                }
             }
             //draws the level
             function drawLevel() {
@@ -449,7 +591,6 @@
                 pause = true;
                 dx = 0;
                 dy = 0;
-                var reload = setInterval(restart, 2000);
             }
             //shows if you win.
             function gameWon(){
@@ -472,7 +613,6 @@
                 pause = true;
                 dx = 0;
                 dy = 0;
-                var reload = setInterval(restart, 2000);
             }
             //draw function, draws all of the code.
             function draw() {
@@ -483,12 +623,13 @@
                 drawPaddle();
                 drawScore();
                 drawHighScore();
+                drawMode();
                 drawLives();
                 drawLevel();
-                collisionDetection();
                 //tells player that they gained 1 life.
                 if(addLife){
                     drawAddLife();
+                    var addLifeInterval = setInterval(lifeAdd, 1000);
                 }
                 //calls gameLost if gameLose == true.
                 if(gameLose){
@@ -533,6 +674,12 @@
                         reset = true;
                         if(!lives) {
                             gameOver();
+                            for(var c=0; c<brickColumnCount; c++){
+                                for(var r=0; r<brickRowCount; r++){
+                                    var b = bricks[c][r];
+                                    b.status = 0;
+                                }
+                            }
                         }
                         //if lives > 0, starts ball and paddle over.
                         else{
@@ -565,6 +712,7 @@
                 //dx is added to x and dy is added to y to move the ball.
                 x += dx;
                 y += dy;
+                collisionDetection();
             }
             //sets interval of the draw function.
             var interval = setInterval(draw, 10);
