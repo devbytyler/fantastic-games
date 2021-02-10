@@ -347,7 +347,6 @@ function drawBackground() {
 }
 //types "You win" on canvas
 function drawWin() {
-    console.log(tie);
     ctx.font = "50px Arial";
     ctx.fillStyle = "#000";
     if(win){
@@ -366,8 +365,46 @@ function draw() {
     drawApple();
     drawSnake1();
     drawSnake2();
-    if(win || win2 || tie) {
-        drawWin();
+
+    //if apple is on snake, it moves.
+    for(var i = 1; i < snakePos.length - 1; i++){
+        if(appleX == snakePos[i][0] && appleY == snakePos[i][1]){
+            appleX = randomNumber(1, 40) * 15;
+            appleY = randomNumber(1, 40) * 15;
+        }
+    }
+    for(var i = 1; i < snake2Pos.length - 1; i++){
+        if(appleX == snake2Pos[i][0] && appleY == snake2Pos[i][1]){
+            appleX = randomNumber(1, 40) * 15;
+            appleY = randomNumber(1, 40) * 15;
+        }
+    }
+}
+
+
+function loseCheck() {
+    //if snake hits walls, it dies.
+    if(snakePos[0][0] > 599 || snakePos[0][0] < 0 || snakePos[0][1] < 0 || snakePos[0][1] > 599) {
+        win2 = true;
+        right = false;
+        left = false;
+        up = false;
+        down = false;
+        right2 = false;
+        left2 = false;
+        up2 = false;
+        down2 = false;
+    }
+    if(snake2Pos[0][0] > 599 || snake2Pos[0][0] < 0 || snake2Pos[0][1] < 0 || snake2Pos[0][1] > 599) {
+        win = true;
+        right2 = false;
+        left2 = false;
+        up2 = false;
+        down2 = false;
+        right = false;
+        left = false;
+        up = false;
+        down = false;
     }
     //if snake hits itself, it dies.
     for(var i = 1; i < snake2Pos.length; i++) {
@@ -399,46 +436,11 @@ function draw() {
     if(snakePos[0][0] == snake2Pos[0][0] && snakePos[0][1] == snake2Pos[0][1]){
         tie = true;
     }
+}
 
-    //if apple is on snake, it moves.
-    for(var i = 1; i < snakePos.length - 1; i++){
-        if(appleX == snakePos[i][0] && appleY == snakePos[i][1]){
-            appleX = randomNumber(1, 40) * 15;
-            appleY = randomNumber(1, 40) * 15;
-        }
-    }
-    for(var i = 1; i < snake2Pos.length - 1; i++){
-        if(appleX == snake2Pos[i][0] && appleY == snake2Pos[i][1]){
-            appleX = randomNumber(1, 40) * 15;
-            appleY = randomNumber(1, 40) * 15;
-        }
-    }
-
-    //if snake hits walls, it dies.
-    if(snakePos[0][0] > 599 || snakePos[0][0] < 0 || snakePos[0][1] < 0 || snakePos[0][1] > 599) {
-        win2 = true;
-        right = false;
-        left = false;
-        up = false;
-        down = false;
-        right2 = false;
-        left2 = false;
-        up2 = false;
-        down2 = false;
-    }
-    if(snake2Pos[0][0] > 599 || snake2Pos[0][0] < 0 || snake2Pos[0][1] < 0 || snake2Pos[0][1] > 599) {
-        win = true;
-        right2 = false;
-        left2 = false;
-        up2 = false;
-        down2 = false;
-        right = false;
-        left = false;
-        up = false;
-        down = false;
-    }
-
-    //Snake 1 moves based on the arrow keys pushed.
+//function for making the snakes move.
+function move() {
+        //Snake 1 moves based on the arrow keys pushed.
     if(right == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
             appleX = randomNumber(1, 40) * 15;
@@ -659,4 +661,16 @@ function draw() {
     }
 }
 //sets interval for how often draw function is called.
-var interval = setInterval(draw, speed);
+var interval = setInterval(drawing, speed);
+
+function drawing() {
+    if(!win && !win2 && !tie){
+        move();
+        loseCheck();
+        if(!win && !win2 && !tie){
+            draw();
+        }else if(win || win2 || tie){
+            drawWin();
+        }
+    }
+}
