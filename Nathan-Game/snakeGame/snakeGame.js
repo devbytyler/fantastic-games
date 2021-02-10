@@ -441,7 +441,7 @@ function draw() {
             }
         }
         //code for adding another block
-        if(blockTimer == 5){
+        if(blockTimer == 2){
             blockPos.push([randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],);
             blockTimer = 0;
         }
