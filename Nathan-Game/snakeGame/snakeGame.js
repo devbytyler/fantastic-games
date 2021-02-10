@@ -38,7 +38,12 @@ var speed = 100;
 var changeSpeed = 0;
 var normalMode = true;
 var blockMode = false;
+var speedMode = false;
+var blockSpeedMode = false;
 var restart = false;
+var interval = [
+    setInterval(drawing, speed),
+];
 
 //gets images for apple
 var appleSrc = 'pictures/snakeApple.png';
@@ -107,11 +112,15 @@ document.getElementById("restarting").addEventListener("click", function(){
     up = false;
     down = false;
     turn = false;
+    clearInterval(interval);
+    interval.splice(0, 1, setInterval(drawing, speed));
 });
 
 //changes mode when button is clicked.
 document.getElementById("modeSwitch").addEventListener("click", function(){
     speed = 100;
+    clearInterval(interval);
+    interval.splice(0, 1, setInterval(drawing, speed));
     score = 0;
     lose = false;
     win = false;
@@ -128,6 +137,7 @@ document.getElementById("modeSwitch").addEventListener("click", function(){
         [255, 300],
     ];
     blockTimer = 0;
+    changeSpeed = 0;
     turnRight = true;
     turnLeft = false;
     turnUp = false;
@@ -144,6 +154,22 @@ document.getElementById("modeSwitch").addEventListener("click", function(){
     }
     else if(blockMode){
         blockMode = false;
+        speedMode = true;
+        document.getElementById("mode").innerHTML = "<h4>Speed Mode</h4>";
+        speed = 75;
+        clearInterval(interval);
+        interval.splice(0, 1, setInterval(drawing, speed));
+    }
+    else if(speedMode){
+        speedMode = false;
+        blockSpeedMode = true;
+        document.getElementById("mode").innerHTML = "<h4>Block Speed Mode</h4>";
+        speed = 75;
+        clearInterval(interval);
+        interval.splice(0, 1, setInterval(drawing, speed));
+    }
+    else if(blockSpeedMode){
+        blockSpeedMode = false;
         normalMode = true;
         document.getElementById("mode").innerHTML = "<h4>Normal Mode</h4>";
     }
@@ -281,7 +307,7 @@ function draw() {
     drawApple();
     drawSnake();
     //if it's block mode, it draws the blocks.
-    if(blockMode) {
+    if(blockMode || blockSpeedMode) {
         drawBlock();
     }
     if(lose) {
@@ -293,21 +319,9 @@ function draw() {
     if(snakePos.length == 1600){
         win = true;
     }
-    //if snake hits itself, it dies.
-    for(var i = 1; i < snakePos.length; i++) {
-        if(snakePos[0][0] == snakePos[i][0] && snakePos[0][1] == snakePos[i][1]){
-            lose = true;
-        }
-    }
 
-    if(blockMode){
+    if(blockMode || blockSpeedMode){
         //if a block is drawn on the snake, it changes coordinates.
-        for(var i = 0; i <= blockPos.length - 1; i++) {
-            if(snakePos[0][0] == blockPos[i][0] && snakePos[0][1] == blockPos[i][1]) {
-                lose = true;
-            }
-        }
-        //if snake hits block, it dies.
         for(var i = 1; i < snakePos.length; i++) {
             for(var j = 1; j < blockPos.length; j++){
                 if(blockPos[j][0] == snakePos[i][0] && blockPos[j][1] == snakePos[i][1]) {
@@ -322,6 +336,11 @@ function draw() {
                 appleY = randomNumber(1, 40) * 15;
             }
         }
+        //code for adding another block
+        if(blockTimer == 5){
+            blockPos.push([randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],);
+            blockTimer = 0;
+        }
     }
 
     //if apple is on snake, it moves.
@@ -331,22 +350,10 @@ function draw() {
             appleY = randomNumber(1, 40) * 15;
         }
     }
+}
 
-    //if snake hits walls, it dies.
-    if(snakePos[0][0] > 599 || snakePos[0][0] < 0 || snakePos[0][1] < 0 || snakePos[0][1] > 599) {
-        lose = true;
-        right = false;
-        left = false;
-        up = false;
-        down = false;
-    }
-
-    //code for adding another block
-    if(blockTimer == 5){
-        blockPos.push([randomNumber(1, 40) * 15, randomNumber(1, 40) * 15],);
-        blockTimer = 0;
-    }
-
+//function for moving.
+function move(){
     //snake moves based on the arrow keys pushed.
     if(right == true){
         if(snakePos[0][0] == appleX && snakePos[0][1] == appleY){
@@ -453,9 +460,50 @@ function draw() {
         }
     }
     //after you are 50 long, you get faster.
-    if(changeSpeed == 50){
-        speed -= 2;
+    if(changeSpeed == 15){
+        speed -= 1;
+        changeSpeed = 0;
+        clearInterval(interval);
+        interval.splice(0, 1, setInterval(drawing, speed));
     }
 }
-//sets interval for how often draw function is called.
-var interval = setInterval(draw, speed);
+
+//function for checking if the player has lost.
+function loseCheck() {
+    //if snake hits walls, it dies.
+    if(snakePos[0][0] > 599 || snakePos[0][0] < 0 || snakePos[0][1] < 0 || snakePos[0][1] > 599) {
+        lose = true;
+    }
+
+    //if snake hits a block, it dies.
+    if(blockMode || blockSpeedMode){
+    for(var i = 0; i <= blockPos.length - 1; i++) {
+            if(snakePos[0][0] == blockPos[i][0] && snakePos[0][1] == blockPos[i][1]) {
+                lose = true;
+            }
+        }
+    }
+
+    //if snake hits itself, it dies.
+    for(var i = 1; i < snakePos.length; i++) {
+        if(snakePos[0][0] == snakePos[i][0] && snakePos[0][1] == snakePos[i][1]){
+            lose = true;
+        }
+    }
+}
+
+//function that calls draw, move, and check functions..
+function drawing() {
+    if(!lose){
+        move();
+        loseCheck();
+        if(!lose && !win){
+            draw();
+        }else if(lose){
+            drawLose();
+        }
+        else if(win){
+            drawWin();
+        }
+    }
+}
