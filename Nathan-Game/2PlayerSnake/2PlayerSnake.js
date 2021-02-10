@@ -194,11 +194,19 @@ function keyDownHandler1(e) {
     else if(e.key == "ArrowDown") {
         e.preventDefault();
         if(!up && !down && !turn) {
-            down = true;
-            left = false;
-            right = false;
-            up = false;
-            turn = true;
+            if(!up && !down && !right && !left){
+                down = false;
+                up = false;
+                right = false;
+                left = false;
+            }
+            else{
+                down = true;
+                left = false;
+                right = false;
+                up = false;
+                turn = true;
+            }
         }
     }
 }
@@ -234,11 +242,18 @@ function keyDownHandler2(e) {
     }
     else if(e.key == "s") {
         if(!up2 && !down2 && !turn2) {
-            down2 = true;
-            left2 = false;
-            right2 = false;
-            up2 = false;
-            turn2 = true;
+            if(!up2 && !down2 && !right2 && !left2){
+                down2 = false;
+                up2 = false;
+                right2 = false;
+                left2 = false;
+            }else{
+                down2 = true;
+                left2 = false;
+                right2 = false;
+                up2 = false;
+                turn2 = true;
+            }
         }
     }
 }
