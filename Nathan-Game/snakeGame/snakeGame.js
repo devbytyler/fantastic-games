@@ -459,12 +459,21 @@ function move(){
             }
         }
     }
-    //after you are 50 long, you get faster.
-    if(changeSpeed == 15){
-        speed -= 1;
-        changeSpeed = 0;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
+    //you get faster as you get longer.
+    if(speedMode || blockSpeedMode){
+        if(changeSpeed == 5){
+            speed -= 2;
+            changeSpeed = 0;
+            clearInterval(interval);
+            interval.splice(0, 1, setInterval(drawing, speed));
+        }
+    }else{
+        if(changeSpeed == 15){
+            speed -= 2;
+            changeSpeed = 0;
+            clearInterval(interval);
+            interval.splice(0, 1, setInterval(drawing, speed));
+        }
     }
 }
 
