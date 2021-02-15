@@ -275,6 +275,7 @@
             function spaceKeyDown(e) {
                 if(!gameLose && !gameWin){
                     if(e.key == "space" || e.key == " " && pause == false){
+                        e.preventDefault();
                         pause = true;
                         oldX = dx;
                         oldY = dy;
@@ -282,6 +283,7 @@
                         dy = 0;
                     }
                     else if(e.key == "space" || e.key == " " && pause == true){
+                        e.preventDefault();
                         if(reset == true){
                            dx = 0;
                            dy = -5;
@@ -289,6 +291,7 @@
                             pause = false;
                        }
                         else if(reset == false){
+                            e.preventDefault();
                             dx = oldX;
                             dy = oldY;
                             pause = false;
@@ -397,7 +400,7 @@
                         dy = -dy;
                         hitY = false;
                     }
-                    else if(hitY){
+                    else if(hitX){
                         dx = -dx;
                         hitX = false;
                     }
