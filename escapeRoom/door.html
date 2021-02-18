@@ -28,7 +28,13 @@
             var onButtonClick = function() {
                 if(document.getElementById("doorLock").value == "22, 6, 37, 43, 41"){
                     document.getElementById("page").innerHTML = "<h1>Congratulations!</h1><div class = room><h2>You Escaped!!!!!!!</h2><p>Thanks for Playing!!!<br><a href = 'https://tylerstephens814.github.io/fantastic-games/'>FANTASTIC GAMES</a></p></div>"
-                    localStorage.clear();
+                    localStorage.removeItem("clock");
+                    localStorage.removeItem("desk");
+                    localStorage.removeItem("fridge");
+                    localStorage.removeItem("microwave");
+                    localStorage.removeItem("sink");
+                    localStorage.removeItem("key");
+                    localStorage.removeItem("toilet");
                 }
                 else {
                     document.getElementById("wrong").textContent  = "Wrong Answer! Try Again.";

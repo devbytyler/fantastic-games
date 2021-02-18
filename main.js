@@ -4,21 +4,21 @@ var app = new Vue({
         games: [
             {
                 name: 'Super Brick', 
-                desc: 'A fantastic brick-breaking adventure.',
+                desc: 'A fantastic brick-breaking adventure!',
                 img: 'images/brick.jpg', 
                 link: 'Nathan-Game/superBrick.html', 
                 creator:'Nathan',
             },
             {
                 name: 'Goalie Wars', 
-                desc: "A super addicting pong adventure. Don't worry if you can't beat it. I can't either.", 
+                desc: "A fantastic pong adventure! Don't worry if you can't beat it. I can't either.",
                 img: 'images/pong.jpg', 
                 link: 'Jacob-Game/Jacob-Soccer/game.html',
                 creator:'Jacob',
             },
             {
                 name: 'Escape Room', 
-                desc: 'A fantastic online escape room.',
+                desc: 'A fantastic online escape room!',
                 img: 'images/escapeRoom.jpeg', 
                 link: 'escapeRoom/main-page.html', 
                 creator: 'Nathan & Jacob',
@@ -40,7 +40,7 @@ var app = new Vue({
             },
             {
                 name: 'Bounce',
-                desc: 'A fantastic bouncing adventure',
+                desc: 'A fantastic bouncing adventure!',
                 img: 'images/Bounce.png',
                 link: 'Jacob-Game/Jacob-Bounce/bounceGame/bounce.html',
                 creator: 'Jacob',

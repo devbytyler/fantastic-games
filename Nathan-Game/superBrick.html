@@ -381,8 +381,9 @@
                                 if(y + 10 == b.y || y - 10 == b.y + brickHeight){
                                     hitY = true;
                                 }
-                                else if(x + 10 >= b.x || x - 10 <= b.x + brickWidth){
+                                if(x + 10 >= b.x || x - 10 <= b.x + brickWidth){
                                     hitX = true;
+                                    console.log("hi");
                                 }
                                 if (score > localStorage.getItem("hardBest") && hard){
                                         localStorage.setItem("hardBest", score);
