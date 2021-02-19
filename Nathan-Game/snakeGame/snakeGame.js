@@ -93,6 +93,7 @@ document.addEventListener("keydown", keyDownHandler, false);
 //makes restart button restart game.
 document.getElementById("restarting").addEventListener("click", function(){
     score = 0;
+    document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
     lose = false;
     win = false;
     if(speedMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || blockSpeedMode){
@@ -142,6 +143,7 @@ document.getElementById("restarting").addEventListener("click", function(){
 //changes mode when button is clicked.
 document.getElementById("modeSwitch").addEventListener("click", function(){
     score = 0;
+    document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
     lose = false;
     win = false;
     blockPos = [
@@ -589,15 +591,15 @@ function move(){
     }
     //you get faster as you get longer.
     if(speedMode || blockSpeedMode || extraFruitSpeedMode || extraFruitBlockSpeedMode){
-        if(changeSpeed == 5){
-            speed -= 2;
+        if(changeSpeed == 32){
+            speed -= 1;
             changeSpeed = 0;
             clearInterval(interval);
             interval.splice(0, 1, setInterval(drawing, speed));
         }
     }else{
-        if(changeSpeed == 15){
-            speed -= 2;
+        if(changeSpeed == 32){
+            speed -= 1;
             changeSpeed = 0;
             clearInterval(interval);
             interval.splice(0, 1, setInterval(drawing, speed));
