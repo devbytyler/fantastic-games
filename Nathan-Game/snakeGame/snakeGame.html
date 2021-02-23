@@ -2,63 +2,19 @@
 <html>
     <head>
         <title>Snake Game</title>
-        <style>
-            body {
-                display: flex;
-                align-content: center;
-                justify-content: center;
-                flex-direction: column;
-                background-color: lightgray;
-            }
-            h1 {
-                text-align: center;
-                margin-bottom: 0;
-            }
-            h3 {
-                text-align: center;
-            }
-            h4 {
-                margin-top: 0;
-            }
-            canvas {
-                background: "white";
-                border: 4px inset darkgray;
-                margin: 0 auto;
-            }
-            #restart {
-                display: flex;
-                width: 100%;
-                justify-content: center;
-            }
-            .modeDiv {
-                display: flex;
-                width: 100%;
-                justify-content: center;
-            }
-            button{
-                padding: 10px;
-                margin-top: 0px;
-                margin-bottom: 10px;
-                font-size: 18px;
-                font-family: monospace;
-                max-height: 50px;
-            }
-            #div{
-                display: flex;
-                justify-content: inherit;
-                width: 600px;
-                margin: auto;
-            }
-        </style>
+        <link rel="stylesheet" href="snake.css">
     </head>
     <body>
         <h1>SNAKE</h1>
         <h3>Collect fruit to grow bigger. Use arrow keys or WASD to move.</h3>
         <canvas id="canvas" width="600" height="600"></canvas>
-        <div id = "div">
-            <div id = "restart"><button id = "restarting">RESTART</button></div>
-            <div id = "score"></div>
+        <div class = "div">
+            <div id = "restart"><button id = "restarting" onclick = "restarting()">RESTART</button></div>
+            <div class = "modeDiv"><button id = "size" onclick = "sizeChange()">SIZE CHANGE</button></div>
             <div class = "modeDiv"><button id = "modeSwitch">MODE SWITCH</button></div>
+        </div>
+        <div class = "div">
+            <div id = "score"></div>
         </div>
         <div id = "mode" class = "modeDiv"><h4>Normal Mode</h4></div>
         <script src = "snakeGame.js">

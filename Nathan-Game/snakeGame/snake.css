@@ -1,0 +1,56 @@
+body {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: lightgray;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 0;
+}
+h3 {
+    text-align: center;
+}
+h4 {
+    margin-top: 0;
+}
+canvas {
+    background: "white";
+    border: 4px inset darkgray;
+    margin: 0 auto;
+}
+#restart {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.modeDiv {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+button{
+    padding: 10px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-family: monospace;
+    max-height: 50px;
+}
+.div{
+    display: flex;
+    justify-content: inherit;
+    width: 600px;
+    margin: auto;
+}
+.sizeDiv {
+    display: flex;
+    justify-content: inherit;
+    margin: auto;
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
