@@ -37,23 +37,19 @@ var turn = false;
 var speed = 100;
 var changeSpeed = 0;
 var eating = false;
-var normalMode = true;
-var blockMode = false;
-var speedMode = false;
-var blockSpeedMode = false;
-var extraFruitMode = false;
-var extraFruitSpeedMode = false;
-var extraFruitBlockMode = false;
-var extraFruitBlockSpeedMode = false;
-var restart = false;
-var small = false;
-var mediumSmall = false;
-var medium = false;
-var mediumBig = false;
-var big = true;
+var randomBlock;
+var randomApple;
 var interval = [
     setInterval(drawing, speed),
 ];
+var appleInput = document.getElementById('appleNum');
+var blockInput = document.getElementById('blockSet');
+var speedInput = document.getElementById('speedSet');
+var sizeInput = document.getElementById('sizeSet');
+var appleSetting = appleNum.value;
+var blockSetting = blockSet.value;
+var speedSetting = speedSet.value;
+var sizeSetting = sizeSet.value;
 
 //gets images for apple
 var appleSrc = 'pictures/snakeApple.png';
@@ -105,7 +101,7 @@ function board() {
                     empty = false;
                 }
             }
-            if(blockMode || extraFruitBlockMode || blockSpeedMode || extraFruitBlockSpeedMode){
+            if(blockSetting == "yes"){
                 for(var x = 0; x < blockPos.length; x++){
                     if(blockPos[x][0] == i*15 && blockPos[x][1] == j*15){
                         empty = false;
@@ -124,15 +120,8 @@ board();
 //sets position of apples and blocks
 function setApple() {
     board();
-    var randomApple;
     applePos = [];
-    if(extraFruitMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || extraFruitBlockMode){
-        for(var i = 0; i < 5; i++){
-            board();
-            randomApple = randomNumber(0, emptyArray.length);
-            applePos.push([emptyArray[randomApple][0], emptyArray[randomApple][1]]);
-        }
-    }else{
+    for(var i = 0; i < appleSetting; i++){
         board();
         randomApple = randomNumber(0, emptyArray.length);
         applePos.push([emptyArray[randomApple][0], emptyArray[randomApple][1]]);
@@ -141,7 +130,6 @@ function setApple() {
 setApple();
 function setBlock() {
     board();
-    var randomBlock;
     blockPos = [];
     for(var i = 0; i < 2; i++){
         randomBlock = randomNumber(0, emptyArray.length);
@@ -156,142 +144,26 @@ document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
 //makes arrow keys or WASD work.
 document.addEventListener("keydown", keyDownHandler, false);
 
-//changes mode when button is clicked.
-document.getElementById("modeSwitch").addEventListener("click", function(){
-    score = 0;
-    document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
-    lose = false;
-    win = false;
-    blockPos = [
-        [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-        [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-    ];
-    snakePos = [
-        [canvas.width/2, canvas.height/2],
-        [(canvas.width/2)-15, canvas.height/2],
-        [(canvas.width/2)-30, canvas.height/2],
-        [(canvas.width/2)-45, canvas.height/2],
-    ];
-    blockTimer = 0;
-    changeSpeed = 0;
-    turnRight = true;
-    turnLeft = false;
-    turnUp = false;
-    turnDown = false;
-    right = false;
-    left = false;
-    up = false;
-    down = false;
-    turn = false;
-    nextMoveRight = false;
-    nextMoveLeft = false;
-    nextMoveUp = false;
-    nextMoveDown = false;
-    changeMode();
-});
-
-//function for changing modes.
-function changeMode() {
-    if(normalMode){
-        extraFruitMode = true;
-        normalMode = false;
-        document.getElementById("mode").innerHTML = "<h4>Extra Fruit Mode</h4>";
-        speed = 100;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    else if(extraFruitMode){
-        document.getElementById("mode").innerHTML = "<h4>Speed Mode</h4>";
-        extraFruitMode = false;
-        speedMode = true;
-        speed = 75;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    else if(speedMode){
-        speedMode = false;
-        extraFruitSpeedMode = true;
-        document.getElementById("mode").innerHTML = "<h4>Extra Fruit Speed Mode</h4>";
-        speed = 75;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    else if(extraFruitSpeedMode){
-        extraFruitSpeedMode = false;
-        blockMode = true;
-        document.getElementById("mode").innerHTML = "<h4>Block Mode</h4>";
-        speed = 100;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    else if(blockMode){
-        blockMode = false;
-        extraFruitBlockMode = true;
-        document.getElementById("mode").innerHTML = "<h4>Extra Fruit Block Mode</h4>";
-        speed = 100;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    else if(extraFruitBlockMode){
-        extraFruitBlockMode = false;
-        blockSpeedMode = true;
-        document.getElementById("mode").innerHTML = "<h4>Block Speed Mode</h4>";
-        speed = 75;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    else if(blockSpeedMode){
-        blockSpeedMode = false;
-        extraFruitBlockSpeedMode = true;
-        document.getElementById("mode").innerHTML = "<h4>Extra Fruit Block Speed Mode</h4>";
-        speed = 75;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    else if(extraFruitBlockSpeedMode){
-        extraFruitBlockSpeedMode = false;
-        normalMode = true;
-        document.getElementById("mode").innerHTML = "<h4>Normal Mode</h4>";
-        speed = 100;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    setBlock();
-    setApple();
-}
-
 //restart function
 function restarting(){
+    appleSetting = appleNum.value;
+    blockSetting = blockSet.value;
+    speedSetting = speedSet.value;
+    sizeSetting = sizeSet.value;
+    setSize();
     score = 0;
     document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
     lose = false;
     win = false;
-    if(speedMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || blockSpeedMode){
-        speed = 75;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }else {
+    if(speedSetting == "slow"){
         speed = 100;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
+    }else if(speedSetting == "medium"){
+        speed = 75;
+    }else if(speedSetting == "fast"){
+        speed = 50;
     }
-    if(extraFruitMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || extraFruitBlockMode){
-        applePos = [
-            [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-            [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-            [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-            [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-            [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-        ];
-    }else {
-        applePos = [
-            [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-        ];
-    }
-    blockPos = [
-        [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-        [randomNumber(1, canvas.width / 15) * 15, randomNumber(1, canvas.height / 15) * 15],
-    ];
+    clearInterval(interval);
+    interval.splice(0, 1, setInterval(drawing, speed));
     snakePos = [
         [canvas.width/2, canvas.height/2],
         [(canvas.width/2)-15, canvas.height/2],
@@ -372,41 +244,22 @@ function keyDownHandler(e) {
 }
 
 //function for changing the size of the board.
-function sizeChange() {
-    restarting();
-    if(!right && !left && !up && !down){
-        if(small){
-            canvas.width = 240;
-            canvas.height = 240;
-            mediumSmall = true;
-            small = false;
-            restarting();
-        }else if(mediumSmall){
-            canvas.width = 390;
-            canvas.height = 390;
-            mediumSmall = false;
-            medium = true;
-            restarting();
-        }else if(medium) {
-            canvas.width = 480;
-            canvas.height = 480;
-            medium = false;
-            mediumBig = true;
-            restarting();
-        }else if(mediumBig){
-            canvas.width = 600;
-            canvas.height = 600;
-            big = true;
-            mediumBig = false;
-            restarting();
-        }else if(big){
-            canvas.width = 120;
-            canvas.height = 120;
-            small = true;
-            medium = false;
-            big = false;
-            restarting();
-        }
+function setSize() {
+    if(sizeSetting == "small"){
+        canvas.width = 120;
+        canvas.height = 120;
+    }else if(sizeSetting == "mediumSmall"){
+        canvas.width = 240;
+        canvas.height = 240;
+    }else if(sizeSetting == "medium"){
+        canvas.width = 390;
+        canvas.height = 390;
+    }else if(sizeSetting == "mediumBig"){
+        canvas.width = 480;
+        canvas.height = 480;
+    }else if(sizeSetting == "big"){
+        canvas.width = 600;
+        canvas.height = 600;
     }
 }
 
@@ -462,7 +315,7 @@ function drawApple() {
         ctx.drawImage(appleObj, applePos[i][0], applePos[i][1], appleSize, appleSize);
     }
 }
-//draws block mode.
+//draws blocks.
 function drawBlock() {
     ctx.beginPath();
     for(var i = 0; i <= blockPos.length - 1; i++){
@@ -484,29 +337,29 @@ function drawBackground() {
 function drawLose() {
     ctx.font = "45px Arial";
     ctx.fillStyle = "#000";
-    if(mediumBig || big){
+    if(canvas.width == 480 || canvas.width == 600){
         ctx.fillText("You Lose!!!", canvas.width / 2 - 119, canvas.height / 2);
     }
-    else if(mediumSmall || medium){
+    else if(canvas.width == 240 || canvas.width == 390){
         ctx.fillText("You Lose!!!", canvas.width / 2 - 109, canvas.height / 2);
     }
-    else if(small){
+    else if(canvas.width == 120){
         ctx.font = "23px Arial";
         ctx.fillText("You Lose!!!", canvas.width / 2 - 56, canvas.height / 2);
     }
 }
 //types "You win" on canvas
 function drawWin() {
-    if(big || mediumBig || medium){
+    if(canvas.width == 600 || canvas.width == 480 || canvas.width == 390){
         ctx.font = "50px Arial";
         ctx.fillStyle = "#000";
         ctx.fillText("You Win!!!!", canvas.width / 2 - 126, canvas.height / 2);
     }
-    else if(mediumSmall){
+    else if(canvas.width == 240){
         ctx.font = "45px Arial";
         ctx.fillStyle = "#000"
         ctx.fillText("You Win!!!!", canvas.width / 2 - 106, canvas.height / 2);
-    }else if(small){
+    }else if(canvas.width == 120){
         ctx.font = "25px Arial";
         ctx.fillStyl = "#000";
         ctx.fillText("You Win!!!", canvas.width / 2 - 56, canvas.height / 2);
@@ -518,7 +371,7 @@ function draw() {
     drawApple();
     drawSnake();
     //if it's block mode, it draws the blocks.
-    if(blockMode || blockSpeedMode || extraFruitBlockMode || extraFruitBlockSpeedMode) {
+    if(blockSetting == "yes") {
         drawBlock();
     }
     if(lose) {
@@ -531,7 +384,7 @@ function draw() {
     if(snakePos.length == canvas.width/15 * canvas.height/15){
         win = true;
     }
-    if(blockMode || blockSpeedMode || extraFruitBlockMode || extraFruitBlockSpeedMode){
+    if(blockSetting == "yes"){
         //code for adding another block
         if(blockTimer == 2){
             blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
@@ -559,7 +412,7 @@ function move(){
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
                     board();
-                    if(extraFruitMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || extraFruitBlockMode){
+                    if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -568,7 +421,16 @@ function move(){
                         else{
                             applePos.splice(i, 1);
                         }
-                    }else{
+                    }else if(appleSetting == "3"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -618,7 +480,7 @@ function move(){
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
                     board();
-                    if(extraFruitMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || extraFruitBlockMode){
+                    if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -627,7 +489,16 @@ function move(){
                         else{
                             applePos.splice(i, 1);
                         }
-                    }else{
+                    }else if(appleSetting == "3"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -675,7 +546,7 @@ function move(){
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
                     board();
-                    if(extraFruitMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || extraFruitBlockMode){
+                    if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -684,7 +555,16 @@ function move(){
                         else{
                             applePos.splice(i, 1);
                         }
-                    }else{
+                    }else if(appleSetting == "3"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -732,7 +612,7 @@ function move(){
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
                     board();
-                    if(extraFruitMode || extraFruitSpeedMode || extraFruitBlockSpeedMode || extraFruitBlockMode){
+                    if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -741,7 +621,16 @@ function move(){
                         else{
                             applePos.splice(i, 1);
                         }
-                    }else{
+                    }else if(appleSetting == "3"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
@@ -781,20 +670,11 @@ function move(){
         }
     }
     //you get faster as you get longer.
-    if(speedMode || blockSpeedMode || extraFruitSpeedMode || extraFruitBlockSpeedMode){
-        if(changeSpeed == 32){
-            speed -= 1;
-            changeSpeed = 0;
-            clearInterval(interval);
-            interval.splice(0, 1, setInterval(drawing, speed));
-        }
-    }else{
-        if(changeSpeed == 32){
-            speed -= 1;
-            changeSpeed = 0;
-            clearInterval(interval);
-            interval.splice(0, 1, setInterval(drawing, speed));
-        }
+    if(changeSpeed == 32){
+        speed -= 1;
+        changeSpeed = 0;
+        clearInterval(interval);
+        interval.splice(0, 1, setInterval(drawing, speed));
     }
 }
 
@@ -857,7 +737,7 @@ function loseCheck() {
     }
 
     //if snake hits a block, it dies.
-    if(blockMode || blockSpeedMode || extraFruitBlockMode || extraFruitBlockSpeedMode){
+    if(blockSetting == "yes"){
     for(var i = 0; i <= blockPos.length - 1; i++) {
             if(snakePos[0][0] == blockPos[i][0] && snakePos[0][1] == blockPos[i][1]) {
                 if(!win){

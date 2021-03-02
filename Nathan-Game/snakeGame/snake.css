@@ -11,46 +11,45 @@ h1 {
 }
 h3 {
     text-align: center;
+    margin: 5px;
 }
 h4 {
-    margin-top: 0;
+    margin: 10px;
+    margin-left: 10px;
 }
 canvas {
     background: "white";
     border: 4px inset darkgray;
     margin: 0 auto;
 }
-#restart {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-}
-.modeDiv {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-}
 button{
-    padding: 10px;
     margin-top: 0px;
     margin-bottom: 10px;
     font-size: 18px;
     font-family: monospace;
-    max-height: 50px;
+    max-height: 30px;
+    max-width: 90px;
 }
-.div{
+div{
     display: flex;
-    justify-content: inherit;
+    justify-content: center;
     width: 600px;
     margin: auto;
 }
-.sizeDiv {
+.select{
+    max-width: 110px;
+    max-height: 30px;
+}
+#selection{
     display: flex;
-    justify-content: inherit;
+    justify-content: center;
+    flex-direction: column;
     margin: auto;
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
+}
+#score{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#setting{
+    margin-top: 30px;
 }

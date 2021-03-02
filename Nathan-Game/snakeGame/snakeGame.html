@@ -7,16 +7,49 @@
     <body>
         <h1>SNAKE</h1>
         <h3>Collect fruit to grow bigger. Use arrow keys or WASD to move.</h3>
+        <h4 id = "score"></h4>
         <canvas id="canvas" width="600" height="600"></canvas>
-        <div class = "div">
-            <div id = "restart"><button id = "restarting" onclick = "restarting()">RESTART</button></div>
-            <div class = "modeDiv"><button id = "size" onclick = "sizeChange()">SIZE CHANGE</button></div>
-            <div class = "modeDiv"><button id = "modeSwitch">MODE SWITCH</button></div>
+        <div id = "selection">
+            <div><h3 id="setting">Settings:</h3></div>
+            <div>
+                <h4>Apple Number:</h4>
+                <select class="select" id="appleNum" name="Apple Number">
+                    <optgroup label="Apple Number">
+                        <option value="1">1</option>
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                    </optgroup>
+                </select>
+                <h4>Block:</h4>
+                <select class="select" id="blockSet" name="Block">
+                    <optgroup label="Blocks">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div>
+                <h4>Speed:</h4>
+                <select class="select" id="speedSet" name="Speed">
+                    <optgroup label="Speed">
+                        <option value="slow">Slow</option>
+                        <option value="medium">Medium</option>
+                        <option value="fast">Fast</option>
+                    </optgroup>
+                </select>
+                <h4>Board Size:</h4>
+                <select class="select" id="sizeSet" name="Size">
+                    <optgroup label="Board Size">
+                        <option value="big">Big</option>
+                        <option value="mediumBig">Medium Big</option>
+                        <option value="medium">Medium</option>
+                        <option value="mediumSmall">Medium Small</option>
+                        <option value="small">Small</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div><button id="submit" onclick="restarting()">RESTART</button></div>
         </div>
-        <div class = "div">
-            <div id = "score"></div>
-        </div>
-        <div id = "mode" class = "modeDiv"><h4>Normal Mode</h4></div>
         <script src = "snakeGame.js">
         </script>
     </body>
