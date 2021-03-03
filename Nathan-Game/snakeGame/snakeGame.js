@@ -14,7 +14,7 @@ var snakePos = [
     [270, 300],
     [255, 300],
 ];
-//apple variables.
+//apple variables
 var appleSize = 15;
 var applePos = [];
 //block variables
