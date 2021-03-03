@@ -428,7 +428,17 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "5"){
+                    if(appleSetting == "10"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
+                            board();
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             board();
                             randomApple = 0;
@@ -498,7 +508,17 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "5"){
+                    if(appleSetting == "10"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
+                            board();
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             board();
                             randomApple = 0;
@@ -566,7 +586,17 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "5"){
+                    if(appleSetting == "10"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
+                            board();
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             board();
                             randomApple = 0;
@@ -634,7 +664,17 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "5"){
+                    if(appleSetting == "10"){
+                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
+                            board();
+                            randomApple = 0;
+                            randomApple = randomNumber(0, emptyArray.length);
+                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                        }
+                        else{
+                            applePos.splice(i, 1);
+                        }
+                    }else if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
                             board();
                             randomApple = 0;
