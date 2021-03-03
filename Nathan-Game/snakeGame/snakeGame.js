@@ -3,9 +3,10 @@ function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-//variables
+//canvas variables
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+//snake variables
 var snakeSize = 15;
 var snakePos = [
     [300, 300],
@@ -13,12 +14,15 @@ var snakePos = [
     [270, 300],
     [255, 300],
 ];
+//apple variables.
 var appleSize = 15;
 var applePos = [];
+//block variables
 var blockPos = [];
 var blockTimer = 0;
 var blockSize = 15;
 var score = 0;
+//variables for turning.
 var right = false;
 var turnRight = true;
 var nextMoveRight = false;
@@ -31,31 +35,35 @@ var nextMoveUp = false;
 var down = false;
 var turnDown = false;
 var nextMoveDown = false;
+//end of game variables.
 var lose = false;
 var win = false;
 var turn = false;
 var speed = 100;
+//speed variables.
 var changeSpeed = 0;
 var eating = false;
+//random variables.
 var randomBlock;
 var randomApple;
 var interval = [
     setInterval(drawing, speed),
 ];
+//variables for the settings.
 var appleInput = document.getElementById('appleNum');
 var blockInput = document.getElementById('blockSet');
 var speedInput = document.getElementById('speedSet');
 var sizeInput = document.getElementById('sizeSet');
 var appleSetting = appleNum.value;
 var blockSetting = blockSet.value;
+speedSet.value = "medium";
 var speedSetting = speedSet.value;
 var sizeSetting = sizeSet.value;
-
+//image variables:
 //gets images for apple
 var appleSrc = 'pictures/snakeApple.png';
 var appleObj = new Image();
 appleObj.src = appleSrc;
-
 //gets image for head
 var upSrc = 'pictures/headUp.png';
 var upObj = new Image();
@@ -69,7 +77,6 @@ upObj.src = upSrc;
 downObj.src = downSrc;
 rightObj.src = rightSrc;
 leftObj.src = leftSrc;
-
 //gets image for tail
 var tailUpSrc = 'pictures/tail-up.png';
 var tailUpObj = new Image();
@@ -117,7 +124,7 @@ function board() {
 }
 board();
 
-//sets position of apples and blocks
+//sets position of apples.
 function setApple() {
     board();
     applePos = [];
@@ -128,6 +135,7 @@ function setApple() {
     }
 }
 setApple();
+//sets the position of the blocks.
 function setBlock() {
     board();
     blockPos = [];
@@ -146,24 +154,33 @@ document.addEventListener("keydown", keyDownHandler, false);
 
 //restart function
 function restarting(){
+    //check settings
     appleSetting = appleNum.value;
     blockSetting = blockSet.value;
     speedSetting = speedSet.value;
     sizeSetting = sizeSet.value;
+    //set size.
     setSize();
+    //reset score.
     score = 0;
+    //set speed.
     document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
     lose = false;
     win = false;
-    if(speedSetting == "slow"){
-        speed = 100;
+    if(speedSetting == "superSlow"){
+        speed = 150
+    }else if(speedSetting == "slow"){
+        speed = 125;
     }else if(speedSetting == "medium"){
-        speed = 75;
+        speed = 100;
     }else if(speedSetting == "fast"){
+        speed = 75;
+    }else if(speedSetting == "superFast"){
         speed = 50;
     }
     clearInterval(interval);
     interval.splice(0, 1, setInterval(drawing, speed));
+    //set snake position.
     snakePos = [
         [canvas.width/2, canvas.height/2],
         [(canvas.width/2)-15, canvas.height/2],
@@ -172,6 +189,7 @@ function restarting(){
     ];
     board();
     blockTimer = 0;
+    //reset turning variables.
     nextMoveRight = false;
     nextMoveLeft = false;
     nextMoveUp = false;
@@ -185,12 +203,14 @@ function restarting(){
     up = false;
     down = false;
     turn = false;
+    //set apples and blocks.
     setApple();
     setBlock();
 }
 
 //function for changing direction
 function keyDownHandler(e) {
+    //right arrow key
     if(e.key == "ArrowRight" || e.key == "d") {
         e.preventDefault();
         if(!left && !right && !turn){
@@ -203,6 +223,7 @@ function keyDownHandler(e) {
             nextMoveRight = true;
         }
     }
+    //left arrow key
     else if(e.key == "ArrowLeft" || e.key == "a") {
         e.preventDefault();
         if(!right && !left && !turn) {
@@ -217,6 +238,7 @@ function keyDownHandler(e) {
             nextMoveLeft = true;
         }
     }
+    //up arrow key
     else if(e.key == "ArrowUp" || e.key == "w") {
         e.preventDefault();
         if(!down && !up && !turn) {
@@ -229,6 +251,7 @@ function keyDownHandler(e) {
             nextMoveUp = true;
         }
     }
+    //down arrow key
     else if(e.key == "ArrowDown" || e.key == "s") {
         e.preventDefault();
         if(!up && !down && !turn) {
@@ -309,7 +332,7 @@ function drawSnake() {
     }
 }
 
-//draws apple at random x and y.
+//draws apple
 function drawApple() {
     for(var i = 0; i < applePos.length; i++){
         ctx.drawImage(appleObj, applePos[i][0], applePos[i][1], appleSize, appleSize);
@@ -367,29 +390,23 @@ function drawWin() {
 }
 //draw function, draws 4 long snake, apple, and background each time it is called.
 function draw() {
+    //draws objects.
     drawBackground();
     drawApple();
     drawSnake();
-    //if it's block mode, it draws the blocks.
     if(blockSetting == "yes") {
         drawBlock();
     }
+    //draws win/lose
     if(lose) {
         drawLose();
     }
     if(win) {
         drawWin();
     }
-
+    //checks win.
     if(snakePos.length == canvas.width/15 * canvas.height/15){
         win = true;
-    }
-    if(blockSetting == "yes"){
-        //code for adding another block
-        if(blockTimer == 2){
-            blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
-            blockTimer = 0;
-        }
     }
 }
 
@@ -411,9 +428,9 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    board();
                     if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -423,6 +440,7 @@ function move(){
                         }
                     }else if(appleSetting == "3"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -432,6 +450,7 @@ function move(){
                         }
                     }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -479,9 +498,9 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    board();
                     if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -491,6 +510,7 @@ function move(){
                         }
                     }else if(appleSetting == "3"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -500,6 +520,7 @@ function move(){
                         }
                     }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -545,9 +566,9 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    board();
                     if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -557,6 +578,7 @@ function move(){
                         }
                     }else if(appleSetting == "3"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -566,6 +588,7 @@ function move(){
                         }
                     }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -611,9 +634,9 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    board();
                     if(appleSetting == "5"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -623,6 +646,7 @@ function move(){
                         }
                     }else if(appleSetting == "3"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -632,6 +656,7 @@ function move(){
                         }
                     }else if(appleSetting == "1"){
                         if(snakePos.length < canvas.width/15 * canvas.height/15){
+                            board();
                             randomApple = 0;
                             randomApple = randomNumber(0, emptyArray.length);
                             applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
@@ -669,12 +694,27 @@ function move(){
             }
         }
     }
-    //you get faster as you get longer.
+    //gets faster as you get longer.
     if(changeSpeed == 32){
         speed -= 1;
         changeSpeed = 0;
         clearInterval(interval);
         interval.splice(0, 1, setInterval(drawing, speed));
+    }
+    //adds another block if blockTimer is a certain number.
+    if(blockSetting == "yes"){
+        //adding another block
+        if(sizeSetting == "big" || sizeSetting == "mediumBig" || sizeSetting == "medium"){
+            if(blockTimer == 3){
+                blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
+                blockTimer = 0;
+            }
+        }else{
+            if(blockTimer == 6){
+                blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
+                blockTimer = 0;
+            }
+        }
     }
 }
 
@@ -735,7 +775,6 @@ function loseCheck() {
             lose = true;
         }
     }
-
     //if snake hits a block, it dies.
     if(blockSetting == "yes"){
     for(var i = 0; i <= blockPos.length - 1; i++) {
@@ -746,7 +785,6 @@ function loseCheck() {
             }
         }
     }
-
     //if snake hits itself, it dies.
     for(var i = 1; i < snakePos.length; i++) {
         if(snakePos[0][0] == snakePos[i][0] && snakePos[0][1] == snakePos[i][1]){
