@@ -429,7 +429,7 @@ function move(){
         document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
         for(var i = 0; i < applePos.length; i++){
             if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                if(snakePos.length < canvas.width/15 * canvas.height/15 - appleSetting){
+                if(emptyArray.length != 0){
                     board();
                     randomApple = 0;
                     randomApple = randomNumber(0, emptyArray.length);
