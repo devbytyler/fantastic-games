@@ -56,7 +56,7 @@ var speedInput = document.getElementById('speedSet');
 var sizeInput = document.getElementById('sizeSet');
 var appleSetting = appleNum.value;
 var blockSetting = blockSet.value;
-speedSet.value = "medium";
+speedSet.value = "100";
 var speedSetting = speedSet.value;
 var sizeSetting = sizeSet.value;
 //image variables:
@@ -160,24 +160,16 @@ function restarting(){
     speedSetting = speedSet.value;
     sizeSetting = sizeSet.value;
     //set size.
-    setSize();
+    canvas.width = sizeSetting;
+    canvas.height = sizeSetting;
     //reset score.
     score = 0;
-    //set speed.
     document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
+    //reset win/lose
     lose = false;
     win = false;
-    if(speedSetting == "superSlow"){
-        speed = 150
-    }else if(speedSetting == "slow"){
-        speed = 125;
-    }else if(speedSetting == "medium"){
-        speed = 100;
-    }else if(speedSetting == "fast"){
-        speed = 75;
-    }else if(speedSetting == "superFast"){
-        speed = 50;
-    }
+    //set speed.
+    speed = speedSetting;
     clearInterval(interval);
     interval.splice(0, 1, setInterval(drawing, speed));
     //set snake position.
@@ -266,26 +258,6 @@ function keyDownHandler(e) {
     }
 }
 
-//function for changing the size of the board.
-function setSize() {
-    if(sizeSetting == "small"){
-        canvas.width = 120;
-        canvas.height = 120;
-    }else if(sizeSetting == "mediumSmall"){
-        canvas.width = 240;
-        canvas.height = 240;
-    }else if(sizeSetting == "medium"){
-        canvas.width = 390;
-        canvas.height = 390;
-    }else if(sizeSetting == "mediumBig"){
-        canvas.width = 480;
-        canvas.height = 480;
-    }else if(sizeSetting == "big"){
-        canvas.width = 600;
-        canvas.height = 600;
-    }
-}
-
 //draws snake segments.
 function drawSnake() {
     //draws head based on direction.
@@ -314,6 +286,7 @@ function drawSnake() {
     if(snakePos[snakePos.length - 2][1] - 15 == snakePos[snakePos.length - 1][1]) {
         ctx.drawImage(tailDownObj, snakePos[snakePos.length - 1][0] - 1.5, snakePos[snakePos.length - 1][1], snakeSize + 3, snakeSize + 3);
     }
+    //draw the middle of the snake.
     for(var i = 0; i < snakePos.length; i++){
         ctx.beginPath();
         for(var i = 1; i < snakePos.length - 1; i++) {
@@ -428,45 +401,14 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "10"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "5"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "3"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "1"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }else{
-                            applePos.splice(i, 1);
-                        }
+                    if(snakePos.length < canvas.width/15 * canvas.height/15 - appleSetting){
+                        board();
+                        randomApple = 0;
+                        randomApple = randomNumber(0, emptyArray.length);
+                        applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                    }
+                    else{
+                        applePos.splice(i, 1);
                     }
                 }
             }
@@ -508,45 +450,14 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "10"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "5"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "3"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "1"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }else{
-                            applePos.splice(i, 1);
-                        }
+                    if(snakePos.length < canvas.width/15 * canvas.height/15 - appleSetting){
+                        board();
+                        randomApple = 0;
+                        randomApple = randomNumber(0, emptyArray.length);
+                        applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                    }
+                    else{
+                        applePos.splice(i, 1);
                     }
                 }
             }
@@ -586,45 +497,14 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "10"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "5"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "3"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "1"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }else{
-                            applePos.splice(i, 1);
-                        }
+                    if(snakePos.length < canvas.width/15 * canvas.height/15 - appleSetting){
+                        board();
+                        randomApple = 0;
+                        randomApple = randomNumber(0, emptyArray.length);
+                        applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                    }
+                    else{
+                        applePos.splice(i, 1);
                     }
                 }
             }
@@ -664,47 +544,15 @@ function move(){
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
             for(var i = 0; i < applePos.length; i++){
                 if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                    if(appleSetting == "10"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 10){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "5"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 5){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "3"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15 - 3){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }
-                        else{
-                            applePos.splice(i, 1);
-                        }
-                    }else if(appleSetting == "1"){
-                        if(snakePos.length < canvas.width/15 * canvas.height/15){
-                            board();
-                            randomApple = 0;
-                            randomApple = randomNumber(0, emptyArray.length);
-                            applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                        }else{
-                            applePos.splice(i, 1);
-                        }
+                    if(snakePos.length < canvas.width/15 * canvas.height/15 - appleSetting){
+                        board();
+                        randomApple = 0;
+                        randomApple = randomNumber(0, emptyArray.length);
+                        applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
                     }
-
+                    else{
+                        applePos.splice(i, 1);
+                    }
                 }
             }
             snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
@@ -735,7 +583,7 @@ function move(){
         }
     }
     //gets faster as you get longer.
-    if(changeSpeed == 32){
+    if(changeSpeed == canvas.width/15){
         speed -= 1;
         changeSpeed = 0;
         clearInterval(interval);
