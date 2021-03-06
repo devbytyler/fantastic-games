@@ -6,7 +6,7 @@ var app = new Vue({
                 name: 'Super Brick', 
                 desc: 'A fantastic brick-breaking adventure!',
                 img: 'images/brick.jpg', 
-                link: 'Nathan-Game/superBrick.html', 
+                link: 'Nathan-Game/brick/superBrick.html', 
                 creator:'Nathan',
             },
             {
