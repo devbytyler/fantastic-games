@@ -22,18 +22,15 @@ var blockPos = [];
 var blockTimer = 0;
 var blockSize = 15;
 var score = 0;
+var moving = false;
 //variables for turning.
-var right = false;
-var turnRight = true;
+var right = true;
 var nextMoveRight = false;
 var left = false;
-var turnLeft = false;
 var nextMoveLeft = false;
 var up = false;
-var turnUp = false;
 var nextMoveUp = false;
 var down = false;
-var turnDown = false;
 var nextMoveDown = false;
 //end of game variables.
 var lose = false;
@@ -181,16 +178,13 @@ function restarting(){
     ];
     board();
     blockTimer = 0;
+    moving = false;
     //reset turning variables.
     nextMoveRight = false;
     nextMoveLeft = false;
     nextMoveUp = false;
     nextMoveDown = false;
-    turnRight = true;
-    turnLeft = false;
-    turnUp = false;
-    turnDown = false;
-    right = false;
+    right = true;
     left = false;
     up = false;
     down = false;
@@ -205,7 +199,10 @@ function keyDownHandler(e) {
     //right arrow key
     if(e.key == "ArrowRight" || e.key == "d") {
         e.preventDefault();
-        if(!left && !right && !turn){
+        if(!left && !right && !turn || !moving){
+            if(!moving){
+                moving = true;
+            }
             right = true;
             left = false;
             up = false;
@@ -219,6 +216,9 @@ function keyDownHandler(e) {
     else if(e.key == "ArrowLeft" || e.key == "a") {
         e.preventDefault();
         if(!right && !left && !turn) {
+            if(!moving){
+                moving = true;
+            }
             if(up || down){
                 left = true;
                 right = false;
@@ -234,6 +234,9 @@ function keyDownHandler(e) {
     else if(e.key == "ArrowUp" || e.key == "w") {
         e.preventDefault();
         if(!down && !up && !turn) {
+            if(!moving){
+                moving = true;
+            }
             up = true;
             down = false;
             right = false;
@@ -247,6 +250,9 @@ function keyDownHandler(e) {
     else if(e.key == "ArrowDown" || e.key == "s") {
         e.preventDefault();
         if(!up && !down && !turn) {
+            if(!moving){
+                moving = true;
+            }
             down = true;
             left = false;
             right = false;
@@ -261,16 +267,16 @@ function keyDownHandler(e) {
 //draws snake segments.
 function drawSnake() {
     //draws head based on direction.
-    if(turnRight){
+    if(right){
         ctx.drawImage(rightObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
     }
-    if(turnLeft){
+    if(left){
         ctx.drawImage(leftObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
     }
-    if(turnUp){
+    if(up){
         ctx.drawImage(upObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
     }
-    if(turnDown){
+    if(down){
         ctx.drawImage(downObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
     }
     //draws tail based on 2nd to last and last items in snakePos array.
@@ -383,114 +389,89 @@ function draw() {
     }
 }
 
-//function that sets the turn values for drawing the snake.
-function turning() {
-    if(turn){
-        turn = false;
-        if(right){
-            turnRight = true;
-            turnLeft = false;
-            turnDown = false;
-            turnUp = false;
-        }else if(left){
-            turnRight = false;
-            turnLeft = true;
-            turnDown = false;
-            turnUp = false;
-        }else if(up){
-            turnRight = false;
-            turnLeft = false;
-            turnDown = false;
-            turnUp = true;
-        }else if(down){
-            turnRight = false;
-            turnLeft = false;
-            turnDown = true;
-            turnUp = false;
-        }
-        turnCheck();
-    }
-}
-
 //function for moving.
 function move(){
-    //checks to see if they are eating an apple.
-    for(var i = 0; i < applePos.length; i++){
-        if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-            eating = true;
-        }
-    }
-    //snake moves based on the arrow keys pushed.
-    if(eating){
-        eating = false;
-        score++;
-        blockTimer++;
-        changeSpeed++;
-        document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
+    if(moving){
+        //checks to see if they are eating an apple.
         for(var i = 0; i < applePos.length; i++){
             if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
-                if(emptyArray.length != 0){
-                    board();
-                    randomApple = 0;
-                    randomApple = randomNumber(0, emptyArray.length);
-                    applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
-                }
-                else{
-                    applePos.splice(i, 1);
-                }
+                eating = true;
             }
         }
-        if(right){
-            snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
-        }else if(left){
-            snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
-        }else if(up){
-            snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
-        }else if(down){
-            snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
-        }
-        if(turn){
-            turning();
-        }
-    }
-    else if(!lose && !win) {
-        if(right){
-            snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
-            snakePos.pop();
-        }else if(left){
-            snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
-            snakePos.pop();
-        }else if(up){
-            snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
-            snakePos.pop();
-        }else if(down){
-            snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
-            snakePos.pop();
-        }
-        if(turn){
-            turning();
-        }
-    }
-    
-    //gets faster as snake get longer.
-    if(changeSpeed == canvas.width/15){
-        speed -= 1;
-        changeSpeed = 0;
-        clearInterval(interval);
-        interval.splice(0, 1, setInterval(drawing, speed));
-    }
-    //adds another block if blockTimer is a certain number.
-    if(blockSetting == "yes"){
-        //adding another block
-        if(sizeSetting == "big" || sizeSetting == "mediumBig" || sizeSetting == "medium"){
-            if(blockTimer == 3){
-                blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
-                blockTimer = 0;
+        //snake moves based on the arrow keys pushed.
+        if(eating){
+            eating = false;
+            score++;
+            blockTimer++;
+            changeSpeed++;
+            document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
+            for(var i = 0; i < applePos.length; i++){
+                if(snakePos[0][0] == applePos[i][0] && snakePos[0][1] == applePos[i][1]){
+                    if(emptyArray.length != 0){
+                        board();
+                        randomApple = 0;
+                        randomApple = randomNumber(0, emptyArray.length);
+                        applePos.splice(i, 1, [emptyArray[randomApple][0], emptyArray[randomApple][1]],);
+                    }
+                    else{
+                        applePos.splice(i, 1);
+                    }
+                }
             }
-        }else{
-            if(blockTimer == 6){
-                blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
-                blockTimer = 0;
+            if(right){
+                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
+            }else if(left){
+                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
+            }else if(up){
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
+            }else if(down){
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
+            }
+            if(turn){
+                turn = false;
+                turnCheck();
+            }
+        }
+        else if(!lose && !win) {
+            if(right){
+                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
+                snakePos.pop();
+            }else if(left){
+                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
+                snakePos.pop();
+            }else if(up){
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
+                snakePos.pop();
+            }else if(down){
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
+                snakePos.pop();
+            }
+            if(turn){
+                turn = false;
+                turnCheck();
+            }
+        }
+
+        //gets faster as snake get longer.
+        if(changeSpeed == canvas.width/15){
+            speed -= 1;
+            changeSpeed = 0;
+            clearInterval(interval);
+            interval.splice(0, 1, setInterval(drawing, speed));
+        }
+        //adds another block if blockTimer is a certain number.
+        if(blockSetting == "yes"){
+            //adding another block
+            if(sizeSetting == "big" || sizeSetting == "mediumBig" || sizeSetting == "medium"){
+                if(blockTimer == 3){
+                    blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
+                    blockTimer = 0;
+                }
+            }else{
+                if(blockTimer == 6){
+                    blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
+                    blockTimer = 0;
+                }
             }
         }
     }
