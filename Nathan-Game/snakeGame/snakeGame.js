@@ -6,21 +6,18 @@ function randomNumber(min, max) {
 //canvas variables
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-//snake variables
-var snakeSize = 15;
+//snake array
 var snakePos = [
-    [300, 300],
-    [285, 300],
-    [270, 300],
-    [255, 300],
+    [canvas.width/2, canvas.height/2, "horizontal"],
+    [(canvas.width/2)-15, canvas.height/2, "horizontal"],
+    [(canvas.width/2)-30, canvas.height/2, "horizontal"],
+    [(canvas.width/2)-45, canvas.height/2, "horizontal"],
 ];
-//apple variables
-var appleSize = 15;
+//apple and block arrays.
 var applePos = [];
-//block variables
 var blockPos = [];
 var blockTimer = 0;
-var blockSize = 15;
+//score and moving variable.
 var score = 0;
 var moving = false;
 //variables for turning.
@@ -32,20 +29,23 @@ var up = false;
 var nextMoveUp = false;
 var down = false;
 var nextMoveDown = false;
+var turning = "null";
 //end of game variables.
 var lose = false;
 var win = false;
 var turn = false;
-var speed = 100;
 //speed variables.
+var speed = 100;
 var changeSpeed = 0;
 var eating = false;
 //random variables.
 var randomBlock;
 var randomApple;
 var interval = [
-    setInterval(drawing, speed),
+    setInterval(draw, speed),
 ];
+var winInterval = [];
+var loseInterval = [];
 //variables for the settings.
 var appleInput = document.getElementById('appleNum');
 var blockInput = document.getElementById('blockSet');
@@ -62,31 +62,44 @@ var appleSrc = 'pictures/snakeApple.png';
 var appleObj = new Image();
 appleObj.src = appleSrc;
 //gets image for head
-var upSrc = 'pictures/headUp.png';
 var upObj = new Image();
-var downSrc = 'pictures/headDown.png';
 var downObj = new Image();
-var rightSrc = 'pictures/headRight.png';
 var rightObj = new Image();
-var leftSrc = 'pictures/headLeft.png';
 var leftObj = new Image();
-upObj.src = upSrc;
-downObj.src = downSrc;
-rightObj.src = rightSrc;
-leftObj.src = leftSrc;
+upObj.src = 'pictures/headUp.png';
+downObj.src = 'pictures/headDown.png';
+rightObj.src = 'pictures/headRight.png';
+leftObj.src = 'pictures/headLeft.png';
 //gets image for tail
-var tailUpSrc = 'pictures/tail-up.png';
 var tailUpObj = new Image();
-var tailDownSrc = 'pictures/tail-down.png';
 var tailDownObj = new Image();
-var tailRightSrc = 'pictures/tail-right.png';
 var tailRightObj = new Image();
-var tailLeftSrc = 'pictures/tail-left.png';
 var tailLeftObj = new Image();
-tailUpObj.src = tailUpSrc;
-tailDownObj.src = tailDownSrc;
-tailRightObj.src = tailRightSrc;
-tailLeftObj.src = tailLeftSrc;
+tailUpObj.src = 'pictures/tail-up.png';
+tailDownObj.src = 'pictures/tail-down.png';
+tailRightObj.src = 'pictures/tail-right.png';
+tailLeftObj.src = 'pictures/tail-left.png';
+//gets images for body
+var horizontalObj = new Image();
+var verticalObj = new Image();
+var rightToUpObj = new Image();
+var rightToDownObj = new Image();
+var leftToUpObj = new Image();
+var leftToDownObj = new Image();
+var upToRightObj = new Image();
+var upToLeftObj = new Image();
+var downToRightObj = new Image();
+var downToLeftObj = new Image();
+horizontalObj.src = 'pictures/bodyLeftRight.png';
+verticalObj.src = 'pictures/bodyUpDown.png';
+rightToUpObj.src = 'pictures/rightToUp.png';
+rightToDownObj.src = 'pictures/rightToDown.png';
+leftToUpObj.src = 'pictures/leftToUp.png';
+leftToDownObj.src = 'pictures/leftToDown.png';
+upToRightObj.src = 'pictures/upToRight.png';
+upToLeftObj.src = 'pictures/upToLeft.png';
+downToRightObj.src = 'pictures/downToRight.png';
+downToLeftObj.src = 'pictures/downToLeft.png';
 
 //creates an array of each empty spot.
 var emptyArray = [];
@@ -150,7 +163,7 @@ document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
 document.addEventListener("keydown", keyDownHandler, false);
 
 //restart function
-function restarting(){
+function restart(){
     //check settings
     appleSetting = appleNum.value;
     blockSetting = blockSet.value;
@@ -165,16 +178,21 @@ function restarting(){
     //reset win/lose
     lose = false;
     win = false;
+    //resets drawing win or lose
+    clearInterval(winInterval);
+    winInterval.pop();
+    clearInterval(loseInterval);
+    loseInterval.pop();
     //set speed.
     speed = speedSetting;
     clearInterval(interval);
-    interval.splice(0, 1, setInterval(drawing, speed));
+    interval.splice(0, 1, setInterval(draw, speed));
     //set snake position.
     snakePos = [
-        [canvas.width/2, canvas.height/2],
-        [(canvas.width/2)-15, canvas.height/2],
-        [(canvas.width/2)-30, canvas.height/2],
-        [(canvas.width/2)-45, canvas.height/2],
+        [canvas.width/2, canvas.height/2, "horizontal"],
+        [(canvas.width/2)-15, canvas.height/2, "horizontal"],
+        [(canvas.width/2)-30, canvas.height/2, "horizontal"],
+        [(canvas.width/2)-45, canvas.height/2, "horizontal"],
     ];
     board();
     blockTimer = 0;
@@ -200,14 +218,20 @@ function keyDownHandler(e) {
     if(e.key == "ArrowRight" || e.key == "d") {
         e.preventDefault();
         if(!left && !right && !turn || !moving){
-            if(!moving){
-                moving = true;
+            if(up){
+                turning = "upToRight";
+            }else if(down){
+                turning = "downToRight";
             }
             right = true;
             left = false;
             up = false;
             down = false;
             turn = true;
+            if(!moving){
+                moving = true;
+                turning = "horizontal";
+            }
         }else if(turn){
             nextMoveRight = true;
         }
@@ -220,6 +244,11 @@ function keyDownHandler(e) {
                 moving = true;
             }
             if(up || down){
+                if(up){
+                    turning = "upToLeft";
+                }else if(down){
+                    turning = "downToLeft";
+                }
                 left = true;
                 right = false;
                 up = false;
@@ -237,6 +266,11 @@ function keyDownHandler(e) {
             if(!moving){
                 moving = true;
             }
+            if(left){
+                turning = "leftToUp";
+            }else if(right){
+                turning = "rightToUp";
+            }
             up = true;
             down = false;
             right = false;
@@ -253,6 +287,11 @@ function keyDownHandler(e) {
             if(!moving){
                 moving = true;
             }
+            if(left){
+                turning = "leftToDown";
+            }else if(right){
+                turning = "rightToDown";
+            }
             down = true;
             left = false;
             right = false;
@@ -268,62 +307,78 @@ function keyDownHandler(e) {
 function drawSnake() {
     //draws head based on direction.
     if(right){
-        ctx.drawImage(rightObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(rightObj, snakePos[0][0], snakePos[0][1], 15, 15);
     }
     if(left){
-        ctx.drawImage(leftObj, snakePos[0][0], snakePos[0][1] - 1, snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(leftObj, snakePos[0][0], snakePos[0][1], 15, 15);
     }
     if(up){
-        ctx.drawImage(upObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(upObj, snakePos[0][0], snakePos[0][1], 15, 15);
     }
     if(down){
-        ctx.drawImage(downObj, snakePos[0][0] - 1, snakePos[0][1], snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(downObj, snakePos[0][0], snakePos[0][1], 15, 15);
     }
     //draws tail based on 2nd to last and last items in snakePos array.
     if(snakePos[snakePos.length - 2][0] + 15 == snakePos[snakePos.length - 1][0]) {
-        ctx.drawImage(tailLeftObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 1.5, snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(tailLeftObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1], 15, 15);
     }
     if(snakePos[snakePos.length - 2][0] - 15 == snakePos[snakePos.length - 1][0]) {
-        ctx.drawImage(tailRightObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 1.5, snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(tailRightObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1], 15, 15);
     }
     if(snakePos[snakePos.length - 2][1] + 15 == snakePos[snakePos.length - 1][1]) {
-        ctx.drawImage(tailUpObj, snakePos[snakePos.length - 1][0] - 1.5, snakePos[snakePos.length - 1][1], snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(tailUpObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1], 15, 15);
     }
     if(snakePos[snakePos.length - 2][1] - 15 == snakePos[snakePos.length - 1][1]) {
-        ctx.drawImage(tailDownObj, snakePos[snakePos.length - 1][0] - 1.5, snakePos[snakePos.length - 1][1], snakeSize + 3, snakeSize + 3);
+        ctx.drawImage(tailDownObj, snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1], 15, 15);
     }
-    //draw the middle of the snake.
-    for(var i = 0; i < snakePos.length; i++){
-        ctx.beginPath();
-        for(var i = 1; i < snakePos.length - 1; i++) {
-            ctx.rect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
+    //draws middle of the snake
+    for(var i = 1; i < snakePos.length - 1; i++){
+        if(snakePos[i][2] == "horizontal"){
+            ctx.drawImage(horizontalObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "vertical"){
+            ctx.drawImage(verticalObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "rightToUp"){
+            ctx.drawImage(rightToUpObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "rightToDown"){
+            ctx.drawImage(rightToDownObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "leftToUp"){
+            ctx.drawImage(leftToUpObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "leftToDown"){
+            ctx.drawImage(leftToDownObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "upToRight"){
+            ctx.drawImage(upToRightObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "upToLeft"){
+            ctx.drawImage(upToLeftObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "downToRight"){
+            ctx.drawImage(downToRightObj, snakePos[i][0], snakePos[i][1], 15, 15);
+        }else if(snakePos[i][2] == "downToLeft"){
+            ctx.drawImage(downToLeftObj, snakePos[i][0], snakePos[i][1], 15, 15);
         }
-        ctx.fillStyle = "darkgreen";
-        ctx.fill();
-        ctx.closePath();
-        ctx.beginPath();
-        for(var i = 1; i < snakePos.length - 1; i++) {
-            ctx.strokeRect(snakePos[i][0], snakePos[i][1], snakeSize, snakeSize);
-        }
-        ctx.fillStyle = "black";
-        ctx.fill();
-        ctx.closePath();
     }
 }
 
 //draws apple
 function drawApple() {
     for(var i = 0; i < applePos.length; i++){
-        ctx.drawImage(appleObj, applePos[i][0], applePos[i][1], appleSize, appleSize);
+        ctx.drawImage(appleObj, applePos[i][0], applePos[i][1], 15, 15);
     }
 }
 //draws blocks.
 function drawBlock() {
     ctx.beginPath();
     for(var i = 0; i <= blockPos.length - 1; i++){
-        ctx.rect(blockPos[i][0], blockPos[i][1], blockSize, blockSize);
+        ctx.rect(blockPos[i][0], blockPos[i][1], 15, 15);
+    }
+    ctx.fillStyle = "#595a5c";
+    ctx.fill();
+    ctx.closePath();
+    
+    ctx.beginPath();
+    for(var i = 0; i <= blockPos.length - 1; i++){
+        ctx.strokeRect(blockPos[i][0], blockPos[i][1], 15, 15);
     }
     ctx.fillStyle = "black";
+    ctx.lineWidth = "3";
     ctx.fill();
     ctx.closePath();
 }
@@ -340,52 +395,41 @@ function drawLose() {
     ctx.font = "45px Arial";
     ctx.fillStyle = "#000";
     if(canvas.width == 480 || canvas.width == 600){
+        ctx.fillRect(0, canvas.width/2 - 47, canvas.width, 60);
+        ctx.fillStyle = "#ffffff";
         ctx.fillText("You Lose!!!", canvas.width / 2 - 119, canvas.height / 2);
     }
     else if(canvas.width == 240 || canvas.width == 390){
+        ctx.fillRect(0, canvas.width/2 - 47, canvas.width, 60);
+        ctx.fillStyle = "#ffffff";
         ctx.fillText("You Lose!!!", canvas.width / 2 - 109, canvas.height / 2);
     }
     else if(canvas.width == 120){
+        ctx.fillRect(0, canvas.width/2 - 25, canvas.width, 30);
+        ctx.fillStyle = "#ffffff";
         ctx.font = "23px Arial";
         ctx.fillText("You Lose!!!", canvas.width / 2 - 56, canvas.height / 2);
     }
 }
 //types "You win" on canvas
 function drawWin() {
+    ctx.fillStyle = "#000";
     if(canvas.width == 600 || canvas.width == 480 || canvas.width == 390){
         ctx.font = "50px Arial";
-        ctx.fillStyle = "#000";
+        ctx.fillRect(0, canvas.width/2 - 50, canvas.width, 60);
+        ctx.fillStyle = "#ffffff";
         ctx.fillText("You Win!!!!", canvas.width / 2 - 126, canvas.height / 2);
     }
     else if(canvas.width == 240){
         ctx.font = "45px Arial";
-        ctx.fillStyle = "#000"
+        ctx.fillRect(0, canvas.width/2 - 41, canvas.width, 50);
+        ctx.fillStyle = "#ffffff";
         ctx.fillText("You Win!!!!", canvas.width / 2 - 106, canvas.height / 2);
     }else if(canvas.width == 120){
         ctx.font = "25px Arial";
-        ctx.fillStyl = "#000";
+        ctx.fillRect(0, canvas.height/2 - 25, canvas.width, 30);
+        ctx.fillStyle = "#ffffff";
         ctx.fillText("You Win!!!", canvas.width / 2 - 56, canvas.height / 2);
-    }
-}
-//draw function, draws 4 long snake, apple, and background each time it is called.
-function draw() {
-    //draws objects.
-    drawBackground();
-    drawApple();
-    drawSnake();
-    if(blockSetting == "yes") {
-        drawBlock();
-    }
-    //draws win/lose
-    if(lose) {
-        drawLose();
-    }
-    if(win) {
-        drawWin();
-    }
-    //checks win.
-    if(snakePos.length == canvas.width/15 * canvas.height/15){
-        win = true;
     }
 }
 
@@ -401,7 +445,9 @@ function move(){
         //snake moves based on the arrow keys pushed.
         if(eating){
             eating = false;
-            score++;
+            if(snakePos.length < canvas.width/15 * canvas.height/15){
+                score++;
+            }
             blockTimer++;
             changeSpeed++;
             document.getElementById("score").innerHTML = "<h3>Score: " + score + "<h3>";
@@ -419,36 +465,36 @@ function move(){
                 }
             }
             if(right){
-                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
+                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1], "horizontal"]);
             }else if(left){
-                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
+                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1], "horizontal"]);
             }else if(up){
-                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15, "vertical"]);
             }else if(down){
-                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15, "vertical"]);
             }
             if(turn){
                 turn = false;
-                turnCheck();
+                snakePos.splice(1, 1, [snakePos[1][0], snakePos[1][1], turning]);
             }
         }
         else if(!lose && !win) {
             if(right){
-                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1]]);
+                snakePos.splice(0, 0, [snakePos[0][0] + 15, snakePos[0][1], "horizontal"]);
                 snakePos.pop();
             }else if(left){
-                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1]]);
+                snakePos.splice(0, 0, [snakePos[0][0] - 15, snakePos[0][1], "horizontal"]);
                 snakePos.pop();
             }else if(up){
-                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15]);
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] - 15, "vertical"]);
                 snakePos.pop();
             }else if(down){
-                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15]);
+                snakePos.splice(0, 0, [snakePos[0][0], snakePos[0][1] + 15, "vertical"]);
                 snakePos.pop();
             }
             if(turn){
                 turn = false;
-                turnCheck();
+                snakePos.splice(1, 1, [snakePos[1][0], snakePos[1][1], turning]);
             }
         }
 
@@ -457,19 +503,23 @@ function move(){
             speed -= 1;
             changeSpeed = 0;
             clearInterval(interval);
-            interval.splice(0, 1, setInterval(drawing, speed));
+            interval.splice(0, 1, setInterval(draw, speed));
         }
         //adds another block if blockTimer is a certain number.
         if(blockSetting == "yes"){
             //adding another block
-            if(sizeSetting == "big" || sizeSetting == "mediumBig" || sizeSetting == "medium"){
+            if(sizeSetting == "600" || sizeSetting == "480" || sizeSetting == "390"){
                 if(blockTimer == 3){
-                    blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
+                    board();
+                    randomBlock = randomNumber(0, emptyArray.length);
+                    blockPos.push([emptyArray[randomBlock][0], emptyArray[randomBlock][1]]);
                     blockTimer = 0;
                 }
             }else{
                 if(blockTimer == 6){
-                    blockPos.push([randomNumber(1, canvas.width/15) * 15, randomNumber(1, canvas.height/15) * 15],);
+                    board();
+                    randomBlock = randomNumber(0, emptyArray.length);
+                    blockPos.push([emptyArray[randomBlock][0], emptyArray[randomBlock][1]]);
                     blockTimer = 0;
                 }
             }
@@ -481,6 +531,11 @@ function move(){
 function turnCheck() {
     if(nextMoveRight){
         if(!right && !left){
+            if(up){
+                turning = "upToRight";
+            }else if(down){
+                turning = "downToRight";
+            }
             turn = true;
             right = true;
             left = false;
@@ -492,6 +547,11 @@ function turnCheck() {
         }
     }else if(nextMoveLeft){
         if(!left && !right){
+            if(up){
+                turning = "upToLeft";
+            }else if(down){
+                turning = "downToLeft";
+            }
             turn = true;
             right = false;
             left = true;
@@ -503,6 +563,11 @@ function turnCheck() {
         }
     }else if(nextMoveUp){
         if(!up && !down){
+            if(left){
+                turning = "leftToUp";
+            }else if(right){
+                turning = "rightToUp";
+            }
             turn = true;
             right = false;
             left = false;
@@ -514,6 +579,11 @@ function turnCheck() {
         }
     }else if(nextMoveDown){
         if(!up && !down){
+            if(left){
+                turning = "leftToDown";
+            }else if(right){
+                turning = "rightToDown";
+            }
             turn = true;
             right = false;
             left = false;
@@ -552,21 +622,35 @@ function loseCheck() {
             }
         }
     }
+    if(lose){
+        loseInterval = [
+            setInterval(drawLose, 500),
+        ];
+    }
 }
 
-//function that calls draw, move, and check functions.
-function drawing() {
+//function that calls move and check functions. If snake hasn't won or lost, it draws the board again.
+function draw() {
     board();
     if(!lose){
         move();
         loseCheck();
         if(!lose && !win){
-            draw();
-        }else if(lose && !win){
-            drawLose();
-        }
-        else if(win){
-            drawWin();
+            //draws objects.
+            drawBackground();
+            drawApple();
+            drawSnake();
+            if(blockSetting == "yes") {
+                drawBlock();
+            }
+            //checks win, if yes it draws win after a second.
+            if(snakePos.length == canvas.width/15 * canvas.height/15){
+                win = true;
+                winInterval = [
+                    setInterval(drawWin, 500),
+                ];
+            }
+            turnCheck();
         }
     }
 }
