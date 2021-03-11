@@ -59,10 +59,9 @@ speedSet.value = "100";
 var speedSetting = speedSet.value;
 var sizeSetting = sizeSet.value;
 //image variables:
-//gets images for apple
-var appleSrc = 'pictures/snakeApple.png';
+//gets image for apple
 var appleObj = new Image();
-appleObj.src = appleSrc;
+appleObj.src = 'pictures/snakeApple.png';
 //gets image for head
 var upObj = new Image();
 var downObj = new Image();
@@ -198,7 +197,6 @@ function restart(){
         [(canvas.width/2)-30, canvas.height/2, "horizontal"],
         [(canvas.width/2)-45, canvas.height/2, "horizontal"],
     ];
-    board();
     blockTimer = 0;
     moving = false;
     //reset turning variables.
@@ -213,6 +211,7 @@ function restart(){
     turn = false;
     movedBack = false;
     //set apples and blocks.
+    board();
     setApple();
     setBlock();
 }
@@ -657,34 +656,36 @@ function draw() {
 
 //function for moving back one when snake dies.
 function moveBack() {
+    //adds one to end of the snake array.
+    if(emptyArray.length != 0){
+        if(snakePos[snakePos.length - 1][2] == "rightToUp"){
+            snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "vertical"],);
+        }else if(snakePos[snakePos.length - 1][2] == "rightToDown"){
+            snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "vertical"],);
+        }else if(snakePos[snakePos.length - 1][2] == "leftToUp"){
+            snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "vertical"],);
+        }else if(snakePos[snakePos.length - 1][2] == "leftToDown"){
+            snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "vertical"],);
+        }else if(snakePos[snakePos.length - 1][2] == "upToRight"){
+            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "horizontal"],);
+        }else if(snakePos[snakePos.length - 1][2] == "upToLeft"){
+            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "horizontal"],);
+        }else if(snakePos[snakePos.length - 1][2] == "downToRight"){
+            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "horizontal"],);
+        }else if(snakePos[snakePos.length - 1][2] == "downToLeft"){
+            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "horizontal"],);
+        }else if(snakePos[snakePos.length - 2][0] + 15 == snakePos[snakePos.length - 1][0]) {
+            snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "horizontal"],);
+        }else if(snakePos[snakePos.length - 2][0] - 15 == snakePos[snakePos.length - 1][0]) {
+            snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "horizontal"],);
+        }else if(snakePos[snakePos.length - 2][1] + 15 == snakePos[snakePos.length - 1][1]) {
+            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "vertical"],);
+        }else if(snakePos[snakePos.length - 2][1] - 15 == snakePos[snakePos.length - 1][1]) {
+            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "vertical"],);
+        }
+    }
     //deletes head from the snake array.
     snakePos.splice(0, 1);
-    //adds one to end of the snake array.
-    if(snakePos[snakePos.length - 1][2] == "rightToUp"){
-        snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "vertical"],);
-    }else if(snakePos[snakePos.length - 1][2] == "rightToDown"){
-        snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "vertical"],);
-    }else if(snakePos[snakePos.length - 1][2] == "leftToUp"){
-        snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "vertical"],);
-    }else if(snakePos[snakePos.length - 1][2] == "leftToDown"){
-        snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "vertical"],);
-    }else if(snakePos[snakePos.length - 1][2] == "upToRight"){
-        snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "horizontal"],);
-    }else if(snakePos[snakePos.length - 1][2] == "upToLeft"){
-        snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "horizontal"],);
-    }else if(snakePos[snakePos.length - 1][2] == "downToRight"){
-        snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "horizontal"],);
-    }else if(snakePos[snakePos.length - 1][2] == "downToLeft"){
-        snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "horizontal"],);
-    }else if(snakePos[snakePos.length - 2][0] + 15 == snakePos[snakePos.length - 1][0]) {
-        snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "horizontal"],);
-    }else if(snakePos[snakePos.length - 2][0] - 15 == snakePos[snakePos.length - 1][0]) {
-        snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "horizontal"],);
-    }else if(snakePos[snakePos.length - 2][1] + 15 == snakePos[snakePos.length - 1][1]) {
-        snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "vertical"],);
-    }else if(snakePos[snakePos.length - 2][1] - 15 == snakePos[snakePos.length - 1][1]) {
-        snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "vertical"],);
-    }
     //makes sure direction of the head is right
     if(snakePos[1][0] + 15 == snakePos[0][0]){
         right = true;
