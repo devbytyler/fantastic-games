@@ -14,7 +14,6 @@ var shipTrail;
 var explosions;
 var playerDeath;
 var bullets;
-var fireButton;
 var bulletTimer = 0;
 var shields;
 var score = 0;
@@ -36,6 +35,7 @@ var bossBulletTimer = 0;
 var bossYdirection = -1;
 var gameOver;
 var bossNum = 1;
+var weaponSwitched = false;
 
 var ACCLERATION = 600;
 var DRAG = 400;
@@ -202,7 +202,7 @@ function create() {
                 boss.dying = false;
                 bossDeath.on = false;
                 //  queue next boss
-                bossLaunchTimer = game.time.events.add(game.rnd.integerInRange(bossSpacing, bossSpacing + 5000), launchBoss);
+                bossLaunchTimer = game.time.events.add(game.rnd.integerInRange(bossSpacing, bossSpacing + 10000), launchBoss);
             });
 
             //  reset pacing for other enemies
@@ -323,7 +323,8 @@ function create() {
 
     //  And some controls to play the game with
     cursors = game.input.keyboard.createCursorKeys();
-    fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    //fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    weaponSwitch = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     //  Add an emitter for the ship's trail
     shipTrail = game.add.emitter(player.x, player.y + 10, 400);
@@ -411,8 +412,16 @@ function update() {
     }
 
     //  Fire bullet
-    if (player.alive && (fireButton.isDown || game.input.activePointer.isDown)) {
+    if (player.alive && (game.input.activePointer.isDown)) {
         fireBullet();
+    }
+    if (player.alive && (weaponSwitch.isDown) && score > 3000){
+        if(player.weaponLevel == 2){
+            player.weaponLevel = 1;
+        }else{
+            player.weaponLevel = 2;
+        }
+        weaponSwitch.isDown = false;
     }
 
     //  Move ship towards mouse pointer
@@ -445,6 +454,10 @@ function update() {
     game.physics.arcade.overlap(player, boss.rayRight, bossHitsPlayer, null, this);
     game.physics.arcade.overlap(blueEnemyBullets, player, enemyHitsPlayer, null, this);
     game.physics.arcade.overlap(player, life, gainLife, null, this);
+    game.physics.arcade.overlap(greenEnemies, blueEnemyBullets, bulletHitsAsteroid, null, this);
+    game.physics.arcade.overlap(greenEnemies, blueEnemies, enemyHitsAsteroid, null, this);
+    game.physics.arcade.overlap(greenEnemies, redEnemies, enemyHitsAsteroid, null, this);
+    game.physics.arcade.overlap(greenEnemies, boss, enemyHitsAsteroid, null, this);
 
     //  Game over?
     if (! player.alive && gameOver.visible === false) {
@@ -453,7 +466,6 @@ function update() {
         function setResetHandlers() {
             //  The "click to restart" handler
             tapRestart = game.input.onTap.addOnce(_restart,this);
-            spaceRestart = fireButton.onDown.addOnce(_restart,this);
             function _restart() {
               tapRestart.detach();
               spaceRestart.detach();
@@ -787,8 +799,9 @@ function hitEnemy(enemy, bullet) {
     }
 
     //  Weapon upgrade
-    if (score > 2500 && player.weaponLevel < 2) {
+    if (score > 3000 && player.weaponLevel < 2 && weaponSwitched == false) {
       player.weaponLevel = 2;
+      weaponSwitched = true;
     }
 
     if(score > 0 && player.health <100) {
@@ -820,6 +833,43 @@ function enemyHitsPlayer (player, bullet) {
         playerDeath.x = player.x;
         playerDeath.y = player.y;
         playerDeath.start(false, 1000, 10, 10);
+    }
+}
+
+function bulletHitsAsteroid (enemy, bullet) {
+    var explosion = explosions.getFirstExists(false);
+    explosion.reset(bullet.body.x + bullet.body.halfWidth, bullet.body.y + bullet.body.halfHeight);
+    explosion.body.velocity.y = enemy.body.velocity.y;
+    explosion.alpha = 0.7;
+    explosion.play('explosion', 30, false, true);
+    if (enemy.finishOff && enemy.health < 5) {
+      enemy.finishOff();
+    } else {
+        enemy.damage(player.damageAmount);
+    }
+    bullet.kill();
+}
+
+function enemyHitsAsteroid (greenEnemy, enemy) {
+    var explosion = explosions.getFirstExists(false);
+    explosion.reset(enemy.body.x + enemy.body.halfWidth, enemy.body.y + enemy.body.halfHeight);
+    explosion.body.velocity.y = enemy.body.velocity.y;
+    explosion.alpha = 0.7;
+    explosion.play('explosion', 30, false, true);
+    if (enemy.finishOff && enemy.health < 5) {
+      enemy.finishOff();
+    } else {
+        enemy.damage(player.damageAmount);
+    }
+    var explosion = explosions.getFirstExists(false);
+    explosion.reset(greenEnemy.body.x + greenEnemy.body.halfWidth, greenEnemy.body.y + greenEnemy.body.halfHeight);
+    explosion.body.velocity.y = greenEnemy.body.velocity.y;
+    explosion.alpha = 0.7;
+    explosion.play('explosion', 30, false, true);
+    if (greenEnemy.finishOff && greenEnemy.health < 5) {
+      greenEnemy.finishOff();
+    } else {
+        greenEnemy.damage(player.damageAmount);
     }
 }
 
