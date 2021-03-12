@@ -768,7 +768,6 @@ function hitEnemy(enemy, bullet) {
     score += enemy.damageAmount;
     scoreText.render();
 
-    greenEnemySpacing *= 0.9;
     redEnemySpacing *= 0.99;
     blueEnemySpacing *= 0.99;
 
@@ -776,13 +775,11 @@ function hitEnemy(enemy, bullet) {
       blueEnemyLaunched = true;
       launchBlueEnemy();
       //  Slow green enemies down now that there are other enemies
-      greenEnemySpacing *= 2;
     }
 
     if(!redEnemyLaunched && score > 350) {
         redEnemyLaunched = true;
         launchRedEnemy();
-        greenEnemySpacing *= 2;
         blueEnemySpacing *= 2;
     }
 
