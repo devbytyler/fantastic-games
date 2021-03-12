@@ -468,7 +468,6 @@ function update() {
             tapRestart = game.input.onTap.addOnce(_restart,this);
             function _restart() {
               tapRestart.detach();
-              spaceRestart.detach();
               restart();
             }
         }
