@@ -106,8 +106,8 @@ function create() {
     greenEnemies.createMultiple(5, 'enemy-green');
     greenEnemies.setAll('anchor.x', 0.5);
     greenEnemies.setAll('anchor.y', 0.5);
-    greenEnemies.setAll('scale.x', 0.5);
-    greenEnemies.setAll('scale.y', 0.5);
+    greenEnemies.setAll('scale.x', .6);
+    greenEnemies.setAll('scale.y', .6);
     greenEnemies.setAll('angle', 180);
     greenEnemies.forEach(function(enemy){
         addEnemyEmitterTrail(enemy);
@@ -467,8 +467,8 @@ function update() {
             //  The "click to restart" handler
             tapRestart = game.input.onTap.addOnce(_restart,this);
             function _restart() {
-              tapRestart.detach();
-              restart();
+                tapRestart.detach();
+                restart();
             }
         }
         var fadeInGameOver = game.add.tween(gameOver);
@@ -906,7 +906,7 @@ function restart () {
     shields.render();
     score = 0;
     scoreText.render();
-    bossNum = 0;
+    bossNum = 1;
     lifeTimer = 0;
 
     //  Hide the text

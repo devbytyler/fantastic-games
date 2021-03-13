@@ -1,21 +1,37 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Platform Game</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-    <style type="text/css">
-        body {
-            display: flex;
-            background: gray;
-            justify-content: center;
-        }
-    </style>
-</head>
-<body>
-
-<script type="text/javascript">
-
+    <head>
+        <meta charset="UTF-8" />
+        <title>Platform Game</title>
+        <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+        <style type="text/css">
+            body {
+                background: gray;
+            }
+            div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            h3 {
+                margin-top: 5px;
+            }
+            h1 {
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+            canvas {
+                display: block;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h1>Star Catcher</h1>
+            <h3>Use arrowkeys to move around and collect stars. Don't let the bombs hit you! Click to restart.</h3>
+        </div>
+        <script type="text/javascript">
 var config = {
     type: Phaser.AUTO,
     width: 800,
@@ -42,6 +58,8 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+var gameOverText;
+var restartText;
 
 var game = new Phaser.Game(config);
 
@@ -54,8 +72,7 @@ function preload ()
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
 }
 
-function create ()
-{
+function create () {
     this.add.image(400, 300, 'sky');
 
     platforms = this.physics.add.staticGroup();
@@ -117,6 +134,10 @@ function create ()
 
     this.physics.add.overlap(player, stars, collectStar, null, this);
     this.physics.add.collider(player, bombs, hitBomb, null, this);
+    gameOverText = this.add.text(150, 175, 'Game Over', { fontSize: '90px', fill: '#000' });
+    gameOverText.visible = false;
+    restartText = this.add.text(100, 300, 'Click To Restart', { fontSize: '60px', fill: '#000'});
+    restartText.visible = false;
 }
 
 function update ()
@@ -167,9 +188,17 @@ function hitBomb (player, bomb) {
     player.setTint(0xff0000);
     player.anims.play('turn');
     gameOver = true;
+    gameOverText.visible = true;
+    restartText.visible = true;
+    var restartInterval = setInterval(restart, 5);
+}
+function restart(){
+    if(game.input.activePointer.isDown && gameOver){
+        location.reload();
+    }
 }
 
-</script>
+        </script>
 
-</body>
+    </body>
 </html>

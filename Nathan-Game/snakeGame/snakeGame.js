@@ -658,21 +658,13 @@ function draw() {
 function moveBack() {
     //adds one to end of the snake array.
     if(emptyArray.length != 0){
-        if(snakePos[snakePos.length - 1][2] == "rightToUp"){
+        if ( /rightToUp|rightToDown/.test(snakePos[snakePos.length -1][2])){
             snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "vertical"],);
-        }else if(snakePos[snakePos.length - 1][2] == "rightToDown"){
-            snakePos.push([snakePos[snakePos.length - 1][0] - 15, snakePos[snakePos.length - 1][1], "vertical"],);
-        }else if(snakePos[snakePos.length - 1][2] == "leftToUp"){
+        }else if(/leftToUp|leftToDown/.test(snakePos[snakePos.length - 1][2])){
             snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "vertical"],);
-        }else if(snakePos[snakePos.length - 1][2] == "leftToDown"){
-            snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "vertical"],);
-        }else if(snakePos[snakePos.length - 1][2] == "upToRight"){
+        }else if(/upToRight|upToLeft/.test(snakePos[snakePos.length - 1][2])){
             snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "horizontal"],);
-        }else if(snakePos[snakePos.length - 1][2] == "upToLeft"){
-            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] + 15, "horizontal"],);
-        }else if(snakePos[snakePos.length - 1][2] == "downToRight"){
-            snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "horizontal"],);
-        }else if(snakePos[snakePos.length - 1][2] == "downToLeft"){
+        }else if(/downToRight|downToLeft/.test(snakePos[snakePos.length - 1][2])){
             snakePos.push([snakePos[snakePos.length - 1][0], snakePos[snakePos.length - 1][1] - 15, "horizontal"],);
         }else if(snakePos[snakePos.length - 2][0] + 15 == snakePos[snakePos.length - 1][0]) {
             snakePos.push([snakePos[snakePos.length - 1][0] + 15, snakePos[snakePos.length - 1][1], "horizontal"],);
