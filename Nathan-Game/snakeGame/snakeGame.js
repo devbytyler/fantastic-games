@@ -151,6 +151,7 @@ function setBlock() {
     board();
     blockPos = [];
     for(var i = 0; i < 2; i++){
+        board();
         randomBlock = randomNumber(0, emptyArray.length);
         blockPos.push([emptyArray[randomBlock][0], emptyArray[randomBlock][1]]);
     }
