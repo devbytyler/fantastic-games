@@ -60,14 +60,14 @@ var app = new Vue({
                 creator: 'Nathan',
 
             },
-            {
+            /*{
                 name: '2 Player Snake',
                 desc: 'A fantastic 2-Player snake game!',
                 img: 'images/2playerSnake.png',
                 link: 'Nathan-Game/2PlayerSnake/2PlayerSnake.html',
                 creator: 'Nathan',
 
-            },
+            },*/
             {
                 name: 'Coming Soon...', 
                 desc: 'Wait for it!', 
