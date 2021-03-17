@@ -57,7 +57,9 @@ var appleSetting = appleNum.value;
 var blockSetting = blockSet.value;
 speedSet.value = "100";
 var speedSetting = speedSet.value;
+sizeSet.value = "390";
 var sizeSetting = sizeSet.value;
+
 //image variables:
 //gets image for apple
 var appleObj = new Image();
